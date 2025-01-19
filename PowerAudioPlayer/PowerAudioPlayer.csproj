@@ -1,0 +1,115 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWindowsForms>true</UseWindowsForms>
+        <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+        <ApplicationVisualStyles>true</ApplicationVisualStyles>
+        <ApplicationIcon>Resources\PowerAudioPlayer.ico</ApplicationIcon>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <ForceDesignerDPIUnaware>true</ForceDesignerDPIUnaware>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Company>AdrenLoso</Company>
+        <_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
+        <_SuppressWpfTrimError>true</_SuppressWpfTrimError>
+        <UseWPF>True</UseWPF>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <AdditionalFiles Remove="app.manifest" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Resources\PowerAudioPlayer.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MemoryPack" Version="1.21.3" />
+        <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="ObjectListView.Repack.Core3" Version="2.9.3" />
+        <PackageReference Include="radio42.Bass.Net.core" Version="2.4.17.6" />
+        <PackageReference Include="SkiaSharp" Version="3.116.1" />
+        <PackageReference Include="SkiaSharp.Views" Version="3.116.1" />
+        <PackageReference Include="SkiaSharp.Views.WindowsForms" Version="3.116.1" />
+        <PackageReference Include="WindowsAPICodePack" Version="8.0.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Language\Strings.zh-CN.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Strings.zh-CN.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Settings.Designer.cs">
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Settings.settings</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Language\Strings.zh-CN.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Strings.zh-CN.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Lib\bass.dll">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </None>
+        <None Update="Lib\bass_fx.dll">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </None>
+        <None Update="Settings.settings">
+            <Generator>SettingsSingleFileGenerator</Generator>
+            <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Lib\ARM64\" />
+        <Folder Include="Lib\Intel32\Plugins\" />
+        <Folder Include="Properties\" />
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="set libarch=AMD64&#xD;&#xA;echo Copying files to $(OutDir).&#xD;&#xA;echo Libraries architecture: %25libarch%25&#xD;&#xA;if not exist &quot;$(OutDir)Lib\Plugins&quot; (&#xD;&#xA; mkdir &quot;$(OutDir)Plugins&quot;&#xD;&#xA;)&#xD;&#xA;xcopy Lib\%25libarch%25\%25Plugins &quot;$(OutDir)Plugins&quot; /Y /Q&#xD;&#xA;copy Lib\%25libarch%25\bass.dll &quot;$(OutDir)&quot; /Y&#xD;&#xA;copy Lib\%25libarch%25\Plugins\OptimFROG.dll &quot;$(OutDir)&quot; /Y&#xD;&#xA;echo Success." />
+    </Target>
+
+    <ItemGroup>
+      <EditorConfigFiles Remove="D:\bc\NET\PowerAudioPlayer\PowerAudioPlayer\.editorconfig" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <COMReference Include="IWshRuntimeLibrary">
+        <WrapperTool>tlbimp</WrapperTool>
+        <VersionMinor>0</VersionMinor>
+        <VersionMajor>1</VersionMajor>
+        <Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
+        <Lcid>0</Lcid>
+        <Isolated>false</Isolated>
+        <EmbedInteropTypes>true</EmbedInteropTypes>
+      </COMReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="D:\bc\NET\PowerAudioPlayer\PowerAudioPlayer\.editorconfig" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\WinFormsExtendedControls\WinFormsExtendedControls.csproj" />
+    </ItemGroup>
+
+</Project>
