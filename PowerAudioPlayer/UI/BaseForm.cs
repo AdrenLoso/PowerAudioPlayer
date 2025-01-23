@@ -1,4 +1,4 @@
-﻿using PowerAudioPlayer.Controllers.Helper;
+﻿using PowerAudioPlayer.Controllers;
 
 namespace PowerAudioPlayer.UI
 {
@@ -6,6 +6,8 @@ namespace PowerAudioPlayer.UI
     {
         public BaseForm()
         {
+            int backdropType = NativeAPI.DWMSBT_TRANSIENTWINDOW;
+            NativeAPI.DwmSetWindowAttribute(Handle, NativeAPI.DWMWA_SYSTEMBACKDROP_TYPE, ref backdropType, sizeof(int));
         }
     }
 }

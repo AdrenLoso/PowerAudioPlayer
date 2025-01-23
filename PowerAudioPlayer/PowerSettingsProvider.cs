@@ -216,7 +216,7 @@ namespace PowerAudioPlayer
             XmlElement valueXml = doc.CreateElement("value");
 
             string? serializedValue = value.SerializedValue as string;
-            if (serializedValue == null && setting.SerializeAs == SettingsSerializeAs.Binary)
+            if (serializedValue == null)// && setting.SerializeAs == SettingsSerializeAs.Binary)
             {
                 // SettingsPropertyValue returns a byte[] in the binary serialization case. We need to
                 // encode this - we use base64 since SettingsPropertyValue understands it and we won't have

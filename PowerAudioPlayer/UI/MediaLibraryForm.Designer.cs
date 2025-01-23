@@ -251,8 +251,8 @@
             ClientSize = new Size(816, 424);
             Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Location = new Point(0, 0);
             Margin = new Padding(4, 3, 4, 3);
-            MaximizeBox = false;
             MinimizeBox = false;
             Name = "MediaLibraryForm";
             ShowIcon = false;

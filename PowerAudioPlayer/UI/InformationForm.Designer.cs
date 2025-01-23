@@ -1,4 +1,6 @@
-﻿namespace PowerAudioPlayer.UI
+﻿using PowerAudioPlayer.UI.CustomControls;
+
+namespace PowerAudioPlayer.UI
 {
     partial class InformationForm
     {

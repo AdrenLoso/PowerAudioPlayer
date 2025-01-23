@@ -5,12 +5,18 @@ namespace PowerAudioPlayer.Controllers
 {
     internal class NativeAPI
     {
+        #region Constants
         public const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
         public const int DWMWA_WINDOW_CORNER_PREFERENCE = 33;
-        public const int DWMWA_SYSTEMBACKDROP_TYPE = 38;
         public const int WM_DWMCOLORIZATIONCOLORCHANGED = 0x0320;
         public const int DWMWA_COLOR_DEFAULT = -1;
         public const int DWMWA_COLOR_NONE = -2;
+        public const int DWMWA_SYSTEMBACKDROP_TYPE = 38;
+        public const int DWMSBT_AUTO = 0;
+        public const int DWMSBT_NONE = 1;
+        public const int DWMSBT_MAINWINDOW = 2;
+        public const int DWMSBT_TRANSIENTWINDOW = 3;
+        public const int DWMSBT_TABBEDWINDOW = 4;
         public const int GWL_STYLE = -16;
         public const int HTCAPTION = 2;
         public const int WM_CREATE = 0x1;
@@ -20,7 +26,7 @@ namespace PowerAudioPlayer.Controllers
         public const int SB_HORZ = 0;
         public const uint SEE_MASK_INVOKEIDLIST = 12;
         public const int SW_SHOW = 5;
-        public const int VM_NCLBUTTONDOWN = 0XA1;
+        public const int VM_NCLBUTTONDOWN = 0xA1;
         public const int WM_HOTKEY = 0x312;
         public const int WM_SYSCOMMAND = 0x0112;
         public const int WM_GETMINMAXINFO = 0x0024;
@@ -39,9 +45,8 @@ namespace PowerAudioPlayer.Controllers
         public const int APPCOMMAND_MEDIA_PAUSE = 47;
         public const int APPCOMMAND_MEDIA_CHANNEL_UP = 51;
         public const int APPCOMMAND_MEDIA_CHANNEL_DOWN = 52;
-
-        
-
+        #endregion
+        #region Structures
         [StructLayout(LayoutKind.Sequential)]
         public struct SHELLEXECUTEINFO
         {
@@ -74,6 +79,8 @@ namespace PowerAudioPlayer.Controllers
             [MarshalAs(UnmanagedType.LPStr)]
             public string lpData;
         }
+        #endregion
+        #region API Declarations
         [DllImport("shell32.dll")]
         public static extern bool ShellExecuteEx(ref SHELLEXECUTEINFO lpExecInfo);
 
@@ -109,5 +116,6 @@ namespace PowerAudioPlayer.Controllers
 
         [DllImport("winmm.dll", CharSet = CharSet.Unicode)]
         public static extern ulong mciSendString(string command, string? buffer, int bufferSize, IntPtr callback);
+        #endregion
     }
 }

@@ -6,7 +6,6 @@ using PowerAudioPlayer.Controllers.Helper;
 using PowerAudioPlayer.Controllers.PlayerCore;
 using PowerAudioPlayer.Model;
 using PowerAudioPlayer.UI;
-using System.ComponentModel;
 using System.IO;
 using Clipboard = System.Windows.Forms.Clipboard;
 using DataFormats = System.Windows.Forms.DataFormats;
@@ -15,7 +14,6 @@ using DragEventArgs = System.Windows.Forms.DragEventArgs;
 using MessageBox = System.Windows.Forms.MessageBox;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 using Utils = PowerAudioPlayer.Controllers.Utils;
-using ProgressDialogs;
 
 namespace PowerAudioPlayer
 {

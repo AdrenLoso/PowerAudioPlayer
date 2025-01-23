@@ -50,7 +50,7 @@
             ClientSize = new Size(508, 465);
             Controls.Add(playlistEditor);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MaximizeBox = false;
+            Location = new Point(0, 0);
             MinimizeBox = false;
             Name = "PlaylistEditorForm";
             ShowIcon = false;

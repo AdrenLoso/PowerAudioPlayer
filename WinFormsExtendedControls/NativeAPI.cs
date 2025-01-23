@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Runtime.ConstrainedExecution;
+﻿using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 
 namespace WinFormsExtendedControls
@@ -64,35 +62,33 @@ namespace WinFormsExtendedControls
 
         [DllImport("dwmapi.dll", PreserveSig = false)]
         [return: MarshalAs(UnmanagedType.Bool)]
-
         public static extern bool DwmIsCompositionEnabled();
-        [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
 
+        [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
         public static extern SafeDeviceHandle CreateCompatibleDC(IntPtr hDC);
+
         [DllImport("gdi32.dll", ExactSpelling = true)]
-
         public static extern IntPtr SelectObject(SafeDeviceHandle hDC, SafeGDIHandle hObject);
+
         [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-
         public static extern bool DeleteObject(IntPtr hObject);
+
         [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
-
         public static extern bool DeleteDC(IntPtr hdc);
+
         [DllImport("gdi32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-
         public static extern bool BitBlt(IntPtr hdc, int nXDest, int nYDest, int nWidth, int nHeight, SafeDeviceHandle hdcSrc, int nXSrc, int nYSrc, uint dwRop);
-        [DllImport("UxTheme.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
 
+        [DllImport("UxTheme.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
         public static extern void DrawThemeTextEx(IntPtr hTheme, SafeDeviceHandle hdc, int iPartId, int iStateId, string text, int iCharCount, int dwFlags, ref RECT pRect, ref DTTOPTS pOptions);
+
         [DllImport("gdi32.dll")]
         public static extern SafeGDIHandle CreateDIBSection(IntPtr hdc, BITMAPINFO pbmi, uint iUsage, IntPtr ppvBits, IntPtr hSection, uint dwOffset);
-        [DllImport("UxTheme.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
 
+        [DllImport("UxTheme.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
         public static extern void GetThemeTextExtent(IntPtr hTheme, SafeDeviceHandle hdc, int iPartId, int iStateId, string text, int iCharCount, int dwTextFlags, [In] ref RECT bounds, out RECT rect);
 
         [StructLayout(LayoutKind.Sequential)]
@@ -116,7 +112,7 @@ namespace WinFormsExtendedControls
             public IntPtr lParam;
         }
 
-        [Flags()]
+        [Flags]
         public enum DrawThemeTextFlags
         {
             TextColor = 1 << 0,
@@ -187,13 +183,15 @@ namespace WinFormsExtendedControls
 
         public static SafeGDIHandle CreateDib(Rectangle bounds, IntPtr primaryHdc, SafeDeviceHandle memoryHdc)
         {
-            BITMAPINFO info = new BITMAPINFO();
-            info.biSize = Marshal.SizeOf(info);
-            info.biWidth = bounds.Width;
-            info.biHeight = -bounds.Height;
-            info.biPlanes = 1;
-            info.biBitCount = 32;
-            info.biCompression = 0; // BI_RGB
+            BITMAPINFO info = new BITMAPINFO
+            {
+                biSize = Marshal.SizeOf<BITMAPINFO>(),
+                biWidth = bounds.Width,
+                biHeight = -bounds.Height,
+                biPlanes = 1,
+                biBitCount = 32,
+                biCompression = 0 // BI_RGB
+            };
             SafeGDIHandle dib = CreateDIBSection(primaryHdc, info, 0, IntPtr.Zero, IntPtr.Zero, 0);
             SelectObject(memoryHdc, dib);
             return dib;
@@ -201,11 +199,14 @@ namespace WinFormsExtendedControls
 
         [DllImport("Kernel32.dll", SetLastError = true)]
         public extern static ActivationContextSafeHandle CreateActCtx(ref ACTCTX actctx);
-        [DllImport("kernel32.dll"), ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+
+        [DllImport("kernel32.dll")]// ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         public extern static void ReleaseActCtx(IntPtr hActCtx);
+
         [DllImport("Kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public extern static bool ActivateActCtx(ActivationContextSafeHandle hActCtx, out IntPtr lpCookie);
+
         [DllImport("Kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public extern static bool DeactivateActCtx(uint dwFlags, IntPtr lpCookie);
@@ -231,10 +232,10 @@ namespace WinFormsExtendedControls
             string lpFileName,
             IntPtr hFile,
             LoadLibraryExFlags dwFlags
-            );
+        );
 
-        [DllImport("kernel32", SetLastError = true),
-        ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [DllImport("kernel32", SetLastError = true)]
+        //ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FreeLibrary(IntPtr hModule);
 

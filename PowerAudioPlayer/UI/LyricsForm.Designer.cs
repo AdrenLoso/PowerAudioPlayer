@@ -47,7 +47,7 @@
             ClientSize = new Size(365, 392);
             Controls.Add(lyricsView);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MaximizeBox = false;
+            Location = new Point(0, 0);
             MinimizeBox = false;
             Name = "LyricsForm";
             ShowIcon = false;
