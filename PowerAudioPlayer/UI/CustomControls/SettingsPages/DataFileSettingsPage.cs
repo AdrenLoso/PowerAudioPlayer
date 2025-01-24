@@ -10,7 +10,8 @@ namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
         public DataFileSettingsPage()
         {
             InitializeComponent();
-            lblMsg.Text = Player.GetString("MsgDataFile", Environment.UserName, Utils.GetProgramLocalAppDataPath());
+            lblMsg.Text = Player.GetString("MsgDataFile", Utils.GetCurrentUserFullName(), Utils.GetProgramLocalAppDataPath());
+            pbUserAvatar.Load(Utils.GetCurrentUserAvatarPath());
         }
 
         private void btnExploreFolder_Click(object sender, EventArgs e)
@@ -55,7 +56,7 @@ namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
 
         private void btnClearCurrentUser_Click(object sender, EventArgs e)
         {
-            if(MessageBox.Show(Player.GetString("MsgClearDataFile", Environment.UserName), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if(MessageBox.Show(Player.GetString("MsgClearDataFile", Utils.GetCurrentUserFullName()), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 Directory.Delete(Utils.GetProgramLocalAppDataPath(), true);
                 MessageBox.Show(Player.GetString("MsgClearDataFileOK"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);

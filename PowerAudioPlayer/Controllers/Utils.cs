@@ -70,6 +70,7 @@ namespace PowerAudioPlayer.Controllers
             }
             return potentialSubdirectory.StartsWith(directory, StringComparison.OrdinalIgnoreCase);
         }
+
         public static bool IsDesignMode()
         {
             bool returnFlag = false;
@@ -182,11 +183,6 @@ namespace PowerAudioPlayer.Controllers
             int hResult = NativeAPI.DwmSetWindowAttribute(hWnd, NativeAPI.DWMWA_USE_IMMERSIVE_DARK_MODE, ref darkMode, sizeof(int));
             return hResult > 0;
         }
-
-        //public static System.Windows.Media.Color GetMediaColorFromDrawingColor(Color color)
-        //{
-        //    return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
-        //}
 
         public static string Windows1254ToGB2312(string input)
         {
@@ -399,6 +395,29 @@ namespace PowerAudioPlayer.Controllers
             }
 
             return num;
+        }
+
+        public static string GetCurrentUserFullName()
+        {
+            uint size = 1024;
+            StringBuilder sb = new StringBuilder((int)size);
+            if (NativeAPI.GetUserNameEx((int)NativeAPI.EXTENDED_NAME_FORMAT.NameDisplay, sb, ref size) != 0)
+            {
+                return sb.ToString();
+            }
+            else
+            {
+                return Environment.UserName;
+            }
+        }
+
+        public static string GetCurrentUserAvatarPath()
+        {
+            var path = Environment.ExpandEnvironmentVariables("%LocalAppData%\\Microsoft\\Windows\\AccountPicture\\UserImage.jpg");
+            if (!File.Exists(path))
+                return string.Empty;
+            else
+                return path;
         }
     }
 }

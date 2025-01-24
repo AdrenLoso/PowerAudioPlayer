@@ -456,7 +456,7 @@ System Information: {8}</value>
     <value>数据文件导入成功。PowerAudioPlayer将立即重启。</value>
   </data>
   <data name="ProjectPageURL" xml:space="preserve">
-    <value>https://github.com/AdrenlYoshi/PowerAudioPlayer</value>
+    <value>https://github.com/AdrenLoso/PowerAudioPlayer</value>
   </data>
   <data name="MsgMIDISoundFontNotSelected" xml:space="preserve">
     <value>你正在播放MIDI文件，但未选择音色库。你将无法听到任何声音。</value>

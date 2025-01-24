@@ -34,7 +34,11 @@
             btnExport = new Button();
             btnImport = new Button();
             btnClearCurrentUser = new Button();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            pbUserAvatar = new PictureBox();
             flowLayoutPanel1.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbUserAvatar).BeginInit();
             SuspendLayout();
             // 
             // lblMsg
@@ -62,10 +66,10 @@
             // btnExploreFolder
             // 
             btnExploreFolder.AutoSize = true;
-            btnExploreFolder.Dock = DockStyle.Top;
-            btnExploreFolder.Location = new Point(0, 17);
+            btnExploreFolder.Dock = DockStyle.Fill;
+            btnExploreFolder.Location = new Point(103, 3);
             btnExploreFolder.Name = "btnExploreFolder";
-            btnExploreFolder.Size = new Size(374, 27);
+            btnExploreFolder.Size = new Size(268, 27);
             btnExploreFolder.TabIndex = 1;
             btnExploreFolder.Text = "浏览文件夹";
             btnExploreFolder.UseVisualStyleBackColor = true;
@@ -74,10 +78,10 @@
             // btnExport
             // 
             btnExport.AutoSize = true;
-            btnExport.Dock = DockStyle.Top;
-            btnExport.Location = new Point(0, 44);
+            btnExport.Dock = DockStyle.Fill;
+            btnExport.Location = new Point(103, 36);
             btnExport.Name = "btnExport";
-            btnExport.Size = new Size(374, 27);
+            btnExport.Size = new Size(268, 27);
             btnExport.TabIndex = 2;
             btnExport.Text = "导出数据文件";
             btnExport.UseVisualStyleBackColor = true;
@@ -86,10 +90,10 @@
             // btnImport
             // 
             btnImport.AutoSize = true;
-            btnImport.Dock = DockStyle.Top;
-            btnImport.Location = new Point(0, 71);
+            btnImport.Dock = DockStyle.Fill;
+            btnImport.Location = new Point(103, 69);
             btnImport.Name = "btnImport";
-            btnImport.Size = new Size(374, 27);
+            btnImport.Size = new Size(268, 27);
             btnImport.TabIndex = 3;
             btnImport.Text = "导入数据文件";
             btnImport.UseVisualStyleBackColor = true;
@@ -98,28 +102,61 @@
             // btnClearCurrentUser
             // 
             btnClearCurrentUser.AutoSize = true;
-            btnClearCurrentUser.Dock = DockStyle.Top;
-            btnClearCurrentUser.Location = new Point(0, 98);
+            btnClearCurrentUser.Dock = DockStyle.Fill;
+            btnClearCurrentUser.Location = new Point(103, 102);
             btnClearCurrentUser.Name = "btnClearCurrentUser";
-            btnClearCurrentUser.Size = new Size(374, 27);
+            btnClearCurrentUser.Size = new Size(268, 27);
             btnClearCurrentUser.TabIndex = 4;
             btnClearCurrentUser.Text = "清空当前用户数据文件";
             btnClearCurrentUser.UseVisualStyleBackColor = true;
             btnClearCurrentUser.Click += btnClearCurrentUser_Click;
             // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.AutoSize = true;
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(pbUserAvatar, 0, 0);
+            tableLayoutPanel1.Controls.Add(btnClearCurrentUser, 1, 3);
+            tableLayoutPanel1.Controls.Add(btnExploreFolder, 1, 0);
+            tableLayoutPanel1.Controls.Add(btnImport, 1, 2);
+            tableLayoutPanel1.Controls.Add(btnExport, 1, 1);
+            tableLayoutPanel1.Dock = DockStyle.Top;
+            tableLayoutPanel1.Location = new Point(0, 17);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 4;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.Size = new Size(374, 132);
+            tableLayoutPanel1.TabIndex = 5;
+            // 
+            // pbUserAvatar
+            // 
+            pbUserAvatar.BorderStyle = BorderStyle.FixedSingle;
+            pbUserAvatar.Location = new Point(3, 3);
+            pbUserAvatar.Name = "pbUserAvatar";
+            tableLayoutPanel1.SetRowSpan(pbUserAvatar, 4);
+            pbUserAvatar.Size = new Size(94, 94);
+            pbUserAvatar.SizeMode = PictureBoxSizeMode.Zoom;
+            pbUserAvatar.TabIndex = 0;
+            pbUserAvatar.TabStop = false;
+            // 
             // DataFileSettingsPage
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(btnClearCurrentUser);
-            Controls.Add(btnImport);
-            Controls.Add(btnExport);
-            Controls.Add(btnExploreFolder);
+            Controls.Add(tableLayoutPanel1);
             Controls.Add(flowLayoutPanel1);
             Name = "DataFileSettingsPage";
             Size = new Size(374, 402);
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbUserAvatar).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -132,5 +169,7 @@
         private Button btnExport;
         private Button btnImport;
         private Button btnClearCurrentUser;
+        private TableLayoutPanel tableLayoutPanel1;
+        private PictureBox pbUserAvatar;
     }
 }

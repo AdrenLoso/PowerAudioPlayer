@@ -46,6 +46,23 @@ namespace PowerAudioPlayer.Controllers
         public const int APPCOMMAND_MEDIA_CHANNEL_UP = 51;
         public const int APPCOMMAND_MEDIA_CHANNEL_DOWN = 52;
         #endregion
+
+        #region Enums
+        public enum EXTENDED_NAME_FORMAT
+        {
+            NameUnknown = 0,
+            NameFullyQualifiedDN = 1,
+            NameSamCompatible = 2,
+            NameDisplay = 3,
+            NameUniqueId = 6,
+            NameCanonical = 7,
+            NameUserPrincipal = 8,
+            NameCanonicalEx = 9,
+            NameServicePrincipal = 10,
+            NameDnsDomain = 12
+        }
+        #endregion
+
         #region Structures
         [StructLayout(LayoutKind.Sequential)]
         public struct SHELLEXECUTEINFO
@@ -78,6 +95,23 @@ namespace PowerAudioPlayer.Controllers
             public int cbData;
             [MarshalAs(UnmanagedType.LPStr)]
             public string lpData;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int x;
+            public int y;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MINMAXINFO
+        {
+            public POINT ptReserved;
+            public POINT ptMaxSize;
+            public POINT ptMaxPosition;
+            public POINT ptMinTrackSize;
+            public POINT ptMaxTrackSize;
         }
         #endregion
         #region API Declarations
@@ -116,6 +150,12 @@ namespace PowerAudioPlayer.Controllers
 
         [DllImport("winmm.dll", CharSet = CharSet.Unicode)]
         public static extern ulong mciSendString(string command, string? buffer, int bufferSize, IntPtr callback);
+
+        [DllImport("secur32.dll", CharSet = CharSet.Auto)]
+        public static extern int GetUserNameEx(int nameFormat, StringBuilder userName, ref uint userNameSize);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern bool SystemParametersInfo(int uAction, int uParam, StringBuilder lpvParam, int fuWinIni);
         #endregion
     }
 }

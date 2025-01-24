@@ -74,7 +74,7 @@ namespace PowerAudioPlayer.UI
             tbComment = new TextBox();
             tableLayoutPanel4 = new TableLayoutPanel();
             lblImage = new Label();
-            pictureBox = new PictureBox();
+            pictureBox = new SKPictureBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -82,7 +82,6 @@ namespace PowerAudioPlayer.UI
             tabPage2.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -481,7 +480,7 @@ namespace PowerAudioPlayer.UI
             // 
             label18.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             label18.AutoSize = true;
-            label18.Location = new Point(3, 379);
+            label18.Location = new Point(3, 380);
             label18.Name = "label18";
             label18.Size = new Size(44, 17);
             label18.TabIndex = 18;
@@ -495,7 +494,7 @@ namespace PowerAudioPlayer.UI
             tbArtist.Name = "tbArtist";
             tbArtist.ReadOnly = true;
             tbArtist.ScrollBars = ScrollBars.Vertical;
-            tbArtist.Size = new Size(244, 23);
+            tbArtist.Size = new Size(246, 23);
             tbArtist.TabIndex = 1;
             // 
             // tbAlbum
@@ -506,7 +505,7 @@ namespace PowerAudioPlayer.UI
             tbAlbum.Name = "tbAlbum";
             tbAlbum.ReadOnly = true;
             tbAlbum.ScrollBars = ScrollBars.Vertical;
-            tbAlbum.Size = new Size(244, 23);
+            tbAlbum.Size = new Size(246, 23);
             tbAlbum.TabIndex = 3;
             // 
             // tbTitle
@@ -517,7 +516,7 @@ namespace PowerAudioPlayer.UI
             tbTitle.Name = "tbTitle";
             tbTitle.ReadOnly = true;
             tbTitle.ScrollBars = ScrollBars.Vertical;
-            tbTitle.Size = new Size(244, 23);
+            tbTitle.Size = new Size(246, 23);
             tbTitle.TabIndex = 5;
             // 
             // tbTrack
@@ -528,7 +527,7 @@ namespace PowerAudioPlayer.UI
             tbTrack.Name = "tbTrack";
             tbTrack.ReadOnly = true;
             tbTrack.ScrollBars = ScrollBars.Vertical;
-            tbTrack.Size = new Size(244, 23);
+            tbTrack.Size = new Size(246, 23);
             tbTrack.TabIndex = 7;
             // 
             // tbDisc
@@ -539,7 +538,7 @@ namespace PowerAudioPlayer.UI
             tbDisc.Name = "tbDisc";
             tbDisc.ReadOnly = true;
             tbDisc.ScrollBars = ScrollBars.Vertical;
-            tbDisc.Size = new Size(244, 23);
+            tbDisc.Size = new Size(246, 23);
             tbDisc.TabIndex = 9;
             // 
             // tbYear
@@ -550,7 +549,7 @@ namespace PowerAudioPlayer.UI
             tbYear.Name = "tbYear";
             tbYear.ReadOnly = true;
             tbYear.ScrollBars = ScrollBars.Vertical;
-            tbYear.Size = new Size(244, 23);
+            tbYear.Size = new Size(246, 23);
             tbYear.TabIndex = 11;
             // 
             // tbGenre
@@ -561,7 +560,7 @@ namespace PowerAudioPlayer.UI
             tbGenre.Name = "tbGenre";
             tbGenre.ReadOnly = true;
             tbGenre.ScrollBars = ScrollBars.Vertical;
-            tbGenre.Size = new Size(244, 23);
+            tbGenre.Size = new Size(246, 23);
             tbGenre.TabIndex = 13;
             // 
             // tbCopyright
@@ -572,7 +571,7 @@ namespace PowerAudioPlayer.UI
             tbCopyright.Name = "tbCopyright";
             tbCopyright.ReadOnly = true;
             tbCopyright.ScrollBars = ScrollBars.Vertical;
-            tbCopyright.Size = new Size(244, 23);
+            tbCopyright.Size = new Size(246, 23);
             tbCopyright.TabIndex = 15;
             // 
             // tbComment
@@ -583,7 +582,7 @@ namespace PowerAudioPlayer.UI
             tbComment.Name = "tbComment";
             tbComment.ReadOnly = true;
             tbComment.ScrollBars = ScrollBars.Vertical;
-            tbComment.Size = new Size(244, 23);
+            tbComment.Size = new Size(246, 23);
             tbComment.TabIndex = 17;
             // 
             // tableLayoutPanel4
@@ -599,29 +598,30 @@ namespace PowerAudioPlayer.UI
             tableLayoutPanel4.RowCount = 2;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
-            tableLayoutPanel4.Size = new Size(244, 247);
+            tableLayoutPanel4.Size = new Size(246, 249);
             tableLayoutPanel4.TabIndex = 19;
             // 
             // lblImage
             // 
             lblImage.AutoSize = true;
-            lblImage.Location = new Point(3, 230);
+            lblImage.Location = new Point(3, 232);
             lblImage.Name = "lblImage";
             lblImage.Size = new Size(0, 17);
             lblImage.TabIndex = 0;
             // 
             // pictureBox
             // 
-            pictureBox.BackColor = Color.Transparent;
             pictureBox.BackgroundImageLayout = ImageLayout.None;
-            pictureBox.BorderStyle = BorderStyle.Fixed3D;
             pictureBox.Dock = DockStyle.Fill;
-            pictureBox.Location = new Point(3, 3);
+            pictureBox.Image = null;
+            pictureBox.Location = new Point(4, 4);
+            pictureBox.Margin = new Padding(4, 4, 4, 4);
             pictureBox.Name = "pictureBox";
             pictureBox.Size = new Size(238, 224);
-            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox.SizeMode = SKPictureBoxSizeMode.Zoom;
             pictureBox.TabIndex = 1;
             pictureBox.TabStop = false;
+            pictureBox.VSync = true;
             pictureBox.DoubleClick += pictureBox_DoubleClick;
             // 
             // InformationForm
@@ -651,7 +651,6 @@ namespace PowerAudioPlayer.UI
             tableLayoutPanel3.PerformLayout();
             tableLayoutPanel4.ResumeLayout(false);
             tableLayoutPanel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             ResumeLayout(false);
         }
 
@@ -701,6 +700,6 @@ namespace PowerAudioPlayer.UI
         private TextBox tbComment;
         private TableLayoutPanel tableLayoutPanel4;
         private Label lblImage;
-        private PictureBox pictureBox;
+        private SKPictureBox pictureBox;
     }
 }

@@ -29,6 +29,7 @@ namespace PowerAudioPlayer
         private MediaLibraryForm mediaLibraryForm = new MediaLibraryForm();
         private PlaylistEditorForm playlistEditorForm = new PlaylistEditorForm();
         private LyricsForm lyricsForm = new LyricsForm();
+        private AlbumPictureForm albumPictureForm = new AlbumPictureForm();
 
         public PlayerForm()
         {
@@ -56,8 +57,10 @@ namespace PowerAudioPlayer
             playlistEditorForm.Owner = this;
             lyricsForm.Owner = this;
             mediaLibraryForm.Owner = this;
+            albumPictureForm.Owner = this;
             playlistEditorForm.Show();
             lyricsForm.Show();
+            albumPictureForm.Show();
         }
 
         #region Player Control Method
@@ -105,7 +108,8 @@ namespace PowerAudioPlayer
         private void UpdateAudioInfo(string file)
         {
             AudioInfo audioInfo = AudioInfoHelper.GetAudioInfo(file);
-            picAlbum.Image = AudioInfoHelper.GetAudioPicture(file);
+            //picAlbum.Image = AudioInfoHelper.GetAudioPicture(file);
+            albumPictureForm.SetAlbumPicture(AudioInfoHelper.GetAudioPicture(file));
             if (audioInfo != null)
             {
                 lblTitle.Text = !string.IsNullOrEmpty(audioInfo.Tag.Title) ? audioInfo.Tag.Title : string.Empty;
@@ -178,7 +182,7 @@ namespace PowerAudioPlayer
             lblTitle.Text = string.Empty;
             lblDisplayTitle.Text = Application.ProductName;
             lblInfo.Text = string.Empty;
-            picAlbum.Image = null;
+            albumPictureForm.ClearAlbumPicture();
             lblStatus.Text = Player.GetString("Stop");
             SetTaskbarOverlayIcon(null, lblStatus.Text);
             SetTaskbarProgressState(TaskbarProgressBarState.NoProgress);
@@ -643,10 +647,12 @@ namespace PowerAudioPlayer
             mediaLibraryForm.Close();
             playlistEditorForm.Close();
             lyricsForm.Close();
+            albumPictureForm.Close();
 
             mediaLibraryForm.Dispose();
             playlistEditorForm.Dispose();
             lyricsForm.Dispose();
+            albumPictureForm.Dispose();
             e.Cancel = false;
         }
 
@@ -763,7 +769,19 @@ namespace PowerAudioPlayer
 
         private void tsmiAddURL_Click(object sender, EventArgs e)
         {
-            // Implement URL addition logic here
+
+        }
+
+        private void tsmiAlbumPictureForm_Click(object sender, EventArgs e)
+        {
+            if (albumPictureForm.Visible)
+            {
+                albumPictureForm.Hide();
+            }
+            else
+            {
+                albumPictureForm.Show();
+            }
         }
         #endregion
     }
