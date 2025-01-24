@@ -87,8 +87,8 @@ namespace PowerAudioPlayer
 
         private string GetSectionName(SettingsContext context)
         {
-            string groupName = (string)context["GroupName"];
-            string key = (string)context["SettingsKey"];
+            string? groupName = context["GroupName"] as string;
+            string? key = context["SettingsKey"] as string;
 
             Debug.Assert(groupName != null, "SettingsContext did not have a GroupName!");
 
@@ -158,7 +158,7 @@ namespace PowerAudioPlayer
             }
         }
 
-        private ClientSettingsSection GetConfigSection(string sectionName)
+        private ClientSettingsSection? GetConfigSection(string sectionName)
         {
             Configuration config = configuration;
             string fullSectionName = UserSettingsGroupName + "/" + sectionName;
@@ -174,6 +174,11 @@ namespace PowerAudioPlayer
                     DeclareSection(sectionName);
                     section = config.GetSection(fullSectionName) as ClientSettingsSection;
                 }
+            }
+
+            if (section == null)
+            {
+                throw new ConfigurationErrorsException($"Section {fullSectionName} not found in the configuration.");
             }
 
             return section;

@@ -34,16 +34,15 @@ namespace PowerAudioPlayer.Controllers.Helper
         {
             if (string.IsNullOrEmpty(file))
                 file = defaultFile;
-            FileStream fs = new FileStream(file, FileMode.Create);
+            using FileStream fs = new FileStream(file, FileMode.Create);
             fs.Write(MemoryPackSerializer.Serialize(_library));
-            fs.Close();
         }
 
         public static void LoadMediaLibrary(string file = "")
         {
             if (string.IsNullOrEmpty(file))
                 file = defaultFile;
-            FileStream fs = new FileStream(file, FileMode.OpenOrCreate);
+            using FileStream fs = new FileStream(file, FileMode.OpenOrCreate);
             int length = (int)fs.Length;
             byte[] buffer = new byte[length];
             try
@@ -55,7 +54,6 @@ namespace PowerAudioPlayer.Controllers.Helper
             {
                 _library = new Dictionary<string, AudioInfo>();
             }
-            fs.Close();
         }
 
         public static void ClearMediaLibrary()
@@ -151,7 +149,7 @@ namespace PowerAudioPlayer.Controllers.Helper
                     list = _library.Values.ToArray().Select(x => Path.GetExtension(x.File).ToLower()).Distinct().ToArray();
                     break;
                 case ViewType.Folder:
-                    list = _library.Values.ToArray().Select(x => Path.GetDirectoryName(x.File)).Distinct().ToArray();
+                    list = _library.Values.ToArray().Select(x => Path.GetDirectoryName(x.File) ?? string.Empty).Distinct().ToArray();
                     break;
             }
             return list;
@@ -175,7 +173,7 @@ namespace PowerAudioPlayer.Controllers.Helper
                     dic = _library.Where(x => Path.GetExtension(x.Value.File).Equals(keyWord)).ToDictionary(x => x.Key, x => x.Value);
                     break;
                 case ViewType.Folder:
-                    dic = _library.Where(x => Path.GetDirectoryName(x.Value.File).Equals(keyWord, StringComparison.OrdinalIgnoreCase)).ToDictionary(x => x.Key, x => x.Value);
+                    dic = _library.Where(x => (Path.GetDirectoryName(x.Value.File) ?? string.Empty).Equals(keyWord, StringComparison.OrdinalIgnoreCase)).ToDictionary(x => x.Key, x => x.Value);
                     break;
             }
             return dic;

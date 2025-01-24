@@ -182,19 +182,6 @@ namespace PowerAudioPlayer {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Configuration.SettingsProviderAttribute(typeof(PowerAudioPlayer.PowerSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
-        public global::System.Drawing.Point PlayerFormLocation {
-            get {
-                return ((global::System.Drawing.Point)(this["PlayerFormLocation"]));
-            }
-            set {
-                this["PlayerFormLocation"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(PowerAudioPlayer.PowerSettingsProvider))]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ResponseAppCommand {
             get {
@@ -325,7 +312,7 @@ namespace PowerAudioPlayer {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Configuration.SettingsProviderAttribute(typeof(PowerAudioPlayer.PowerSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
         public int LyricsItemsMargin {
             get {
                 return ((int)(this["LyricsItemsMargin"]));
@@ -516,26 +503,28 @@ namespace PowerAudioPlayer {
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(PowerAudioPlayer.PowerSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
-        public global::System.Drawing.Point PlaylistEditorFormLocation {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WindowsState {
             get {
-                return ((global::System.Drawing.Point)(this["PlaylistEditorFormLocation"]));
+                return ((string)(this["WindowsState"]));
             }
             set {
-                this["PlaylistEditorFormLocation"] = value;
+                this["WindowsState"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(PowerAudioPlayer.PowerSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
-        public global::System.Drawing.Point LyricsFormLocation {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WindowsOpenState {
             get {
-                return ((global::System.Drawing.Point)(this["LyricsFormLocation"]));
+                return ((string)(this["WindowsOpenState"]));
             }
             set {
-                this["LyricsFormLocation"] = value;
+                this["WindowsOpenState"] = value;
             }
         }
     }

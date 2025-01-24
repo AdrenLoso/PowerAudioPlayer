@@ -6,8 +6,9 @@ using System.ComponentModel;
 
 namespace PowerAudioPlayer.UI
 {
-    public partial class MediaLibraryForm : BaseForm
+    public partial class MediaLibraryForm : Form
     {
+        private readonly WindowStateManager windowStateManager;
         private DoWorkEventHandler doWorkEvent = (object? sender, DoWorkEventArgs e) => { };
         private bool isRefreshingMediaLibrary = false;
 
@@ -15,6 +16,8 @@ namespace PowerAudioPlayer.UI
         {
             InitializeComponent();
             RefreshPlaylistList();
+            windowStateManager = new WindowStateManager(this);
+            windowStateManager.LoadState();
             lblWelcome.Text = Player.GetString("MsgWelcomeMediaLibrary");
             lblWelcome.BringToFront();
         }
@@ -70,19 +73,26 @@ namespace PowerAudioPlayer.UI
 
         private void tvTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            if (playlistEditor.IsWorking)
+            {
+                if(MessageBox.Show(Player.GetString("MsgCancelTip"), Application.ProductName ?? string.Empty, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    return;
+                }
+            }
             if (e.Button == MouseButtons.Left)
             {
                 tvTreeView.SelectedNode = e.Node;
                 if (e.Node.Level == 1)
                 {
-                    if (e.Node.Parent.Name == "nodePlaylist")
+                    if (e.Node.Parent?.Name == "nodePlaylist")
                     {
                         EditPlaylist(Convert.ToInt32(e.Node.Tag));
                     }
-                    else if (e.Node.Parent.Name == "nodeMedia")
+                    else if (e.Node.Parent?.Name == "nodeMedia")
                     {
                         mediaLibraryEditor.BringToFront();
-                        mediaLibraryEditor.SetMode(false, (ViewType)Enum.Parse(typeof(ViewType), (string)e.Node.Tag));
+                        mediaLibraryEditor.SetMode(false, Enum.Parse<ViewType>((string?)e.Node.Tag ?? string.Empty));
                     }
                 }
                 else
@@ -101,12 +111,12 @@ namespace PowerAudioPlayer.UI
             else if (e.Button == MouseButtons.Right)
             {
                 Point ClickPoint = new Point(e.X, e.Y);
-                TreeNode CurrentNode = tvTreeView.GetNodeAt(ClickPoint);
+                TreeNode? CurrentNode = tvTreeView.GetNodeAt(ClickPoint);
                 if (CurrentNode != null)
                 {
                     tvTreeView.SelectedNode = CurrentNode;
                 }
-                if (e.Node.Level == 1 && e.Node.Parent.Name == "nodePlaylist")
+                if (e.Node.Level == 1 && e.Node.Parent?.Name == "nodePlaylist")
                 {
                     if (e.Node.Tag != null)
                     {
@@ -137,7 +147,7 @@ namespace PowerAudioPlayer.UI
 
         private void tsmiNewPlaylist_Click(object sender, EventArgs e)
         {
-            var ib = new WinFormsExtendedControls.ExtendedForms.InputDialog { WindowTitle = Application.ProductName, MainInstruction = Player.GetString("MsgAddPlaylist") };
+            var ib = new WinFormsExtendedControls.ExtendedForms.InputDialog { WindowTitle = Application.ProductName ?? string.Empty, MainInstruction = Player.GetString("MsgAddPlaylist") };
             if (ib.ShowDialog() == DialogResult.OK && ib.Input != "")
             {
                 if (PlaylistHelper.Add(new Playlist(ib.Input)) != -1)
@@ -149,11 +159,12 @@ namespace PowerAudioPlayer.UI
 
         private void tsmiRenamePlaylist_Click(object sender, EventArgs e)
         {
-            TreeNode node = tvTreeView.SelectedNode;
+            TreeNode? node = tvTreeView.SelectedNode;
+            if (node == null) return;
             int playlistIndex = Convert.ToInt32(node.Tag);
-            if (node.Parent.Name == "nodePlaylist" || node.Level == 1)
+            if (node.Parent?.Name == "nodePlaylist" || node.Level == 1)
             {
-                var ib = new WinFormsExtendedControls.ExtendedForms.InputDialog { WindowTitle = Application.ProductName, MainInstruction = Player.GetString("MsgRenamePlaylist", PlaylistHelper.Playlists[playlistIndex].Name) };
+                var ib = new WinFormsExtendedControls.ExtendedForms.InputDialog { WindowTitle = Application.ProductName ?? string.Empty, MainInstruction = Player.GetString("MsgRenamePlaylist", PlaylistHelper.Playlists[playlistIndex].Name) };
                 if (ib.ShowDialog() == DialogResult.OK && ib.Input != "")
                 {
                     if (PlaylistHelper.Rename(ib.Input, playlistIndex))
@@ -165,9 +176,10 @@ namespace PowerAudioPlayer.UI
         }
         private void tsmiRemovePlaylist_Click(object sender, EventArgs e)
         {
-            TreeNode node = tvTreeView.SelectedNode;
+            TreeNode? node = tvTreeView.SelectedNode;
+            if (node == null) return;
             int playlistIndex = Convert.ToInt32(node.Tag);
-            if (node.Parent.Name == "nodePlaylist" || node.Level == 1)
+            if (node.Parent?.Name == "nodePlaylist" || node.Level == 1)
             {
                 if (playlistIndex == playlistEditor.EditPlaylistIndex)
                 {
@@ -181,9 +193,10 @@ namespace PowerAudioPlayer.UI
 
         private void tsmiPlayPlaylist_Click(object sender, EventArgs e)
         {
-            TreeNode node = tvTreeView.SelectedNode;
+            TreeNode? node = tvTreeView.SelectedNode;
+            if (node == null) return;
             int playlistIndex = Convert.ToInt32(node.Tag);
-            if ((node.Parent.Name == "nodePlaylist" || node.Level == 1) && Owner != null)
+            if ((node.Parent?.Name == "nodePlaylist" || node.Level == 1) && Owner != null)
             {
                 PlaylistHelper.CopyToActivePlaylist(playlistIndex);
                 NativeAPI.SendMessage(Owner.Handle, Player.WM_PLAY, 0, 1);
@@ -193,9 +206,10 @@ namespace PowerAudioPlayer.UI
 
         private void tsmiLineUpPlaylist_Click(object sender, EventArgs e)
         {
-            TreeNode node = tvTreeView.SelectedNode;
+            TreeNode? node = tvTreeView.SelectedNode;
+            if (node == null) return;
             int playlistIndex = Convert.ToInt32(node.Tag);
-            if ((node.Parent.Name == "nodePlaylist" || node.Level == 1) && Owner != null)
+            if ((node.Parent?.Name == "nodePlaylist" || node.Level == 1) && Owner != null)
             {
                 PlaylistHelper.ActivePlaylist.Items.AddRange(PlaylistHelper.Playlists[playlistIndex].Items);
                 NativeAPI.SendMessage(Owner.Handle, Player.WM_REFRESHPLAYLISTVIEW, 0, 0);
@@ -206,7 +220,7 @@ namespace PowerAudioPlayer.UI
         {
             if (PlaylistHelper.ActivePlaylist.Count != 0)
             {
-                var ib = new WinFormsExtendedControls.ExtendedForms.InputDialog { WindowTitle = Application.ProductName, MainInstruction = Player.GetString("MsgAddPlaylist") };
+                var ib = new WinFormsExtendedControls.ExtendedForms.InputDialog { WindowTitle = Application.ProductName ?? string.Empty, MainInstruction = Player.GetString("MsgAddPlaylist") };
                 if (ib.ShowDialog() == DialogResult.OK && ib.Input != "")
                 {
                     if (PlaylistHelper.Add(new Playlist(ib.Input) { Items = PlaylistHelper.ActivePlaylist.Items }) != -1)
@@ -223,9 +237,10 @@ namespace PowerAudioPlayer.UI
 
         private void tsmiSendPlToMediaLibrary_Click(object sender, EventArgs e)
         {
-            TreeNode node = tvTreeView.SelectedNode;
+            TreeNode? node = tvTreeView.SelectedNode;
+            if (node == null) return;
             int playlistIndex = Convert.ToInt32(node.Tag);
-            if (node.Parent.Name == "nodePlaylist" || node.Level == 1)
+            if (node.Parent?.Name == "nodePlaylist" || node.Level == 1)
             {
                 foreach (var item in PlaylistHelper.Playlists[playlistIndex].Items)
                 {
@@ -236,6 +251,8 @@ namespace PowerAudioPlayer.UI
 
         private void MediaLibraryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (WindowState == FormWindowState.Normal)
+                windowStateManager.SaveState();
             Hide();
             e.Cancel = true;
         }
@@ -321,11 +338,11 @@ namespace PowerAudioPlayer.UI
 
         private void tvTreeView_KeyDown(object sender, KeyEventArgs e)
         {
-            if (tvTreeView.SelectedNode != null && tvTreeView.SelectedNode.Level == 1 && tvTreeView.SelectedNode.Parent.Name == "nodePlaylist")
+            if (tvTreeView.SelectedNode != null && tvTreeView.SelectedNode.Level == 1 && tvTreeView.SelectedNode.Parent?.Name == "nodePlaylist")
             {
-                if(e.KeyCode == Keys.F2)
+                if (e.KeyCode == Keys.F2)
                     tsmiRenamePlaylist_Click(sender, new());
-                else if(e.KeyCode == Keys.Delete)
+                else if (e.KeyCode == Keys.Delete)
                     tsmiRemovePlaylist_Click(sender, new());
             }
         }

@@ -69,6 +69,11 @@ namespace PowerAudioPlayer.UI.CustomControls
             }
         }
 
+        public bool IsWorking 
+        {
+            get => backgroundWorker.IsBusy;
+        }
+
         [Browsable(false)]
         public IList<PlaylistItem> SelectedItems { get => lvPlaylist.SelectedObjects.Cast<PlaylistItem>().ToList(); }
 

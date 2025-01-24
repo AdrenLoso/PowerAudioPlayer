@@ -7,12 +7,14 @@ using PowerAudioPlayer.Controllers.Helper;
 
 namespace PowerAudioPlayer.UI
 {
-    public partial class LyricsForm : BaseForm
+    public partial class LyricsForm : Form
     {
+        private readonly WindowStateManager windowStateManager;
         public LyricsForm()
         {
             InitializeComponent();
-            Location = Settings.Default.LyricsFormLocation;
+            windowStateManager = new WindowStateManager(this);
+            windowStateManager.LoadState();
             lyricsView.DataBindings.Add("HighlightColor", Settings.Default, "LyricsHighlightColor", true, DataSourceUpdateMode.OnPropertyChanged);
             lyricsView.DataBindings.Add("LineMargin", Settings.Default, "LyricsItemsMargin", true, DataSourceUpdateMode.OnPropertyChanged);
         }
@@ -72,6 +74,8 @@ namespace PowerAudioPlayer.UI
 
         private void LyricsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (WindowState == FormWindowState.Normal)
+                windowStateManager.SaveState();
             Hide();
             e.Cancel = true;
         }
@@ -79,12 +83,6 @@ namespace PowerAudioPlayer.UI
         private void LyricsForm_ForeColorChanged(object sender, EventArgs e)
         {
             lyricsView.ForeColor = ForeColor;
-        }
-
-        private void LyricsForm_LocationChanged(object sender, EventArgs e)
-        {
-            if (WindowState == FormWindowState.Normal)
-                Settings.Default.LyricsFormLocation = Location;
         }
     }
 }

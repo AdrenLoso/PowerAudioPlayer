@@ -1,6 +1,6 @@
 ﻿namespace PowerAudioPlayer.UI
 {
-    public partial class SettingsForm : BaseForm
+    public partial class SettingsForm : Form
     {
         public SettingsForm()
         {

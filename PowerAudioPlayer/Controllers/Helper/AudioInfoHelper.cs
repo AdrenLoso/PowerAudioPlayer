@@ -9,9 +9,40 @@ namespace PowerAudioPlayer.Controllers.Helper
     {
         public static AudioInfo GetAudioInfo(string file)
         {
-            TAG_INFO bassTagInfo = new TAG_INFO();
+            int stream = LoadStream(file);
+            TAG_INFO bassTagInfo = GetTagInfo(stream, file);
+            FreeStream(stream);
+            return bassTagInfo != null ? BassTagInfo2AudioInfo(bassTagInfo, file) : new AudioInfo();
+        }
+
+        public static AudioInfo GetAudioInfo(int stream)
+        {
+            string filename = Bass.BASS_ChannelGetInfo(stream).filename;
+            TAG_INFO bassTagInfo = GetTagInfo(stream, filename);
+            return bassTagInfo != null ? BassTagInfo2AudioInfo(bassTagInfo, filename) : new AudioInfo();
+        }
+
+        public static Image? GetAudioPicture(string file)
+        {
+            int stream = Bass.BASS_StreamCreateFile(file, 0, 0, BASSFlag.BASS_STREAM_PRESCAN | BASSFlag.BASS_STREAM_DECODE);
+            TAG_INFO bassTagInfo = GetTagInfo(stream, file);
+            FreeStream(stream);
+            return bassTagInfo?.PictureCount > 0 ? Utils.ByteToImage(bassTagInfo.PictureGet(0).Data) : null;
+        }
+
+        private static int LoadStream(string file)
+        {
             int stream = Bass.BASS_MusicLoad(file, 0, 0, BASSFlag.BASS_MUSIC_PRESCAN | BASSFlag.BASS_MUSIC_NOSAMPLE, 48400);
-            if (stream == 0) stream = Bass.BASS_StreamCreateFile(file, 0, 0, BASSFlag.BASS_STREAM_PRESCAN | BASSFlag.BASS_STREAM_DECODE);
+            if (stream == 0)
+            {
+                stream = Bass.BASS_StreamCreateFile(file, 0, 0, BASSFlag.BASS_STREAM_PRESCAN | BASSFlag.BASS_STREAM_DECODE);
+            }
+            return stream;
+        }
+
+        private static TAG_INFO GetTagInfo(int stream, string file)
+        {
+            TAG_INFO bassTagInfo = new TAG_INFO();
             if (Utils.IsUrl(file))
             {
                 BassTags.BASS_TAG_GetFromURL(stream, bassTagInfo);
@@ -20,35 +51,13 @@ namespace PowerAudioPlayer.Controllers.Helper
             {
                 BassTags.BASS_TAG_GetFromFile(stream, bassTagInfo);
             }
-            Bass.BASS_StreamFree(stream);
-            Bass.BASS_MusicFree(stream);
-            return bassTagInfo != null ? BassTagInfo2AudioInfo(bassTagInfo, file) : new AudioInfo();
-        }        
-
-        public static AudioInfo GetAudioInfo(int stream)
-        {
-            TAG_INFO bassTagInfo = new TAG_INFO();
-            if (stream != 0 && Utils.IsUrl(Bass.BASS_ChannelGetInfo(stream).filename))
-            {
-                BassTags.BASS_TAG_GetFromURL(stream, bassTagInfo);
-            }
-            else
-            {
-                BassTags.BASS_TAG_GetFromFile(stream, bassTagInfo);
-            }
-            return bassTagInfo != null ? BassTagInfo2AudioInfo(bassTagInfo, bassTagInfo.filename) : new AudioInfo();
+            return bassTagInfo;
         }
 
-        public static Image? GetAudioPicture(string file)
+        private static void FreeStream(int stream)
         {
-            TAG_INFO bassTagInfo = new TAG_INFO();
-            int stream = Bass.BASS_StreamCreateFile(file, 0, 0, BASSFlag.BASS_STREAM_PRESCAN | BASSFlag.BASS_STREAM_DECODE);
-            BassTags.BASS_TAG_GetFromFile(stream, bassTagInfo);
             Bass.BASS_StreamFree(stream);
-            if (bassTagInfo.PictureCount > 0)
-                return Utils.ByteToImage(bassTagInfo.PictureGet(0).Data) ?? null;
-            else
-                return null;
+            Bass.BASS_MusicFree(stream);
         }
 
         public static AudioInfo BassTagInfo2AudioInfo(TAG_INFO bassTagInfo, string filename)
@@ -61,12 +70,17 @@ namespace PowerAudioPlayer.Controllers.Helper
             audioInfo.Tag.Year = year;
             audioInfo.Tag.Disc = disc;
             audioInfo.Tag.Genre = bassTagInfo.genre;
-            audioInfo.Tag.Title = bassTagInfo.channelinfo.ctype != BASSChannelType.BASS_CTYPE_STREAM_MIDI ? bassTagInfo.title : Utils.Windows1254ToGB2312(bassTagInfo.title);
-            audioInfo.Tag.Album = bassTagInfo.channelinfo.ctype != BASSChannelType.BASS_CTYPE_STREAM_MIDI ? bassTagInfo.album : Utils.Windows1254ToGB2312(bassTagInfo.album);
-            audioInfo.Tag.Artist = bassTagInfo.channelinfo.ctype != BASSChannelType.BASS_CTYPE_STREAM_MIDI ? bassTagInfo.artist : Utils.Windows1254ToGB2312(bassTagInfo.artist);
-            audioInfo.Tag.Comment = bassTagInfo.channelinfo.ctype != BASSChannelType.BASS_CTYPE_STREAM_MIDI ? bassTagInfo.comment : Utils.Windows1254ToGB2312(bassTagInfo.comment);
-            audioInfo.Tag.Copyright = bassTagInfo.channelinfo.ctype != BASSChannelType.BASS_CTYPE_STREAM_MIDI ? bassTagInfo.copyright : Utils.Windows1254ToGB2312(bassTagInfo.copyright);
+            audioInfo.Tag.Title = ConvertToGB2312IfNeeded(bassTagInfo.title, bassTagInfo.channelinfo.ctype);
+            audioInfo.Tag.Album = ConvertToGB2312IfNeeded(bassTagInfo.album, bassTagInfo.channelinfo.ctype);
+            audioInfo.Tag.Artist = ConvertToGB2312IfNeeded(bassTagInfo.artist, bassTagInfo.channelinfo.ctype);
+            audioInfo.Tag.Comment = ConvertToGB2312IfNeeded(bassTagInfo.comment, bassTagInfo.channelinfo.ctype);
+            audioInfo.Tag.Copyright = ConvertToGB2312IfNeeded(bassTagInfo.copyright, bassTagInfo.channelinfo.ctype);
             return audioInfo;
+        }
+
+        private static string ConvertToGB2312IfNeeded(string text, BASSChannelType ctype)
+        {
+            return ctype != BASSChannelType.BASS_CTYPE_STREAM_MIDI ? text : Utils.Windows1254ToGB2312(text);
         }
 
         public static AudioType GetAudioTypeByCType(BASSChannelType? type)
@@ -181,45 +195,24 @@ namespace PowerAudioPlayer.Controllers.Helper
             };
         }
 
-
         public static string ChannelNumberToString(int chans)
         {
-            string result = chans.ToString();
-            switch (chans)
+            return chans switch
             {
-                case 1:
-                    result = "Mono";
-                    break;
-                case 2:
-                    result = "Stereo";
-                    break;
-                case 3:
-                    result = "2.1";
-                    break;
-                case 4:
-                    result = "2.2";
-                    break;
-                case 5:
-                    result = "4.1";
-                    break;
-                case 6:
-                    result = "5.1";
-                    break;
-                case 7:
-                    result = "5.2";
-                    break;
-                case 8:
-                    result = "7.1";
-                    break;
-            }
-            return result;
+                1 => "Mono",
+                2 => "Stereo",
+                3 => "2.1",
+                4 => "2.2",
+                5 => "4.1",
+                6 => "5.1",
+                7 => "5.2",
+                8 => "7.1",
+                _ => chans.ToString(),
+            };
         }
 
         public static string GetDisplayTitle(AudioInfo info, string format = "%ARTIST% - %TITLE%")
         {
-            //%FILE% : File Name    %TITLE% : Title
-            //%ALBUM% : Album       %ARTIST% : Artist
-            //%GENRE% : Genre
             if (string.IsNullOrWhiteSpace(info.Tag.Title) && string.IsNullOrWhiteSpace(info.Tag.Artist))
             {
                 return Path.GetFileName(info.File);

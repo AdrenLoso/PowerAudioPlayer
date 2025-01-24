@@ -101,7 +101,7 @@ namespace PowerAudioPlayer.UI.CustomControls
             string timestr = reg.Match(str).Groups["time"].Value;
             int m = Convert.ToInt32(timestr.Split(':')[0]);
             int s = 0, f = 0;
-            if (timestr.Split(':')[1].Contains("."))
+            if (timestr.Split(':')[1].Contains('.'))
             {
                 s = Convert.ToInt32(timestr.Split(':')[1].Split('.')[0]);
                 f = Convert.ToInt32(timestr.Split(':')[1].Split('.')[1]);
@@ -152,7 +152,13 @@ namespace PowerAudioPlayer.UI.CustomControls
 
         private void tsmiCopyCurrentLine_Click(object sender, EventArgs e)
         {
-            Clipboard.SetDataObject(LyricsLines[LineIndex].Text);
+            try
+            {
+                Clipboard.SetDataObject(LyricsLines[LineIndex].Text);
+            }
+            catch
+            {
+            }
         }
 
         private void tsmiCopyAlline_Click(object sender, EventArgs e)

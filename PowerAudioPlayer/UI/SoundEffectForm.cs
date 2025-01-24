@@ -4,7 +4,7 @@ using Un4seen.Bass.AddOn.Fx;
 
 namespace PowerAudioPlayer.UI
 {
-    public partial class SoundEffectForm : BaseForm
+    public partial class SoundEffectForm : Form
     {
         public SoundEffectForm()
         {

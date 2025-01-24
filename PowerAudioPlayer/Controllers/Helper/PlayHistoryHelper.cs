@@ -34,16 +34,15 @@ namespace PowerAudioPlayer.Controllers.Helper
         {
             if (string.IsNullOrEmpty(file))
                 file = defaultFile;
-            FileStream fs = new FileStream(file, FileMode.Create);
+            using FileStream fs = new FileStream(file, FileMode.Create);
             fs.Write(MemoryPackSerializer.Serialize(_history));
-            fs.Close();
         }
 
         public static void LoadHistory(string file = "")
         {
             if (string.IsNullOrEmpty(file))
                 file = defaultFile;
-            FileStream fs = new FileStream(file, FileMode.OpenOrCreate);
+            using FileStream fs = new FileStream(file, FileMode.OpenOrCreate);
             int length = (int)fs.Length;
             byte[] buffer = new byte[length];
             fs.ReadExactly(buffer, 0, length);
@@ -55,7 +54,6 @@ namespace PowerAudioPlayer.Controllers.Helper
             {
                 _history = new Dictionary<string, PlayHistoryItem>();
             }
-            fs.Close();
         }
 
         public static void ClearHistory()

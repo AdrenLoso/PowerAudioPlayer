@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace PowerAudioPlayer.UI
 {
-    partial class AboutForm : BaseForm
+    partial class AboutForm : Form
     {
         public AboutForm()
         {

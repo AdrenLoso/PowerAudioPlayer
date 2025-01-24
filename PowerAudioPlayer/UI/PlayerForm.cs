@@ -17,13 +17,14 @@ using Utils = PowerAudioPlayer.Controllers.Utils;
 
 namespace PowerAudioPlayer
 {
-    public partial class PlayerForm : BaseForm
+    public partial class PlayerForm : Form
     {
         private readonly ThumbnailToolBarButton tbtnPrevious = new ThumbnailToolBarButton(Resources.Previousi, Player.GetString("SPrevious"));
         private readonly ThumbnailToolBarButton tbtnPlay = new ThumbnailToolBarButton(Resources.Playi, Player.GetString("Play"));
         private readonly ThumbnailToolBarButton tbtnPause = new ThumbnailToolBarButton(Resources.Pausei, Player.GetString("Pause"));
         private readonly ThumbnailToolBarButton tbtnStop = new ThumbnailToolBarButton(Resources.Stopi, Player.GetString("Stop"));
         private readonly ThumbnailToolBarButton tbtnNext = new ThumbnailToolBarButton(Resources.Nexti, Player.GetString("SNext"));
+        private readonly WindowStateManager windowStateManager;
         private SoundEffectForm? soundEffectForm = null;
         private MediaLibraryForm mediaLibraryForm = new MediaLibraryForm();
         private PlaylistEditorForm playlistEditorForm = new PlaylistEditorForm();
@@ -33,19 +34,30 @@ namespace PowerAudioPlayer
         {
             InitializeComponent();
             InitBinding();
-            Location = Settings.Default.PlayerFormLocation;
-            tbtnPrevious.Click += (object? sender, ThumbnailButtonClickedEventArgs e) => { btnPrevious_Click(new object(), new EventArgs()); };
-            tbtnPlay.Click += (object? sender, ThumbnailButtonClickedEventArgs e) => { btnPlay_Click(new object(), new EventArgs()); };
-            tbtnPause.Click += (object? sender, ThumbnailButtonClickedEventArgs e) => { btnPause_Click(new object(), new EventArgs()); };
-            tbtnStop.Click += (object? sender, ThumbnailButtonClickedEventArgs e) => { btnStop_Click(new object(), new EventArgs()); };
-            tbtnNext.Click += (object? sender, ThumbnailButtonClickedEventArgs e) => { btnNext_Click(new object(), new EventArgs()); };
+            windowStateManager = new WindowStateManager(this);
+            windowStateManager.LoadState();
+            InitializeThumbnailButtons();
+            InitializeForms();
+            if (Settings.Default.MediaLibraryStartUpUpdate)
+                NativeAPI.SendMessage(mediaLibraryForm.Handle, Player.WM_REFRESHMEDIALIBRARY, 0, 0);
+        }
+
+        private void InitializeThumbnailButtons()
+        {
+            tbtnPrevious.Click += (sender, e) => btnPrevious_Click(sender ?? this, EventArgs.Empty);
+            tbtnPlay.Click += (sender, e) => btnPlay_Click(sender ?? this, EventArgs.Empty);
+            tbtnPause.Click += (sender, e) => btnPause_Click(sender ?? this, EventArgs.Empty);
+            tbtnStop.Click += (sender, e) => btnStop_Click(sender ?? this, EventArgs.Empty);
+            tbtnNext.Click += (sender, e) => btnNext_Click(sender ?? this, EventArgs.Empty);
+        }
+
+        private void InitializeForms()
+        {
             playlistEditorForm.Owner = this;
             lyricsForm.Owner = this;
+            mediaLibraryForm.Owner = this;
             playlistEditorForm.Show();
             lyricsForm.Show();
-            mediaLibraryForm.Owner = this;
-            if (Settings.Default.MediaLibraryStartUpUpdate && mediaLibraryForm != null)
-                NativeAPI.SendMessage(mediaLibraryForm.Handle, Player.WM_REFRESHMEDIALIBRARY, 0, 0);
         }
 
         #region Player Control Method
@@ -53,50 +65,36 @@ namespace PowerAudioPlayer
         {
             Player.Core.SetVolume(Settings.Default.Volume);
             trbVolume.Value = Settings.Default.Volume;
-            UpdateContols();
+            UpdateControls();
         }
 
         private void Play(int index)
         {
-            if (PlaylistHelper.ActivePlaylist.IsOutOfRange(index))
-            {
-                return;
-            }
+            if (PlaylistHelper.ActivePlaylist.IsOutOfRange(index)) return;
+
             lblStatus1.Text = Player.GetString("MsgReady");
             Player.ResetABRepeat();
             UpdateABRepeatToolTip();
             Player.Core.Open(PlaylistHelper.ActivePlaylist.Items[index].File);
+
             if (!Player.Core.IsOpened())
             {
                 lblStatus1.Text = Player.GetString("MsgPlayErrorWithArg", PlaylistHelper.ActivePlaylist.Items[index].DisplayTitle);
-                if (!Settings.Default.StopPlayingWhenError)
-                {
-                    Play(index + 1);
-                    return;
-                }
-                else
-                {
-                    return;
-                }
+                if (!Settings.Default.StopPlayingWhenError) Play(index + 1);
+                return;
             }
+
             if (!Player.Core.IsSoundFontLoaded())
                 lblStatus1.Text = Player.GetString("MsgMIDISoundFontNotSelected");
+
             Player.playIndex = index;
             Player.Core.Play();
-            AudioInfo audioInfo = AudioInfoHelper.GetAudioInfo(PlaylistHelper.ActivePlaylist.Items[index].File);
-            picAlbum.Image = AudioInfoHelper.GetAudioPicture(PlaylistHelper.ActivePlaylist.Items[index].File);
-            if (audioInfo != null)
-            {
-                lblTitle.Text = !string.IsNullOrEmpty(audioInfo.Tag.Title) ? audioInfo.Tag.Title : string.Empty;
-                lblArtist.Text = !string.IsNullOrEmpty(audioInfo.Tag.Artist) ? audioInfo.Tag.Artist : string.Empty;
-                lblAlbum.Text = !string.IsNullOrEmpty(audioInfo.Tag.Album) ? audioInfo.Tag.Album : string.Empty;
-                lblInfo.Text = Player.Core.GetChannelInfo().ToString();
-            }
+            UpdateAudioInfo(PlaylistHelper.ActivePlaylist.Items[index].File);
             lblDisplayTitle.Text = PlaylistHelper.ActivePlaylist.Items[index].DisplayTitle;
 
             tmrPlayer.Start();
             LoadLyrics();
-            UpdateContols();
+            UpdateControls();
             if (Settings.Default.RecordPlayHistroy)
             {
                 PlayHistoryHelper.Add(PlaylistHelper.ActivePlaylist.Items[index]);
@@ -104,63 +102,18 @@ namespace PowerAudioPlayer
             }
         }
 
-        //private void EndSync(int handle, int channel, int data, nint user)
-        //{
-        //    Invoke(new Action(() =>
-        //    {
-        //        if (Settings.Default.PlayMode == PlayMode.TrackLoop)
-        //        {
-        //            Play(Player.playIndex);
-        //            return;
-        //        }
-        //        tmrPlayer.Stop();
-        //        tmrSpectrum.Stop();
-        //        tmrLyrics.Stop();
-        //        peakMeterCtrl.Stop();
-        //        switch (Settings.Default.PlayMode)
-        //        {
-        //            case PlayMode.OrderPlay:
-        //                if (Player.playIndex >= PlaylistHelper.ActivePlaylist.Count - 1)
-        //                {
-        //                    Player.Core.Close();
-        //                    UpdateContols();
-        //                }
-        //                else
-        //                {
-        //                    btnNext_Click(new object(), new EventArgs());
-        //                }
-        //                break;
-        //            case PlayMode.TrackLoop:
-
-        //                break;
-        //            case PlayMode.PlaylistLoop:
-        //                if (Player.playIndex >= PlaylistHelper.ActivePlaylist.Count - 1)
-        //                    Play(0);
-        //                else
-        //                    btnNext_Click(new object(), new EventArgs());
-        //                break;
-        //            case PlayMode.ShufflePlay:
-        //                Play(new Random().Next(0, PlaylistHelper.ActivePlaylist.Count));
-        //                break;
-        //        }
-        //    }));
-        //}
-
-        //private void MetaSync(int handle, int channel, int data, nint user)
-        //{
-        //    TAG_INFO _tagInfo = new TAG_INFO(Bass.BASS_ChannelGetInfo(channel).filename);
-        //    if (_tagInfo.UpdateFromMETA(Bass.BASS_ChannelGetTags(channel, BASSTag.BASS_TAG_META), false, true))
-        //    {
-        //        Invoke(() =>
-        //        {
-        //            lblTitle.Text = !string.IsNullOrEmpty(_tagInfo.title) ? _tagInfo.title : "";
-        //            lblArtist.Text = !string.IsNullOrEmpty(_tagInfo.artist) ? _tagInfo.artist : "";
-        //            lblAlbum.Text = !string.IsNullOrEmpty(_tagInfo.album) ? _tagInfo.album : "";
-        //            lblInfo.Text = Player.Core.GetChannelInfo().ToString();
-        //            lblDisplayTitle.Text = AudioInfoHelper.GetDisplayTitle(AudioInfoHelper.BassTagInfo2AudioInfo(_tagInfo, _tagInfo.filename));
-        //        });
-        //    }
-        //}
+        private void UpdateAudioInfo(string file)
+        {
+            AudioInfo audioInfo = AudioInfoHelper.GetAudioInfo(file);
+            picAlbum.Image = AudioInfoHelper.GetAudioPicture(file);
+            if (audioInfo != null)
+            {
+                lblTitle.Text = !string.IsNullOrEmpty(audioInfo.Tag.Title) ? audioInfo.Tag.Title : string.Empty;
+                lblArtist.Text = !string.IsNullOrEmpty(audioInfo.Tag.Artist) ? audioInfo.Tag.Artist : string.Empty;
+                lblAlbum.Text = !string.IsNullOrEmpty(audioInfo.Tag.Album) ? audioInfo.Tag.Album : string.Empty;
+                lblInfo.Text = Player.Core.GetChannelInfo().ToString();
+            }
+        }
 
         private void Stop()
         {
@@ -168,7 +121,7 @@ namespace PowerAudioPlayer
             tmrLyrics.Stop();
             NativeAPI.SendMessage(lyricsForm.Handle, Player.WM_CLEARLRC, 0, 0);
             Player.Core.Stop();
-            UpdateContols();
+            UpdateControls();
         }
 
         private void LoadLyrics()
@@ -177,10 +130,7 @@ namespace PowerAudioPlayer
             tmrLyrics.Start();
         }
 
-        private void HandleCommandLine(string[] cmd)
-        {
-
-        }
+        private void HandleCommandLine(string[] cmd) { }
 
         #endregion
 
@@ -188,7 +138,7 @@ namespace PowerAudioPlayer
         private void InitBinding()
         {
             Binding binding = new Binding("Text", Settings.Default, "Volume", true, DataSourceUpdateMode.OnPropertyChanged);
-            binding.Format += (object? sender, ConvertEventArgs e) => { e.Value = string.Format("{0}%", e.Value?.ToString()); };
+            binding.Format += (sender, e) => e.Value = $"{e.Value}%";
             lblVolume.DataBindings.Add(binding);
 
             AddRadioCheckedBinding(tsemiOrderPlay, Settings.Default, "PlayMode", PlayMode.OrderPlay);
@@ -200,64 +150,74 @@ namespace PowerAudioPlayer
         private void AddRadioCheckedBinding<T>(WinFormsExtendedControls.ToolStripEnhancedMenuItem radio, object dataSource, string dataMember, T trueValue)
         {
             var binding = new Binding(nameof(WinFormsExtendedControls.ToolStripEnhancedMenuItem.Checked), dataSource, dataMember, true, DataSourceUpdateMode.OnPropertyChanged);
-            binding.Parse += (s, a) => { if ((bool)a.Value) a.Value = trueValue; };
-            binding.Format += (s, a) => a.Value = ((T)a.Value).Equals(trueValue);
+            binding.Parse += (s, a) => { if (a.Value is bool value && value) a.Value = trueValue; };
+            binding.Format += (s, a) => a.Value = a.Value is T value && value.Equals(trueValue);
             radio.DataBindings.Add(binding);
         }
 
-        private void UpdateContols()
+        private void UpdateControls()
         {
             if (Player.Core.GetChannelStatus() == PlayerChannelStatus.Stopped || !Player.Core.IsOpened())
             {
-                Text = Application.ProductName;
-                lblPosition.Text = "00:00 / 00:00";
-                trbPosition.Enabled = false;
-                trbPosition.Maximum = 0;
-                lblAlbum.Text = string.Empty;
-                lblArtist.Text = string.Empty;
-                lblTitle.Text = string.Empty;
-                lblDisplayTitle.Text = Application.ProductName;
-                lblInfo.Text = string.Empty;
-                picAlbum.Image = null;
-                lblStatus.Text = Player.GetString("Stop");
-                SetTaskbarOverlayIcon(null, lblStatus.Text);
-                SetTaskbarProgressState(TaskbarProgressBarState.NoProgress);
+                ResetControls();
             }
             else
             {
-                lblPosition.Text = string.Format("{0}/{1}({2})", Utils.FormatTimeSecond(Player.Core.GetPositionSecond()), Utils.FormatTimeSecond(Player.Core.GetLengthSecond()), ((double)Player.Core.GetPositionMillisecond() / Player.Core.GetLengthMillisecond()).ToString("P1"));
-                trbPosition.Maximum = Player.Core.GetLengthMillisecond();
-                if (Player.Core.GetChannelStatus() == PlayerChannelStatus.Playing)
-                {
-                    try
-                    {
-                        trbPosition.Value = Player.Core.GetPositionMillisecond();
-                        trbPosition.Enabled = true;
-                    }
-                    catch
-                    {
-                        trbPosition.Enabled = false;
-                    }
-                    lblStatus.Text = Player.GetString("Play");
-                    SetTaskbarOverlayIcon(Resources.Playi, lblStatus.Text);
-                    SetTaskbarProgressState(TaskbarProgressBarState.Normal);
-                }
-                else
-                {
-                    trbPosition.Enabled = false;
-                    lblStatus.Text = Player.GetString("Pause");
-                    SetTaskbarOverlayIcon(Resources.Pausei, lblStatus.Text);
-                    SetTaskbarProgressState(TaskbarProgressBarState.Paused);
-                }
-                Text = $"[{lblStatus.Text}]{lblDisplayTitle.Text} - {Application.ProductName}";
+                UpdatePlayingControls();
+            }
+        }
+
+        private void ResetControls()
+        {
+            Text = Application.ProductName;
+            lblPosition.Text = "00:00 / 00:00";
+            trbPosition.Enabled = false;
+            trbPosition.Maximum = 0;
+            lblAlbum.Text = string.Empty;
+            lblArtist.Text = string.Empty;
+            lblTitle.Text = string.Empty;
+            lblDisplayTitle.Text = Application.ProductName;
+            lblInfo.Text = string.Empty;
+            picAlbum.Image = null;
+            lblStatus.Text = Player.GetString("Stop");
+            SetTaskbarOverlayIcon(null, lblStatus.Text);
+            SetTaskbarProgressState(TaskbarProgressBarState.NoProgress);
+        }
+
+        private void UpdatePlayingControls()
+        {
+            lblPosition.Text = $"{Utils.FormatTimeSecond(Player.Core.GetPositionSecond())}/{Utils.FormatTimeSecond(Player.Core.GetLengthSecond())}({((double)Player.Core.GetPositionMillisecond() / Player.Core.GetLengthMillisecond()):P1})";
+            trbPosition.Maximum = Player.Core.GetLengthMillisecond();
+            if (Player.Core.GetChannelStatus() == PlayerChannelStatus.Playing)
+            {
                 try
                 {
-                    SetTaskbarProgressValue(trbPosition.Value, trbPosition.Maximum);
+                    trbPosition.Value = Player.Core.GetPositionMillisecond();
+                    trbPosition.Enabled = true;
                 }
                 catch
                 {
-                    SetTaskbarProgressValue(0, 0);
+                    trbPosition.Enabled = false;
                 }
+                lblStatus.Text = Player.GetString("Play");
+                SetTaskbarOverlayIcon(Resources.Playi, lblStatus.Text);
+                SetTaskbarProgressState(TaskbarProgressBarState.Normal);
+            }
+            else
+            {
+                trbPosition.Enabled = false;
+                lblStatus.Text = Player.GetString("Pause");
+                SetTaskbarOverlayIcon(Resources.Pausei, lblStatus.Text);
+                SetTaskbarProgressState(TaskbarProgressBarState.Paused);
+            }
+            Text = $"[{lblStatus.Text}]{lblDisplayTitle.Text} - {Application.ProductName}";
+            try
+            {
+                SetTaskbarProgressValue(trbPosition.Value, trbPosition.Maximum);
+            }
+            catch
+            {
+                SetTaskbarProgressValue(0, 0);
             }
         }
 
@@ -319,42 +279,44 @@ namespace PowerAudioPlayer
         {
             if (Player.Core.IsEnded())
             {
-                if (Settings.Default.PlayMode == PlayMode.TrackLoop)
-                {
-                    Play(Player.playIndex);
-                    return;
-                }
-                tmrPlayer.Stop();
-                tmrLyrics.Stop();
-                switch (Settings.Default.PlayMode)
-                {
-                    case PlayMode.OrderPlay:
-                        if (Player.playIndex >= PlaylistHelper.ActivePlaylist.Count - 1)
-                        {
-                            Player.Core.Close();
-                            UpdateContols();
-                        }
-                        else
-                        {
-                            btnNext_Click(new object(), new EventArgs());
-                        }
-                        break;
-                    case PlayMode.TrackLoop:
-
-                        break;
-                    case PlayMode.PlaylistLoop:
-                        if (Player.playIndex >= PlaylistHelper.ActivePlaylist.Count - 1)
-                            Play(0);
-                        else
-                            btnNext_Click(new object(), new EventArgs());
-                        break;
-                    case PlayMode.ShufflePlay:
-                        Play(new Random().Next(0, PlaylistHelper.ActivePlaylist.Count));
-                        break;
-                }
+                HandlePlaybackEnd();
             }
             Player.ContinueABRepeat();
-            UpdateContols();
+            UpdateControls();
+        }
+
+        private void HandlePlaybackEnd()
+        {
+            if (Settings.Default.PlayMode == PlayMode.TrackLoop)
+            {
+                Play(Player.playIndex);
+                return;
+            }
+            tmrPlayer.Stop();
+            tmrLyrics.Stop();
+            switch (Settings.Default.PlayMode)
+            {
+                case PlayMode.OrderPlay:
+                    if (Player.playIndex >= PlaylistHelper.ActivePlaylist.Count - 1)
+                    {
+                        Player.Core.Close();
+                        UpdateControls();
+                    }
+                    else
+                    {
+                        btnNext_Click(new object(), new EventArgs());
+                    }
+                    break;
+                case PlayMode.PlaylistLoop:
+                    if (Player.playIndex >= PlaylistHelper.ActivePlaylist.Count - 1)
+                        Play(0);
+                    else
+                        btnNext_Click(new object(), new EventArgs());
+                    break;
+                case PlayMode.ShufflePlay:
+                    Play(new Random().Next(0, PlaylistHelper.ActivePlaylist.Count));
+                    break;
+            }
         }
 
         private void trbVolume_Scroll(object sender, EventArgs e)
@@ -412,7 +374,7 @@ namespace PowerAudioPlayer
                 UpdateABRepeatToolTip();
                 Player.Core.SetPositionMillisecond(0);
             }
-            UpdateContols();
+            UpdateControls();
         }
 
         private void btnPause_Click(object sender, EventArgs e)
@@ -436,7 +398,7 @@ namespace PowerAudioPlayer
                 Player.Core.Pause();
                 tmrPlayer.Stop();
             }
-            UpdateContols();
+            UpdateControls();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -466,14 +428,13 @@ namespace PowerAudioPlayer
 
         private void tsbtnSettings_Click(object sender, EventArgs e)
         {
-            SettingsForm settingsForm = new SettingsForm();
-            settingsForm.Owner = this;
+            SettingsForm settingsForm = new SettingsForm { Owner = this };
             settingsForm.ShowDialog();
         }
 
         private void tsmiExport_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = Player.GetString("FilterPlaylist"),
                 FileName = $"{PlaylistHelper.ActivePlaylist.Name}.json"
@@ -506,102 +467,95 @@ namespace PowerAudioPlayer
                     HandleCommandLine(Environment.GetCommandLineArgs());
                     break;
                 case NativeAPI.WM_COPYDATA:
-                    NativeAPI.COPYDATASTRUCT cdata = new NativeAPI.COPYDATASTRUCT();
-                    Type mytype = cdata.GetType();
-                    cdata = (NativeAPI.COPYDATASTRUCT)m.GetLParam(mytype);
-                    var args = Utils.SegmentCommandLine(cdata.lpData);
-                    args[0] = string.Empty;
-                    if (args.Length > 1)
-                    {
-                        PlaylistHelper.ActivePlaylist.Items.Clear();
-                        foreach (var f in args)
-                        {
-                            if (!string.IsNullOrEmpty(f))
-                                PlaylistHelper.ActivePlaylist.Items.Add(PlaylistItem.FormFile(f));
-                        }
-                        NativeAPI.SendMessage(playlistEditorForm.Handle, Player.WM_REFRESHPLAYLISTVIEW, 0, 0);
-                        Play(0);
-                    }
+                    HandleCopyData(m);
                     break;
                 case NativeAPI.WM_APPCOMMAND:
-                    if (Settings.Default.ResponseAppCommand)
-                    {
-                        int cmd = (int)((uint)m.LParam >> 16 & ~0xf000);
-                        switch (cmd)
-                        {
-                            case NativeAPI.APPCOMMAND_MEDIA_PREVIOUSTRACK:
-                                btnPrevious_Click(new(), new());
-                                break;
-                            case NativeAPI.APPCOMMAND_MEDIA_NEXTTRACK:
-                                btnNext_Click(new(), new());
-                                break;
-                            case NativeAPI.APPCOMMAND_MEDIA_PAUSE:
-                                btnPause_Click(new(), new());
-                                break;
-                            case NativeAPI.APPCOMMAND_MEDIA_PLAY:
-                                btnPlay_Click(new(), new());
-                                break;
-                            case NativeAPI.APPCOMMAND_MEDIA_PLAY_PAUSE:
-                                btnPause_Click(new(), new());
-                                break;
-                            case NativeAPI.APPCOMMAND_MEDIA_STOP:
-                                btnStop_Click(new(), new());
-                                break;
-                            case NativeAPI.APPCOMMAND_VOLUME_DOWN:
-                                try
-                                {
-                                    trbVolume.Value -= 4;
-                                    trbVolume_Scroll(new(), new());
-                                }
-                                catch
-                                {
-                                    trbVolume.Value = 100;
-                                }
-                                break;
-                            case NativeAPI.APPCOMMAND_VOLUME_UP:
-                                try
-                                {
-                                    trbVolume.Value += 4;
-                                    trbVolume_Scroll(new(), new());
-                                }
-                                catch
-                                {
-                                    trbVolume.Value = 100;
-                                }
-                                break;
-                        }
-                    }
+                    HandleAppCommand(m);
                     break;
             }
 
             base.WndProc(ref m);
         }
 
-        private void PlayerForm_MouseWheel(object sender, MouseEventArgs e)
+        private void HandleCopyData(Message m)
         {
-            if (e.Delta > 0)
+            NativeAPI.COPYDATASTRUCT cdata = (NativeAPI.COPYDATASTRUCT)m.GetLParam(typeof(NativeAPI.COPYDATASTRUCT));
+            var args = Utils.SegmentCommandLine(cdata.lpData);
+            args[0] = string.Empty;
+            if (args.Length > 1)
             {
-                try
+                PlaylistHelper.ActivePlaylist.Items.Clear();
+                foreach (var f in args)
                 {
-                    trbVolume.Value += 2;
-                    trbVolume_Scroll(sender, new EventArgs());
+                    if (!string.IsNullOrEmpty(f))
+                        PlaylistHelper.ActivePlaylist.Items.Add(PlaylistItem.FormFile(f));
                 }
-                catch
+                NativeAPI.SendMessage(playlistEditorForm.Handle, Player.WM_REFRESHPLAYLISTVIEW, 0, 0);
+                Play(0);
+            }
+        }
+
+        private void HandleAppCommand(Message m)
+        {
+            if (Settings.Default.ResponseAppCommand)
+            {
+                int cmd = (int)((uint)m.LParam >> 16 & ~0xf000);
+                switch (cmd)
                 {
-                    trbVolume.Value = 100;
+                    case NativeAPI.APPCOMMAND_MEDIA_PREVIOUSTRACK:
+                        btnPrevious_Click(new(), new());
+                        break;
+                    case NativeAPI.APPCOMMAND_MEDIA_NEXTTRACK:
+                        btnNext_Click(new(), new());
+                        break;
+                    case NativeAPI.APPCOMMAND_MEDIA_PAUSE:
+                        btnPause_Click(new(), new());
+                        break;
+                    case NativeAPI.APPCOMMAND_MEDIA_PLAY:
+                        btnPlay_Click(new(), new());
+                        break;
+                    case NativeAPI.APPCOMMAND_MEDIA_PLAY_PAUSE:
+                        btnPause_Click(new(), new());
+                        break;
+                    case NativeAPI.APPCOMMAND_MEDIA_STOP:
+                        btnStop_Click(new(), new());
+                        break;
+                    case NativeAPI.APPCOMMAND_VOLUME_DOWN:
+                        try
+                        {
+                            trbVolume.Value -= 4;
+                            trbVolume_Scroll(new(), new());
+                        }
+                        catch
+                        {
+                            trbVolume.Value = 100;
+                        }
+                        break;
+                    case NativeAPI.APPCOMMAND_VOLUME_UP:
+                        try
+                        {
+                            trbVolume.Value += 4;
+                            trbVolume_Scroll(new(), new());
+                        }
+                        catch
+                        {
+                            trbVolume.Value = 100;
+                        }
+                        break;
                 }
             }
-            else
+        }
+
+        private void PlayerForm_MouseWheel(object sender, MouseEventArgs e)
+        {
+            try
             {
-                try
-                {
-                    trbVolume.Value -= 2;
-                    trbVolume_Scroll(sender, new EventArgs());
-                }
-                catch
-                {
-                    trbVolume.Value = 0;
-                }
+                trbVolume.Value += e.Delta > 0 ? 2 : -2;
+                trbVolume_Scroll(sender, new EventArgs());
+            }
+            catch
+            {
+                trbVolume.Value = e.Delta > 0 ? 100 : 0;
             }
         }
 
@@ -637,13 +591,7 @@ namespace PowerAudioPlayer
 
         private void PlayerForm_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data != null)
-            {
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                    e.Effect = DragDropEffects.All;
-                else
-                    e.Effect = DragDropEffects.None;
-            }
+            e.Effect = e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.All : DragDropEffects.None;
         }
 
         private void tsbtnAPRepeat_Click(object sender, EventArgs e)
@@ -658,11 +606,8 @@ namespace PowerAudioPlayer
         {
             if (soundEffectForm == null)
             {
-                soundEffectForm = new SoundEffectForm() { Owner = this };
-                soundEffectForm.FormClosed += (object? sender, FormClosedEventArgs e) =>
-                {
-                    soundEffectForm = null;
-                };
+                soundEffectForm = new SoundEffectForm { Owner = this };
+                soundEffectForm.FormClosed += (s, e) => soundEffectForm = null;
                 soundEffectForm.Show();
             }
             else
@@ -670,12 +615,6 @@ namespace PowerAudioPlayer
                 soundEffectForm.Close();
                 soundEffectForm = null;
             }
-        }
-
-        private void PlayerForm_LocationChanged(object sender, EventArgs e)
-        {
-            if (WindowState == FormWindowState.Normal)
-                Settings.Default.PlayerFormLocation = Location;
         }
 
         private void lbl_DoubleClick(object sender, EventArgs e)
@@ -698,6 +637,13 @@ namespace PowerAudioPlayer
 
         private void PlayerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (WindowState == FormWindowState.Normal)
+                windowStateManager.SaveState();
+
+            mediaLibraryForm.Close();
+            playlistEditorForm.Close();
+            lyricsForm.Close();
+
             mediaLibraryForm.Dispose();
             playlistEditorForm.Dispose();
             lyricsForm.Dispose();
@@ -707,7 +653,7 @@ namespace PowerAudioPlayer
         private void lblDisplayTitle_DoubleClick(object sender, EventArgs e)
         {
             if (Player.playIndex != -1)
-                new InformationForm() { Tag = PlaylistHelper.ActivePlaylist.Items[Player.playIndex].File }.ShowDialog();
+                new InformationForm { Tag = PlaylistHelper.ActivePlaylist.Items[Player.playIndex].File }.ShowDialog();
         }
 
         private void tsmiAbout_Click(object sender, EventArgs e)
@@ -768,9 +714,11 @@ namespace PowerAudioPlayer
 
         private void tsmiAddFile_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true;
-            openFileDialog.Filter = Player.Core.GetAllSupportedFileFilter(Player.GetString("AllSupportedFileFilter"), Player.GetString("AllFiles"));
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = Player.Core.GetAllSupportedFileFilter(Player.GetString("AllSupportedFileFilter"), Player.GetString("AllFiles"))
+            };
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 if (openFileDialog.FileNames.Length > 0)
@@ -789,11 +737,15 @@ namespace PowerAudioPlayer
 
         private void tsmiAddFolder_Click(object sender, EventArgs e)
         {
-            CommonOpenFileDialog commonOpenFileDialog = new CommonOpenFileDialog();
-            CommonFileDialogCheckBox checkBox = new CommonFileDialogCheckBox();
-            checkBox.Text = Player.GetString("IncludingSubDir");
+            CommonOpenFileDialog commonOpenFileDialog = new CommonOpenFileDialog
+            {
+                IsFolderPicker = true
+            };
+            CommonFileDialogCheckBox checkBox = new CommonFileDialogCheckBox
+            {
+                Text = Player.GetString("IncludingSubDir")
+            };
             commonOpenFileDialog.Controls.Add(checkBox);
-            commonOpenFileDialog.IsFolderPicker = true;
             if (commonOpenFileDialog.ShowDialog() == CommonFileDialogResult.Ok && commonOpenFileDialog.FileName != null)
             {
                 PlaylistHelper.ActivePlaylist.Items.Clear();
@@ -806,12 +758,12 @@ namespace PowerAudioPlayer
                 NativeAPI.SendMessage(playlistEditorForm.Handle, Player.WM_REFRESHPLAYLISTVIEW, 0, 0);
                 if (files.Any())
                     Play(0);
-            };
+            }
         }
 
         private void tsmiAddURL_Click(object sender, EventArgs e)
         {
-
+            // Implement URL addition logic here
         }
         #endregion
     }

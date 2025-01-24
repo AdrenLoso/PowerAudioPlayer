@@ -10,7 +10,7 @@ using Utils = PowerAudioPlayer.Controllers.Utils;
 
 namespace PowerAudioPlayer.UI
 {
-    public partial class InformationForm : BaseForm
+    public partial class InformationForm : Form
     {
         public InformationForm()
         {

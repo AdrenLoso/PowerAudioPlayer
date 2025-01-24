@@ -198,11 +198,11 @@ namespace PowerAudioPlayer
             trbPosition.Dock = DockStyle.Fill;
             trbPosition.Enabled = false;
             trbPosition.EnableSelRange = false;
-            trbPosition.Location = new Point(183, 3);
+            trbPosition.Location = new Point(92, 3);
             trbPosition.Name = "trbPosition";
             trbPosition.SelEnd = 0;
             trbPosition.SelStart = 0;
-            trbPosition.Size = new Size(122, 29);
+            trbPosition.Size = new Size(211, 29);
             trbPosition.TabIndex = 1;
             trbPosition.TickStyle = TickStyle.None;
             toolTip.SetToolTip(trbPosition, "位置");
@@ -214,10 +214,10 @@ namespace PowerAudioPlayer
             trbVolume.AutoSize = false;
             trbVolume.Dock = DockStyle.Fill;
             trbVolume.LargeChange = 2;
-            trbVolume.Location = new Point(385, 3);
+            trbVolume.Location = new Point(348, 3);
             trbVolume.Maximum = 100;
             trbVolume.Name = "trbVolume";
-            trbVolume.Size = new Size(50, 29);
+            trbVolume.Size = new Size(87, 29);
             trbVolume.TabIndex = 2;
             trbVolume.TickFrequency = 5;
             trbVolume.TickStyle = TickStyle.None;
@@ -228,10 +228,10 @@ namespace PowerAudioPlayer
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Location = new Point(4, 46);
+            lblTitle.Location = new Point(4, 28);
             lblTitle.Margin = new Padding(3);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(0, 35);
+            lblTitle.Size = new Size(0, 17);
             lblTitle.TabIndex = 1;
             lblTitle.UseMnemonic = false;
             lblTitle.DoubleClick += lbl_DoubleClick;
@@ -239,10 +239,10 @@ namespace PowerAudioPlayer
             // lblAlbum
             // 
             lblAlbum.AutoSize = true;
-            lblAlbum.Location = new Point(4, 130);
+            lblAlbum.Location = new Point(4, 76);
             lblAlbum.Margin = new Padding(3);
             lblAlbum.Name = "lblAlbum";
-            lblAlbum.Size = new Size(0, 35);
+            lblAlbum.Size = new Size(0, 17);
             lblAlbum.TabIndex = 3;
             lblAlbum.UseMnemonic = false;
             lblAlbum.DoubleClick += lbl_DoubleClick;
@@ -250,10 +250,10 @@ namespace PowerAudioPlayer
             // lblArtist
             // 
             lblArtist.AutoSize = true;
-            lblArtist.Location = new Point(4, 88);
+            lblArtist.Location = new Point(4, 52);
             lblArtist.Margin = new Padding(3);
             lblArtist.Name = "lblArtist";
-            lblArtist.Size = new Size(0, 35);
+            lblArtist.Size = new Size(0, 17);
             lblArtist.TabIndex = 2;
             lblArtist.UseMnemonic = false;
             lblArtist.DoubleClick += lbl_DoubleClick;
@@ -264,7 +264,7 @@ namespace PowerAudioPlayer
             lblInfo.Location = new Point(4, 4);
             lblInfo.Margin = new Padding(3);
             lblInfo.Name = "lblInfo";
-            lblInfo.Size = new Size(0, 35);
+            lblInfo.Size = new Size(0, 17);
             lblInfo.TabIndex = 0;
             lblInfo.UseMnemonic = false;
             lblInfo.DoubleClick += lbl_DoubleClick;
@@ -295,7 +295,7 @@ namespace PowerAudioPlayer
             lblPosition.Dock = DockStyle.Fill;
             lblPosition.Location = new Point(3, 0);
             lblPosition.Name = "lblPosition";
-            lblPosition.Size = new Size(174, 35);
+            lblPosition.Size = new Size(83, 35);
             lblPosition.TabIndex = 0;
             lblPosition.Text = "00:00 / 00:00";
             lblPosition.TextAlign = ContentAlignment.MiddleCenter;
@@ -304,9 +304,9 @@ namespace PowerAudioPlayer
             // 
             lblVolume.AutoSize = true;
             lblVolume.Dock = DockStyle.Fill;
-            lblVolume.Location = new Point(311, 0);
+            lblVolume.Location = new Point(309, 0);
             lblVolume.Name = "lblVolume";
-            lblVolume.Size = new Size(68, 35);
+            lblVolume.Size = new Size(33, 35);
             lblVolume.TabIndex = 3;
             lblVolume.Text = "50%";
             lblVolume.TextAlign = ContentAlignment.MiddleCenter;
@@ -633,14 +633,12 @@ namespace PowerAudioPlayer
             Controls.Add(menuStrip1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Location = new Point(0, 0);
             MaximizeBox = false;
             Name = "PlayerForm";
             StartPosition = FormStartPosition.Manual;
             Text = "PowerAudioPlayer";
             FormClosing += PlayerForm_FormClosing;
             Shown += PlayerForm_Shown;
-            LocationChanged += PlayerForm_LocationChanged;
             DragDrop += PlayerForm_DragDrop;
             DragEnter += PlayerForm_DragEnter;
             MouseWheel += PlayerForm_MouseWheel;

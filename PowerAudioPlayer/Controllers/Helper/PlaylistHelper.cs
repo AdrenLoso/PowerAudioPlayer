@@ -31,88 +31,66 @@ namespace PowerAudioPlayer.Controllers.Helper
             var cmd = Environment.GetCommandLineArgs();
             cmd[0] = string.Empty;
             Directory.CreateDirectory(DefaultPlaylistDir);
-            IEnumerable<string> files = Utils.SearchFiles(DefaultPlaylistDir, ["*.json"], false);
-            foreach (string file in files)
+            var files = Utils.SearchFiles(DefaultPlaylistDir, ["*.json"], false);
+            foreach (var file in files)
             {
-                string name = Path.GetFileNameWithoutExtension(file);
-                int lastIndex = LoadPlaylist(file);
+                var name = Path.GetFileNameWithoutExtension(file);
+                var lastIndex = LoadPlaylist(file);
                 if (name == "active")
                 {
-                    Playlists[lastIndex].IsActive = true;
-                    Playlists[lastIndex].Name = Player.GetString("ActivePlaylist");
+                    var activePlaylist = Playlists[lastIndex];
+                    activePlaylist.IsActive = true;
+                    activePlaylist.Name = Player.GetString("ActivePlaylist");
                     if (cmd.Length > 1)
                     {
-                        Playlists[lastIndex].Items.Clear();
+                        activePlaylist.Items.Clear();
                         foreach (var f in cmd)
                         {
                             if (!string.IsNullOrEmpty(f))
-                                Playlists[lastIndex].Items.Add(PlaylistItem.FormFile(f));
+                                activePlaylist.Items.Add(PlaylistItem.FormFile(f));
                         }
                     }
                 }
             }
             if (_playlists.Count == 0 || _playlists.FindLast(x => x.IsActive) == null)
             {
-                _playlists.Add(new Playlist() { Name = Player.GetString("ActivePlaylist"), IsActive = true });
+                _playlists.Add(new Playlist { Name = Player.GetString("ActivePlaylist"), IsActive = true });
             }
         }
 
         public static void SavePlaylists()
         {
             Directory.CreateDirectory(DefaultPlaylistDir);
-            for (int i = 0; i < _playlists.Count; i++)
+            foreach (var playlist in _playlists)
             {
-                if (Playlists[i].IsActive)
-                    SavePlaylist(Path.Combine(DefaultPlaylistDir, "active.json"), i);
-                else
-                    SavePlaylist(Path.Combine(DefaultPlaylistDir, $"{Playlists[i].Name}.json"), i);
+                var fileName = playlist.IsActive ? "active.json" : $"{playlist.Name}.json";
+                SavePlaylist(Path.Combine(DefaultPlaylistDir, fileName), _playlists.IndexOf(playlist));
             }
         }
 
         public static int LoadPlaylist(string file)
         {
-            using StreamReader sr = new StreamReader(file);
-            string? strLine;
-            StringBuilder stringBuilder = new StringBuilder();
-            while ((strLine = sr.ReadLine()) != null)
-                stringBuilder.AppendLine(strLine);
-            Playlist pl = new Playlist();
-            try
-            {
-                pl.Items = JsonConvert.DeserializeObject<List<PlaylistItem>>(stringBuilder.ToString()) ?? new List<PlaylistItem>();
-            }
-            catch
-            {
-                pl.Items = new List<PlaylistItem>();
-            }
-            pl.Name = Path.GetFileNameWithoutExtension(file);
-            if (NameExists(pl.Name))
-                pl.Name += _playlists.Count(f => f.Name.Equals(pl.Name)).ToString();
-            _playlists.Add(pl);
+            var json = File.ReadAllText(file);
+            var items = JsonConvert.DeserializeObject<List<PlaylistItem>>(json) ?? new List<PlaylistItem>();
+            var name = Path.GetFileNameWithoutExtension(file);
+            if (NameExists(name))
+                name += _playlists.Count(f => f.Name.Equals(name)).ToString();
+            var playlist = new Playlist { Name = name, Items = items };
+            _playlists.Add(playlist);
             return _playlists.Count - 1;
         }
 
         public static void ReplacePlaylist(string file, int index = 0)
         {
-            using StreamReader sr = new StreamReader(file);
-            string? strLine;
-            StringBuilder stringBuilder = new StringBuilder();
-            while ((strLine = sr.ReadLine()) != null)
-                stringBuilder.AppendLine(strLine);
-            try
-            {
-                _playlists[index].Items = JsonConvert.DeserializeObject<List<PlaylistItem>>(stringBuilder.ToString()) ?? new List<PlaylistItem>();
-            }
-            catch
-            {
-                return;
-            }
+            var json = File.ReadAllText(file);
+            var items = JsonConvert.DeserializeObject<List<PlaylistItem>>(json) ?? new List<PlaylistItem>();
+            _playlists[index].Items = items;
         }
 
         public static void SavePlaylist(string file, int index = 0)
         {
-            using StreamWriter streamWriter = new StreamWriter(file, false);
-            streamWriter.Write(JsonConvert.SerializeObject(Playlists[index].Items));
+            var json = JsonConvert.SerializeObject(Playlists[index].Items);
+            File.WriteAllText(file, json);
         }
 
         public static bool FileExistsInAnyList(string file)
@@ -137,19 +115,15 @@ namespace PowerAudioPlayer.Controllers.Helper
                 try
                 {
                     File.Move(Path.Combine(DefaultPlaylistDir, $"{_playlists[index].Name}.json"), Path.Combine(DefaultPlaylistDir, $"{newName}.json"));
-                    _playlists[index].Name = newName;
-                    return true;
                 }
                 catch
                 {
-                    _playlists[index].Name = newName;
-                    return true;
+                    // Ignore exceptions
                 }
+                _playlists[index].Name = newName;
+                return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public static int Add(Playlist list)
@@ -167,10 +141,7 @@ namespace PowerAudioPlayer.Controllers.Helper
                     return -1;
                 }
             }
-            else
-            {
-                return -1;
-            }
+            return -1;
         }
 
         public static bool Remove(Playlist list)
@@ -193,10 +164,7 @@ namespace PowerAudioPlayer.Controllers.Helper
             {
                 return Remove(_playlists[index]);
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public static bool NameExists(string name)

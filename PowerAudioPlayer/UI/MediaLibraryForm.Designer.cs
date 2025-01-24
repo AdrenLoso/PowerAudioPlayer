@@ -251,12 +251,12 @@
             ClientSize = new Size(816, 424);
             Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Location = new Point(0, 0);
             Margin = new Padding(4, 3, 4, 3);
             MinimizeBox = false;
             Name = "MediaLibraryForm";
             ShowIcon = false;
             ShowInTaskbar = false;
+            StartPosition = FormStartPosition.Manual;
             Text = "媒体库";
             FormClosing += MediaLibraryForm_FormClosing;
             cmsPlaylist.ResumeLayout(false);

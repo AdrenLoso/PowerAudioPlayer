@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace PowerAudioPlayer.UI
 {
-    public partial class ExceptionForm : BaseForm
+    public partial class ExceptionForm : Form
     {
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Exception exception { set; get; } = new Exception();

@@ -47,15 +47,14 @@
             ClientSize = new Size(365, 392);
             Controls.Add(lyricsView);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Location = new Point(0, 0);
             MinimizeBox = false;
             Name = "LyricsForm";
             ShowIcon = false;
             ShowInTaskbar = false;
+            StartPosition = FormStartPosition.Manual;
             Text = "歌词";
             FormClosing += LyricsForm_FormClosing;
             ForeColorChanged += LyricsForm_ForeColorChanged;
-            LocationChanged += LyricsForm_LocationChanged;
             ResumeLayout(false);
         }
 

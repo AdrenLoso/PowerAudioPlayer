@@ -38,9 +38,6 @@
     <Setting Name="EnableEqualizer" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="PlayerFormLocation" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.Drawing.Point" Scope="User">
-      <Value Profile="(Default)">100, 100</Value>
-    </Setting>
     <Setting Name="ResponseAppCommand" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -72,7 +69,7 @@
       <Value Profile="(Default)">255, 128, 0</Value>
     </Setting>
     <Setting Name="LyricsItemsMargin" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="MediaLibraryDirectories" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.Collections.Generic.List&lt;PowerAudioPlayer.Controllers.MediaLibraryDirectory&gt;" Scope="User">
       <Value Profile="(Default)" />
@@ -116,11 +113,11 @@
     <Setting Name="PlayerCore" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="PowerAudioPlayer.Controllers.PlayerCores" Scope="User">
       <Value Profile="(Default)">BASS</Value>
     </Setting>
-    <Setting Name="PlaylistEditorFormLocation" Type="System.Drawing.Point" Scope="User">
-      <Value Profile="(Default)">100, 100</Value>
+    <Setting Name="WindowsState" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="LyricsFormLocation" Type="System.Drawing.Point" Scope="User">
-      <Value Profile="(Default)">100, 100</Value>
+    <Setting Name="WindowsOpenState" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

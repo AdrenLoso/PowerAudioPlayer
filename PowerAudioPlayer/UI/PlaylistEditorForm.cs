@@ -4,12 +4,15 @@ using PowerAudioPlayer.Controllers.Helper;
 namespace PowerAudioPlayer.UI
 
 {
-    public partial class PlaylistEditorForm : BaseForm
+    public partial class PlaylistEditorForm : Form
     {
+        private readonly WindowStateManager windowStateManager;
+
         public PlaylistEditorForm()
         {
             InitializeComponent();
-            Location = Settings.Default.PlaylistEditorFormLocation;
+            windowStateManager = new WindowStateManager(this);
+            windowStateManager.LoadState();
             playlistEditor.IsEditActivePlaylist = true;
             playlistEditor.RefreshItems();
         }
@@ -42,14 +45,10 @@ namespace PowerAudioPlayer.UI
 
         private void PlaylistEditorForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (WindowState == FormWindowState.Normal)
+                windowStateManager.SaveState();
             Hide();
             e.Cancel = true;
-        }
-
-        private void PlaylistEditorForm_LocationChanged(object sender, EventArgs e)
-        {
-            if (WindowState == FormWindowState.Normal)
-                Settings.Default.PlaylistEditorFormLocation = Location;
         }
     }
 }
