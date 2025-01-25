@@ -6,8 +6,8 @@ using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using File = System.IO.File;
 using System.Collections.Concurrent;
+using File = System.IO.File;
 
 namespace PowerAudioPlayer.Controllers
 {
@@ -372,12 +372,15 @@ namespace PowerAudioPlayer.Controllers
             var shellType = Type.GetTypeFromProgID("WScript.Shell");
             if (shellType != null)
             {
-                dynamic shell = Activator.CreateInstance(shellType);
-                var shortcut = shell.CreateShortcut(lnkFilePath);
-                shortcut.TargetPath = targetPath;
-                shortcut.Arguments = args;
-                shortcut.WorkingDirectory = workDir;
-                shortcut.Save();
+                dynamic? shell = Activator.CreateInstance(shellType);
+                if (shell != null)
+                {
+                    var shortcut = shell.CreateShortcut(lnkFilePath);
+                    shortcut.TargetPath = targetPath;
+                    shortcut.Arguments = args;
+                    shortcut.WorkingDirectory = workDir;
+                    shortcut.Save();
+                }
             }
         }
 

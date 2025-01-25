@@ -14,6 +14,7 @@ using DragEventArgs = System.Windows.Forms.DragEventArgs;
 using MessageBox = System.Windows.Forms.MessageBox;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 using Utils = PowerAudioPlayer.Controllers.Utils;
+using Newtonsoft.Json;
 
 namespace PowerAudioPlayer
 {
@@ -30,6 +31,7 @@ namespace PowerAudioPlayer
         private PlaylistEditorForm playlistEditorForm = new PlaylistEditorForm();
         private LyricsForm lyricsForm = new LyricsForm();
         private AlbumPictureForm albumPictureForm = new AlbumPictureForm();
+        
 
         public PlayerForm()
         {
@@ -58,9 +60,31 @@ namespace PowerAudioPlayer
             lyricsForm.Owner = this;
             mediaLibraryForm.Owner = this;
             albumPictureForm.Owner = this;
-            playlistEditorForm.Show();
-            lyricsForm.Show();
-            albumPictureForm.Show();
+            try
+            {
+                if (!string.IsNullOrEmpty(Settings.Default.WindowsOpenStatus))
+                {
+                    Dictionary<string, bool> windowsOpenStatus = JsonConvert.DeserializeObject<Dictionary<string, bool>>(Settings.Default.WindowsOpenStatus) ?? [];
+                    if (windowsOpenStatus.ContainsKey(mediaLibraryForm.Name))
+                        mediaLibraryForm.Visible = windowsOpenStatus[mediaLibraryForm.Name];
+                    if (windowsOpenStatus.ContainsKey(lyricsForm.Name))
+                        lyricsForm.Visible = windowsOpenStatus[lyricsForm.Name];
+                    if (windowsOpenStatus.ContainsKey(playlistEditorForm.Name))
+                        playlistEditorForm.Visible = windowsOpenStatus[playlistEditorForm.Name];
+                    if (windowsOpenStatus.ContainsKey(albumPictureForm.Name))
+                        albumPictureForm.Visible = windowsOpenStatus[albumPictureForm.Name];
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch
+            {
+                playlistEditorForm.Show();
+                lyricsForm.Show();
+                albumPictureForm.Show();
+            }
         }
 
         #region Player Control Method
@@ -483,7 +507,7 @@ namespace PowerAudioPlayer
 
         private void HandleCopyData(Message m)
         {
-            NativeAPI.COPYDATASTRUCT cdata = (NativeAPI.COPYDATASTRUCT)m.GetLParam(typeof(NativeAPI.COPYDATASTRUCT));
+            NativeAPI.COPYDATASTRUCT cdata = (NativeAPI.COPYDATASTRUCT?)m.GetLParam(typeof(NativeAPI.COPYDATASTRUCT)) ?? default;
             var args = Utils.SegmentCommandLine(cdata.lpData);
             args[0] = string.Empty;
             if (args.Length > 1)
@@ -643,12 +667,18 @@ namespace PowerAudioPlayer
         {
             if (WindowState == FormWindowState.Normal)
                 windowStateManager.SaveState();
-
+            Dictionary<string, bool> windowsOpenStatus = new Dictionary<string, bool>
+            {
+                { mediaLibraryForm.Name, mediaLibraryForm.Visible },
+                { lyricsForm.Name, lyricsForm.Visible },
+                { playlistEditorForm.Name, playlistEditorForm.Visible },
+                { albumPictureForm.Name, albumPictureForm.Visible }
+            };
+            Settings.Default.WindowsOpenStatus = JsonConvert.SerializeObject(windowsOpenStatus);
             mediaLibraryForm.Close();
             playlistEditorForm.Close();
             lyricsForm.Close();
             albumPictureForm.Close();
-
             mediaLibraryForm.Dispose();
             playlistEditorForm.Dispose();
             lyricsForm.Dispose();

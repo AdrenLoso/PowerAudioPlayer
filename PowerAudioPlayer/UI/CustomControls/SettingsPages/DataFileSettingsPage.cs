@@ -12,6 +12,7 @@ namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
             InitializeComponent();
             lblMsg.Text = Player.GetString("MsgDataFile", Utils.GetCurrentUserFullName(), Utils.GetProgramLocalAppDataPath());
             pbUserAvatar.Load(Utils.GetCurrentUserAvatarPath());
+            Utils.AddShieldToButton(btnClearCurrentUser);
         }
 
         private void btnExploreFolder_Click(object sender, EventArgs e)

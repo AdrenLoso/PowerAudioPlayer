@@ -116,7 +116,7 @@
     <Setting Name="WindowsState" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="WindowsOpenState" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.String" Scope="User">
+    <Setting Name="WindowsOpenStatus" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

@@ -41,7 +41,6 @@ namespace PowerAudioPlayer
             {
                 HandleRunningInstance(instance);
             }
-
         }
 
         private static void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
@@ -51,9 +50,9 @@ namespace PowerAudioPlayer
                 Application.SetColorMode(SystemColorMode.System);
                 if (Utils.IsDarkMode())
                 {
-                    foreach(Form win in Application.OpenForms)
+                    foreach(Form form in Application.OpenForms)
                     {
-                        Utils.EnableDarkModeForWindowTitle(win.Handle, true);
+                        Utils.EnableDarkModeForWindowTitle(form.Handle, true);
                     }
                 }
                 else

@@ -519,12 +519,12 @@ namespace PowerAudioPlayer {
         [global::System.Configuration.SettingsProviderAttribute(typeof(PowerAudioPlayer.PowerSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string WindowsOpenState {
+        public string WindowsOpenStatus {
             get {
-                return ((string)(this["WindowsOpenState"]));
+                return ((string)(this["WindowsOpenStatus"]));
             }
             set {
-                this["WindowsOpenState"] = value;
+                this["WindowsOpenStatus"] = value;
             }
         }
     }
