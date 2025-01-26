@@ -91,6 +91,7 @@ namespace PowerAudioPlayer.Controllers
                 DataFilePath = DataFilePath.LocalAppData;
                 SetDataFilePath(DataFilePath);
             }
+            GetExactDataFilePath();
             if(Settings.Default.Equalizer == null || Settings.Default.Equalizer.Length == 0) 
                 Settings.Default.Equalizer = new int[10];
             if (Settings.Default.MediaLibraryDirectories == null)
@@ -245,6 +246,9 @@ namespace PowerAudioPlayer.Controllers
             {
                 if (DataFilePath == DataFilePath.LocalAppData)
                 {
+                    string path = Utils.GetProgramLocalAppDataPath();
+                    if (!Path.Exists(path))
+                        Directory.CreateDirectory(path);
                     return Utils.GetProgramLocalAppDataPath();
                 }
                 else

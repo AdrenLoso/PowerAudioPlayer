@@ -46,13 +46,13 @@ namespace PowerAudioPlayer.Controllers.Helper
           CharSet = CharSet.Unicode,
           ExactSpelling = true, SetLastError = true)]
         static extern bool MiniDumpWriteDump(
-          IntPtr hProcess,
-          uint processId,
-          IntPtr hFile,
-          uint dumpType,
-          ref MiniDumpExceptionInformation expParam,
-          IntPtr userStreamParam,
-          IntPtr callbackParam);
+            IntPtr hProcess,
+            uint processId,
+            IntPtr hFile,
+            uint dumpType,
+            ref MiniDumpExceptionInformation expParam,
+            IntPtr userStreamParam,
+            IntPtr callbackParam);
 
         [DllImport("kernel32.dll", EntryPoint = "GetCurrentThreadId", ExactSpelling = true)]
         static extern uint GetCurrentThreadId();
@@ -77,13 +77,13 @@ namespace PowerAudioPlayer.Controllers.Helper
                 exp.ClientPointers = false;
                 exp.ExceptioonPointers = Marshal.GetExceptionPointers();
                 bool bRet = MiniDumpWriteDump(
-                  GetCurrentProcess(),
-                  GetCurrentProcessId(),
-                  fs.SafeFileHandle.DangerousGetHandle(),
-                  (uint)dumpType,
-                  ref exp,
-                  IntPtr.Zero,
-                  IntPtr.Zero);
+                      GetCurrentProcess(),
+                      GetCurrentProcessId(),
+                      fs.SafeFileHandle.DangerousGetHandle(),
+                      (uint)dumpType,
+                      ref exp,
+                      IntPtr.Zero,
+                      IntPtr.Zero);
                 return bRet;
             }
         }

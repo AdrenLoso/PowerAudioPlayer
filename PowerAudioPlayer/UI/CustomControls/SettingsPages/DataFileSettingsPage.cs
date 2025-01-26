@@ -51,7 +51,7 @@ namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
                 {
                     Directory.Delete(Player.GetExactDataFilePath(), true);
                     Directory.CreateDirectory(Player.GetExactDataFilePath());
-                    ZipFile.ExtractToDirectory(openFileDialog.FileName, Utils.GetProgramLocalAppDataPath());
+                    ZipFile.ExtractToDirectory(openFileDialog.FileName, Player.GetExactDataFilePath());
                     MessageBox.Show(Player.GetString("MsgDataFileImportOK"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Application.Restart();
                     Process.GetCurrentProcess().Kill();

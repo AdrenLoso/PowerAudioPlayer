@@ -435,5 +435,23 @@ namespace PowerAudioPlayer.Controllers
             WindowsPrincipal principal = new WindowsPrincipal(id);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
+
+        public static void CreateDirectoryRecursively(string fileFullPath)
+        {
+            if (File.Exists(fileFullPath))
+            {
+                return;
+            }
+            string? dirPath = Path.GetDirectoryName(fileFullPath);
+            if (dirPath != null && !Directory.Exists(dirPath))
+            {
+                CreateDirectoryRecursively(dirPath);
+            }
+
+            if (dirPath != null)
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+        }
     }
 }
