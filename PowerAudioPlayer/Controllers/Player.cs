@@ -14,16 +14,22 @@ namespace PowerAudioPlayer.Controllers
 
     public enum PlayerCores
     {
-        BASS,
-        MCI
+        BASS = 0,
+        MCI = 1
     }
 
     public enum ABRepeatMode
     {
-        None,
-        ASelected,
-        ABRepeat
+        None = 0,
+        ASelected = 1,
+        ABRepeat = 2
     };
+
+    public enum DataFilePath
+    {
+        LocalAppData = 0,
+        Program = 1
+    }
 
     public class FileSearchArgs
     {
@@ -54,7 +60,7 @@ namespace PowerAudioPlayer.Controllers
         public const int WM_LOADLYRICS = WM_USER + 6;
         public const int WM_LRCROLL = WM_USER + 7;
         public const int WM_CLEARLRC = WM_USER + 8;
-        public const int WM_REFRESHMEDIALIBRARY = WM_USER + 10;
+        public const int WM_UPDATEMEDIALIBRARY = WM_USER + 10;
         public const int WM_HANDLECOMMANDLINE = WM_USER + 11;
         public const int WM_REFRESHHISTORYVIEW = WM_USER + 12;
         public const int WM_SWITCHPLAYLISTEDITORFORMEMBEDDED = WM_USER + 13;
@@ -64,11 +70,27 @@ namespace PowerAudioPlayer.Controllers
         private static int aRepeatPos = 0;
         private static int bRepeatPos = 0;
 
+        public static DataFilePath DataFilePath = DataFilePath.LocalAppData;
+
         public static IPlayerCore Core = null!;
         public static void Init()
         {
-            if(!Path.Exists(Utils.GetProgramLocalAppDataPath()))
-                Directory.CreateDirectory(Utils.GetProgramLocalAppDataPath());
+            try
+            {
+                using FileStream fs = new FileStream(Path.Combine(Utils.GetProgramExecuableFilePath(), "DataFileSavePath.dat"), FileMode.Open, FileAccess.Read);
+                {
+                    var b = fs.ReadByte();
+                    if (b == 0x0)
+                        DataFilePath = DataFilePath.LocalAppData;
+                    else
+                        DataFilePath = DataFilePath.Program;
+                }
+            }
+            catch
+            {
+                DataFilePath = DataFilePath.LocalAppData;
+                SetDataFilePath(DataFilePath);
+            }
             if(Settings.Default.Equalizer == null || Settings.Default.Equalizer.Length == 0) 
                 Settings.Default.Equalizer = new int[10];
             if (Settings.Default.MediaLibraryDirectories == null)
@@ -206,6 +228,43 @@ namespace PowerAudioPlayer.Controllers
         public static Color GetThemeColor()
         {
             return Settings.Default.ThemeColorFollowingSystem ? Utils.GetSystemThemeColor() : Settings.Default.ThemeColor;
+        }
+
+        public static void SetDataFilePath(DataFilePath dataFilePath) //应用重启后，GetExactDataFilePath() 和 GetDataFilePath() 才会获取到新值。
+        {
+            using FileStream fs = new FileStream(Path.Combine(Utils.GetProgramExecuableFilePath(), "DataFileSavePath.dat"), FileMode.Create, FileAccess.Write);
+            if (dataFilePath == DataFilePath.LocalAppData)
+                fs.WriteByte(0x0);
+            else
+                fs.WriteByte(0x1);
+        }
+
+        public static string GetExactDataFilePath()
+        {
+            try
+            {
+                if (DataFilePath == DataFilePath.LocalAppData)
+                {
+                    return Utils.GetProgramLocalAppDataPath();
+                }
+                else
+                {
+                    string path = Path.Combine(Utils.GetProgramExecuableFilePath(), "DataFile");
+                    if (!Path.Exists(path))
+                        Directory.CreateDirectory(path);
+                    return path;
+                }
+            }
+            catch
+            {
+                DataFilePath = DataFilePath.LocalAppData;
+                return Utils.GetProgramLocalAppDataPath();
+            }
+        }
+
+        public static DataFilePath GetDataFilePath()
+        {
+            return DataFilePath;
         }
     }
 }

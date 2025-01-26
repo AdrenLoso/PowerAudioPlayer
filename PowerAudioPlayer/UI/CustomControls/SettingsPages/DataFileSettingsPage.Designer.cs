@@ -36,6 +36,7 @@
             btnClearCurrentUser = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             pbUserAvatar = new PictureBox();
+            btnSetSavePath = new Button();
             flowLayoutPanel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbUserAvatar).BeginInit();
@@ -107,7 +108,7 @@
             btnClearCurrentUser.Name = "btnClearCurrentUser";
             btnClearCurrentUser.Size = new Size(268, 27);
             btnClearCurrentUser.TabIndex = 4;
-            btnClearCurrentUser.Text = "清空当前用户数据文件";
+            btnClearCurrentUser.Text = "清空数据文件";
             btnClearCurrentUser.UseVisualStyleBackColor = true;
             btnClearCurrentUser.Click += btnClearCurrentUser_Click;
             // 
@@ -144,10 +145,23 @@
             pbUserAvatar.TabIndex = 0;
             pbUserAvatar.TabStop = false;
             // 
+            // btnSetSavePath
+            // 
+            btnSetSavePath.AutoSize = true;
+            btnSetSavePath.Dock = DockStyle.Top;
+            btnSetSavePath.Location = new Point(0, 149);
+            btnSetSavePath.Name = "btnSetSavePath";
+            btnSetSavePath.Size = new Size(374, 27);
+            btnSetSavePath.TabIndex = 6;
+            btnSetSavePath.Text = "*设置数据文件保存路径";
+            btnSetSavePath.UseVisualStyleBackColor = true;
+            btnSetSavePath.Click += btnSetSavePath_Click;
+            // 
             // DataFileSettingsPage
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(btnSetSavePath);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(flowLayoutPanel1);
             Name = "DataFileSettingsPage";
@@ -171,5 +185,6 @@
         private Button btnClearCurrentUser;
         private TableLayoutPanel tableLayoutPanel1;
         private PictureBox pbUserAvatar;
+        private Button btnSetSavePath;
     }
 }

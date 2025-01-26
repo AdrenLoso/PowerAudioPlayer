@@ -42,7 +42,7 @@ namespace PowerAudioPlayer
             InitializeThumbnailButtons();
             InitializeForms();
             if (Settings.Default.MediaLibraryStartUpUpdate)
-                NativeAPI.SendMessage(mediaLibraryForm.Handle, Player.WM_REFRESHMEDIALIBRARY, 0, 0);
+                NativeAPI.SendMessage(mediaLibraryForm.Handle, Player.WM_UPDATEMEDIALIBRARY, 0, 0);
         }
 
         private void InitializeThumbnailButtons()
@@ -488,8 +488,8 @@ namespace PowerAudioPlayer
                 case Player.WM_LOCATETO:
                     NativeAPI.SendMessage(playlistEditorForm.Handle, Player.WM_LOCATETO, 0, 0);
                     break;
-                case Player.WM_REFRESHMEDIALIBRARY:
-                    NativeAPI.SendMessage(mediaLibraryForm.Handle, Player.WM_REFRESHMEDIALIBRARY, 0, 0);
+                case Player.WM_UPDATEMEDIALIBRARY:
+                    NativeAPI.SendMessage(mediaLibraryForm.Handle, Player.WM_UPDATEMEDIALIBRARY, 0, 0);
                     break;
                 case Player.WM_HANDLECOMMANDLINE:
                     HandleCommandLine(Environment.GetCommandLineArgs());
@@ -501,7 +501,6 @@ namespace PowerAudioPlayer
                     HandleAppCommand(m);
                     break;
             }
-
             base.WndProc(ref m);
         }
 

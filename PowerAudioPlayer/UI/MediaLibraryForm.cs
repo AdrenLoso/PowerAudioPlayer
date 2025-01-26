@@ -3,6 +3,7 @@ using PowerAudioPlayer.Controllers;
 using PowerAudioPlayer.Controllers.Helper;
 using PowerAudioPlayer.Model;
 using System.ComponentModel;
+using WinFormsExtendedControls.ExtendedForms;
 
 namespace PowerAudioPlayer.UI
 {
@@ -10,7 +11,7 @@ namespace PowerAudioPlayer.UI
     {
         private readonly WindowStateManager windowStateManager;
         private DoWorkEventHandler doWorkEvent = (object? sender, DoWorkEventArgs e) => { };
-        private bool isRefreshingMediaLibrary = false;
+        private bool isUpdatingMediaLibrary = false;
 
         public MediaLibraryForm()
         {
@@ -26,7 +27,7 @@ namespace PowerAudioPlayer.UI
         {
             switch (m.Msg)
             {
-                case Player.WM_REFRESHMEDIALIBRARY:
+                case Player.WM_UPDATEMEDIALIBRARY:
                     UpdateMediaLibrary();
                     break;
                 case Player.WM_REFRESHHISTORYVIEW:
@@ -38,12 +39,16 @@ namespace PowerAudioPlayer.UI
 
         private void UpdateMediaLibrary()
         {
-            if (!isRefreshingMediaLibrary)
+            if (!isUpdatingMediaLibrary)
             {
-                isRefreshingMediaLibrary = true;
+                isUpdatingMediaLibrary = true;
                 doWorkEvent = (object? sender, DoWorkEventArgs e) =>
                 {
+                    var progressDialog = new ProgressDialog() { Marquee = true, ShowTimeRemaining = false, Title = Player.GetString("Working"), CancelButton = false };
+                    progressDialog.Show();
+                    progressDialog.Line1 = Player.GetString("MsgMsgUpdateMediaLibrary");
                     MediaLibraryHelper.UpdateMediaLibrary();
+                    progressDialog.Close();
                 };
                 backgroundWorker.DoWork += doWorkEvent;
                 backgroundWorker.RunWorkerAsync();
@@ -220,7 +225,7 @@ namespace PowerAudioPlayer.UI
         {
             if (PlaylistHelper.ActivePlaylist.Count != 0)
             {
-                var ib = new WinFormsExtendedControls.ExtendedForms.InputDialog { WindowTitle = Application.ProductName ?? string.Empty, MainInstruction = Player.GetString("MsgAddPlaylist") };
+                var ib = new InputDialog { WindowTitle = Application.ProductName ?? string.Empty, MainInstruction = Player.GetString("MsgAddPlaylist") };
                 if (ib.ShowDialog() == DialogResult.OK && ib.Input != "")
                 {
                     if (PlaylistHelper.Add(new Playlist(ib.Input) { Items = PlaylistHelper.ActivePlaylist.Items }) != -1)
@@ -333,7 +338,7 @@ namespace PowerAudioPlayer.UI
         private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             mediaLibraryEditor.Enabled = true;
-            isRefreshingMediaLibrary = false;
+            isUpdatingMediaLibrary = false;
         }
 
         private void tvTreeView_KeyDown(object sender, KeyEventArgs e)

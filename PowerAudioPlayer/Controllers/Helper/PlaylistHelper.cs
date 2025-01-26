@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
 using PowerAudioPlayer.Model;
 using System.IO;
-using System.Text;
 
 namespace PowerAudioPlayer.Controllers.Helper
 {
     internal static class PlaylistHelper
     {
-        public static readonly string DefaultPlaylistDir = Path.Combine(Utils.GetProgramLocalAppDataPath(), "Playlist");
+        public static readonly string DefaultPlaylistDir = Path.Combine(Player.GetExactDataFilePath(), "Playlist");
 
         private static List<Playlist> _playlists = new List<Playlist>();
         public static List<Playlist> Playlists
@@ -118,7 +117,6 @@ namespace PowerAudioPlayer.Controllers.Helper
                 }
                 catch
                 {
-                    // Ignore exceptions
                 }
                 _playlists[index].Name = newName;
                 return true;

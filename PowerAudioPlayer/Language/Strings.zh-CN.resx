@@ -440,8 +440,11 @@ System Information: {8}</value>
   <data name="MsgVersion" xml:space="preserve">
     <value>版本 {0}</value>
   </data>
-  <data name="MsgDataFile" xml:space="preserve">
+  <data name="MsgDataFile1" xml:space="preserve">
     <value>由于PowerAudioPlayer以 {0} 用户身份运行，因此数据文件被储存在此处：{1}。</value>
+  </data>
+  <data name="MsgDataFile2" xml:space="preserve">
+    <value>数据文件被储存在此处：{0}。</value>
   </data>
   <data name="dotNETRTVersion" xml:space="preserve">
     <value>.NET运行时版本：.NET {0}</value>
@@ -461,7 +464,7 @@ System Information: {8}</value>
   <data name="MsgMIDISoundFontNotSelected" xml:space="preserve">
     <value>你正在播放MIDI文件，但未选择音色库。你将无法听到任何声音。</value>
   </data>
-  <data name="MsgClearDataFile" xml:space="preserve">
+  <data name="MsgClearDataFile1" xml:space="preserve">
     <value>用户 {0} 的数据文件将被清空。继续？</value>
   </data>
   <data name="MsgClearDataFileOK" xml:space="preserve">
@@ -496,5 +499,31 @@ System Information: {8}</value>
   </data>
   <data name="MsgCancelTip" xml:space="preserve">
     <value>此操作将取消当前任务。是否继续？</value>
+  </data>
+  <data name="MsgUpdateMediaLibrary" xml:space="preserve">
+    <value>正在更新媒体库</value>
+  </data>
+  <data name="MsgRunAsAdministrator" xml:space="preserve">
+    <value>PowerAudioPlayer需要以管理员身份运行才能修改此设置。是否以管理员身份重启？</value>
+  </data>
+  <data name="SaveToLocalAppData" xml:space="preserve">
+    <value>保存到每个用户的Appdata\Local目录下（每个用户独立）</value>
+  </data>
+  <data name="SaveToProgramPath" xml:space="preserve">
+    <value>保存到程序目录下（所有用户共用）</value>
+  </data>
+  <data name="MsgClearDataFile2" xml:space="preserve">
+    <value>数据文件将被清空。继续？</value>
+  </data>
+  <data name="MsgSetDataFileSavePath1" xml:space="preserve">
+    <value>选择数据文件保存路径</value>
+  </data>
+  <data name="MsgSetDataFileSavePath2" xml:space="preserve">
+    <value>注意：1.修改数据文件保存路径后，你需要手动将数据文件移动到新位置；
+2.若无法保存到程序目录下，则会保存到每个用户的Appdata\Local目录下；
+3.重启程序后生效。</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>设置</value>
   </data>
 </root>

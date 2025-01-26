@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Collections.Concurrent;
 using File = System.IO.File;
+using System.Security.Principal;
 
 namespace PowerAudioPlayer.Controllers
 {
@@ -351,7 +352,12 @@ namespace PowerAudioPlayer.Controllers
 
         public static string GetProgramLocalAppDataPath()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Assembly.GetExecutingAssembly().GetName().Name.ToString());
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Assembly.GetExecutingAssembly().GetName().Name ?? string.Empty);
+        }
+
+        public static string GetProgramExecuableFilePath()
+        {
+            return AppDomain.CurrentDomain.BaseDirectory;
         }
 
         public static void AddShieldToButton(Button btn)
@@ -421,6 +427,13 @@ namespace PowerAudioPlayer.Controllers
                 return string.Empty;
             else
                 return path;
+        }
+
+        public static bool IsRunAsAdministrator()
+        {
+            WindowsIdentity id = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(id);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
     }
 }

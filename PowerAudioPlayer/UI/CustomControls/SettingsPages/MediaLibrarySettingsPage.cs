@@ -57,7 +57,7 @@ namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
         private void btnRefreshMediaLibrary_Click(object sender, EventArgs e)
         {
             if (Owner != null)
-                NativeAPI.SendMessage(Owner.Handle, Player.WM_REFRESHMEDIALIBRARY, 0, 0);
+                NativeAPI.SendMessage(Owner.Handle, Player.WM_UPDATEMEDIALIBRARY, 0, 0);
         }
 
         private void btnCleanUpMediaLibrary_Click(object sender, EventArgs e)
@@ -84,18 +84,18 @@ namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
 
         private void cbRecordPlayHistroy_CheckedChanged(object sender, EventArgs e)
         {
-            if(!cbRecordPlayHistroy.Checked && PlayHistoryHelper.Count > 0)
-            {
-                DialogResult result = MessageBox.Show(Player.GetString("MsgClearPlayHistory"), Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    PlayHistoryHelper.ClearHistory();
-                }
-                else if (result == DialogResult.Cancel)
-                {
-                    cbRecordPlayHistroy.Checked = true;
-                }
-            }
+            //if(!cbRecordPlayHistroy.Checked && PlayHistoryHelper.Count > 0)
+            //{
+            //    DialogResult result = MessageBox.Show(Player.GetString("MsgClearPlayHistory"), Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            //    if (result == DialogResult.Yes)
+            //    {
+            //        PlayHistoryHelper.ClearHistory();
+            //    }
+            //    else if (result == DialogResult.Cancel)
+            //    {
+            //        cbRecordPlayHistroy.Checked = true;
+            //    }
+            //}
         }
     }
 }

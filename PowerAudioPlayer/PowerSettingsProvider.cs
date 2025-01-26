@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Xml;
 using System.Reflection;
+using PowerAudioPlayer.Controllers;
 
 namespace PowerAudioPlayer
 {
@@ -31,7 +32,7 @@ namespace PowerAudioPlayer
             var fileMap = new ExeConfigurationFileMap
             {
                 ExeConfigFilename = $"{_applicationName}.exe.config",
-                RoamingUserConfigFilename = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\" + _applicationName + "\\Settings\\user.config"
+                RoamingUserConfigFilename = Player.GetDataFilePath() == DataFilePath.LocalAppData ? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\" + _applicationName + "\\Settings\\user.config" : Player.GetExactDataFilePath() + "\\Settings\\user.config"
             };
             configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.PerUserRoaming);
         }

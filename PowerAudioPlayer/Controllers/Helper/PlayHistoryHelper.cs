@@ -7,7 +7,7 @@ namespace PowerAudioPlayer.Controllers.Helper
     internal class PlayHistoryHelper
     {
         private static Dictionary<string, PlayHistoryItem> _history = new Dictionary<string, PlayHistoryItem>();
-        public static string defaultFile = Path.Combine(Utils.GetProgramLocalAppDataPath(), "History.dat");
+        public static string defaultFile = Path.Combine(Player.GetExactDataFilePath(), "History.dat");
 
         public static int Count
         {

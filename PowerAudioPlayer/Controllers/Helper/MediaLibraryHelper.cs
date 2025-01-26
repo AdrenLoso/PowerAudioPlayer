@@ -7,7 +7,7 @@ namespace PowerAudioPlayer.Controllers.Helper
     internal class MediaLibraryHelper
     {
         private static Dictionary<string, AudioInfo> _library = new Dictionary<string, AudioInfo>();
-        public static string defaultFile = Path.Combine(Utils.GetProgramLocalAppDataPath(), "MediaLibrary.dat");
+        public static string defaultFile = Path.Combine(Player.GetExactDataFilePath(), "MediaLibrary.dat");
 
         public static int Count
         {
@@ -64,26 +64,23 @@ namespace PowerAudioPlayer.Controllers.Helper
         public static int CleanUpMediaLibrary()
         {
             int removeCount = 0;
-            foreach (KeyValuePair<string, AudioInfo> keyValuePair in _library)
+            var keysToRemove = _library.Keys
+                .Where(key => !File.Exists(key) || !IsInMediaLibraryDirectories(key))
+                .ToList();
+            foreach (var key in keysToRemove)
             {
-                if (!File.Exists(keyValuePair.Key) || !IsInMediaLibraryDirectories(keyValuePair.Key))
-                {
-                    Remove(keyValuePair.Key);
-                    removeCount++;
-                }
+                Remove(key);
+                removeCount++;
             }
             return removeCount;
         }
 
         public static bool IsInMediaLibraryDirectories(string file)
         {
-            foreach (var d in Settings.Default.MediaLibraryDirectories)
-            {
-                string? path = Path.GetDirectoryName(file);
-                if (path != null && Utils.IsSubDirectoryOf(path, d.Directory))
-                    return true;
-            }
-            return false;
+            string? path = Path.GetDirectoryName(file);
+            if (path == null) return false;
+            return Settings.Default.MediaLibraryDirectories
+                .Any(d => Utils.IsSubDirectoryOf(path, d.Directory));
         }
 
         public static bool Add(string file, AudioInfo audioInfo)
@@ -119,14 +116,16 @@ namespace PowerAudioPlayer.Controllers.Helper
 
         public static void UpdateMediaLibrary()
         {
-            foreach (MediaLibraryDirectory dir in Settings.Default.MediaLibraryDirectories)
+            var supportedFiles = Player.Core.GetAllSupportedFileArray();
+            var mediaLibraryDirectories = Settings.Default.MediaLibraryDirectories;
+            Parallel.ForEach(mediaLibraryDirectories, dir =>
             {
-                var files = Utils.SearchFiles(dir.Directory, Player.Core.GetAllSupportedFileArray(), true);
-                foreach (var file in files)
+                Utils.SearchFiles(dir.Directory, supportedFiles, true, file =>
                 {
                     Add(file);
-                }
-            }
+                    return true;
+                });
+            });
             if (Settings.Default.MediaLibraryAutoRemove)
                 CleanUpMediaLibrary();
         }
