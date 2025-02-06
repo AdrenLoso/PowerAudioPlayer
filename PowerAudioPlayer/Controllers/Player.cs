@@ -64,6 +64,8 @@ namespace PowerAudioPlayer.Controllers
         public const int WM_HANDLECOMMANDLINE = WM_USER + 11;
         public const int WM_REFRESHHISTORYVIEW = WM_USER + 12;
         public const int WM_SWITCHPLAYLISTEDITORFORMEMBEDDED = WM_USER + 13;
+        public const int WM_SETALBUMPICTURE = WM_USER + 14;
+        public const int WM_CLEARALBUMPICTURE = WM_USER + 15;
 
         public static ABRepeatMode abRepeatMode = ABRepeatMode.None;
         public static int playIndex = -1;

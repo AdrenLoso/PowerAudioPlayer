@@ -45,15 +45,15 @@ namespace PowerAudioPlayer.UI
             logoPictureBox.Image = Resources.PowerAudioPlayerBig;
             logoPictureBox.Location = new Point(12, 12);
             logoPictureBox.Name = "logoPictureBox";
-            logoPictureBox.Size = new Size(77, 45);
-            logoPictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            logoPictureBox.Size = new Size(80, 80);
+            logoPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             logoPictureBox.TabIndex = 26;
             logoPictureBox.TabStop = false;
             // 
             // okButton
             // 
             okButton.DialogResult = DialogResult.Cancel;
-            okButton.Location = new Point(297, 338);
+            okButton.Location = new Point(297, 373);
             okButton.Margin = new Padding(4);
             okButton.Name = "okButton";
             okButton.Size = new Size(88, 27);
@@ -62,7 +62,7 @@ namespace PowerAudioPlayer.UI
             // 
             // rtbAcknowledgement
             // 
-            rtbAcknowledgement.Location = new Point(12, 148);
+            rtbAcknowledgement.Location = new Point(12, 183);
             rtbAcknowledgement.Name = "rtbAcknowledgement";
             rtbAcknowledgement.ReadOnly = true;
             rtbAcknowledgement.Size = new Size(375, 183);
@@ -73,7 +73,7 @@ namespace PowerAudioPlayer.UI
             // lblVersion
             // 
             lblVersion.AutoSize = true;
-            lblVersion.Location = new Point(12, 60);
+            lblVersion.Location = new Point(12, 95);
             lblVersion.Name = "lblVersion";
             lblVersion.Size = new Size(66, 17);
             lblVersion.TabIndex = 34;
@@ -82,7 +82,7 @@ namespace PowerAudioPlayer.UI
             // lblCompany
             // 
             lblCompany.AutoSize = true;
-            lblCompany.Location = new Point(12, 77);
+            lblCompany.Location = new Point(12, 112);
             lblCompany.Name = "lblCompany";
             lblCompany.Size = new Size(77, 17);
             lblCompany.TabIndex = 35;
@@ -91,7 +91,7 @@ namespace PowerAudioPlayer.UI
             // lbldotNETVersion
             // 
             lbldotNETVersion.AutoSize = true;
-            lbldotNETVersion.Location = new Point(12, 94);
+            lbldotNETVersion.Location = new Point(12, 129);
             lbldotNETVersion.Name = "lbldotNETVersion";
             lbldotNETVersion.Size = new Size(110, 17);
             lbldotNETVersion.TabIndex = 37;
@@ -100,7 +100,7 @@ namespace PowerAudioPlayer.UI
             // lblLastCompileTime
             // 
             lblLastCompileTime.AutoSize = true;
-            lblLastCompileTime.Location = new Point(12, 128);
+            lblLastCompileTime.Location = new Point(12, 163);
             lblLastCompileTime.Name = "lblLastCompileTime";
             lblLastCompileTime.Size = new Size(121, 17);
             lblLastCompileTime.TabIndex = 38;
@@ -122,7 +122,7 @@ namespace PowerAudioPlayer.UI
             // lblArchitecture
             // 
             lblArchitecture.AutoSize = true;
-            lblArchitecture.Location = new Point(12, 111);
+            lblArchitecture.Location = new Point(12, 146);
             lblArchitecture.Name = "lblArchitecture";
             lblArchitecture.Size = new Size(91, 17);
             lblArchitecture.TabIndex = 40;
@@ -132,7 +132,7 @@ namespace PowerAudioPlayer.UI
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            ClientSize = new Size(399, 378);
+            ClientSize = new Size(399, 410);
             Controls.Add(lblArchitecture);
             Controls.Add(lblProductName);
             Controls.Add(rtbAcknowledgement);

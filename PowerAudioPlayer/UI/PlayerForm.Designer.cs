@@ -80,13 +80,13 @@ namespace PowerAudioPlayer
             tsmiSettingsForm = new ToolStripMenuItem();
             tsmiMediaLibraryForm = new ToolStripMenuItem();
             tsmiSoundEffectForm = new ToolStripMenuItem();
-            tsmiSupportedFormatForm = new ToolStripMenuItem();
             tsmiLyricsForm = new ToolStripMenuItem();
             tsmiPlaylistEditorForm = new ToolStripMenuItem();
+            tsmiAlbumPictureForm = new ToolStripMenuItem();
+            tsmiSupportedFormatForm = new ToolStripMenuItem();
             tsmiMisc = new ToolStripMenuItem();
             tsmiCreateDesktopShortcut = new ToolStripMenuItem();
             tsmiAbout = new ToolStripMenuItem();
-            tsmiAlbumPictureForm = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)trbPosition).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trbVolume).BeginInit();
             tableLayoutPanel3.SuspendLayout();
@@ -565,13 +565,6 @@ namespace PowerAudioPlayer
             tsmiSoundEffectForm.Text = "声音效果";
             tsmiSoundEffectForm.Click += tsbtnSoundEffect_Click;
             // 
-            // tsmiSupportedFormatForm
-            // 
-            tsmiSupportedFormatForm.Name = "tsmiSupportedFormatForm";
-            tsmiSupportedFormatForm.Size = new Size(180, 22);
-            tsmiSupportedFormatForm.Text = "支持的格式列表";
-            tsmiSupportedFormatForm.Click += tsmiSupportedFormat_Click;
-            // 
             // tsmiLyricsForm
             // 
             tsmiLyricsForm.Image = Resources.Lyrics;
@@ -587,6 +580,21 @@ namespace PowerAudioPlayer
             tsmiPlaylistEditorForm.Size = new Size(180, 22);
             tsmiPlaylistEditorForm.Text = "播放列表编辑器";
             tsmiPlaylistEditorForm.Click += tsmiPlaylistEditorForm_Click;
+            // 
+            // tsmiAlbumPictureForm
+            // 
+            tsmiAlbumPictureForm.Image = Resources.Picture;
+            tsmiAlbumPictureForm.Name = "tsmiAlbumPictureForm";
+            tsmiAlbumPictureForm.Size = new Size(180, 22);
+            tsmiAlbumPictureForm.Text = "专辑图片";
+            tsmiAlbumPictureForm.Click += tsmiAlbumPictureForm_Click;
+            // 
+            // tsmiSupportedFormatForm
+            // 
+            tsmiSupportedFormatForm.Name = "tsmiSupportedFormatForm";
+            tsmiSupportedFormatForm.Size = new Size(180, 22);
+            tsmiSupportedFormatForm.Text = "支持的格式列表";
+            tsmiSupportedFormatForm.Click += tsmiSupportedFormat_Click;
             // 
             // tsmiMisc
             // 
@@ -608,14 +616,6 @@ namespace PowerAudioPlayer
             tsmiAbout.Size = new Size(148, 22);
             tsmiAbout.Text = "关于";
             tsmiAbout.Click += tsmiAbout_Click;
-            // 
-            // tsmiAlbumPictureForm
-            // 
-            tsmiAlbumPictureForm.Image = Resources.Picture;
-            tsmiAlbumPictureForm.Name = "tsmiAlbumPictureForm";
-            tsmiAlbumPictureForm.Size = new Size(180, 22);
-            tsmiAlbumPictureForm.Text = "专辑图片";
-            tsmiAlbumPictureForm.Click += tsmiAlbumPictureForm_Click;
             // 
             // PlayerForm
             // 
