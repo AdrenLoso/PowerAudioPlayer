@@ -82,7 +82,6 @@ namespace PowerAudioPlayer
             tableLayoutPanel2 = new TableLayoutPanel();
             panel1 = new Panel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            pbAssocIcon = new PictureBox();
             lblAlbum = new Label();
             lblArtist = new Label();
             lblTitle = new Label();
@@ -100,7 +99,6 @@ namespace PowerAudioPlayer
             tableLayoutPanel2.SuspendLayout();
             panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pbAssocIcon).BeginInit();
             tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             flowLayoutPanel1.SuspendLayout();
@@ -132,6 +130,7 @@ namespace PowerAudioPlayer
             trbPosition.TickStyle = TickStyle.None;
             toolTip.SetToolTip(trbPosition, "位置");
             trbPosition.Scroll += trbPosition_Scroll;
+            trbPosition.MouseDown += trbPosition_MouseDown;
             // 
             // btnPrevious
             // 
@@ -531,19 +530,16 @@ namespace PowerAudioPlayer
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.AutoSize = true;
-            tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            tableLayoutPanel1.ColumnCount = 3;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(pbAssocIcon, 0, 0);
-            tableLayoutPanel1.Controls.Add(lblAlbum, 2, 3);
-            tableLayoutPanel1.Controls.Add(lblArtist, 2, 1);
-            tableLayoutPanel1.Controls.Add(lblTitle, 2, 2);
-            tableLayoutPanel1.Controls.Add(lblInfo, 1, 0);
-            tableLayoutPanel1.Controls.Add(label2, 1, 1);
-            tableLayoutPanel1.Controls.Add(label3, 1, 2);
-            tableLayoutPanel1.Controls.Add(label4, 1, 3);
+            tableLayoutPanel1.Controls.Add(lblAlbum, 1, 3);
+            tableLayoutPanel1.Controls.Add(lblArtist, 1, 1);
+            tableLayoutPanel1.Controls.Add(lblTitle, 1, 2);
+            tableLayoutPanel1.Controls.Add(lblInfo, 0, 0);
+            tableLayoutPanel1.Controls.Add(label2, 0, 1);
+            tableLayoutPanel1.Controls.Add(label3, 0, 2);
+            tableLayoutPanel1.Controls.Add(label4, 0, 3);
             tableLayoutPanel1.Location = new Point(7, 24);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 5;
@@ -551,32 +547,20 @@ namespace PowerAudioPlayer
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(140, 98);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 0F));
+            tableLayoutPanel1.Size = new Size(140, 92);
             tableLayoutPanel1.TabIndex = 98;
-            // 
-            // pbAssocIcon
-            // 
-            pbAssocIcon.Dock = DockStyle.Fill;
-            pbAssocIcon.Location = new Point(4, 4);
-            pbAssocIcon.Name = "pbAssocIcon";
-            tableLayoutPanel1.SetRowSpan(pbAssocIcon, 5);
-            pbAssocIcon.Size = new Size(34, 90);
-            pbAssocIcon.SizeMode = PictureBoxSizeMode.CenterImage;
-            pbAssocIcon.TabIndex = 101;
-            pbAssocIcon.TabStop = false;
             // 
             // lblAlbum
             // 
             lblAlbum.AutoSize = true;
             lblAlbum.Dock = DockStyle.Fill;
-            lblAlbum.Location = new Point(96, 76);
+            lblAlbum.Location = new Point(53, 72);
             lblAlbum.Margin = new Padding(3);
             lblAlbum.Name = "lblAlbum";
-            lblAlbum.Size = new Size(40, 17);
+            lblAlbum.Size = new Size(84, 17);
             lblAlbum.TabIndex = 94;
             lblAlbum.Text = " ";
-            lblAlbum.TextAlign = ContentAlignment.MiddleLeft;
             lblAlbum.UseMnemonic = false;
             lblAlbum.DoubleClick += lbl_DoubleClick;
             // 
@@ -584,13 +568,12 @@ namespace PowerAudioPlayer
             // 
             lblArtist.AutoSize = true;
             lblArtist.Dock = DockStyle.Fill;
-            lblArtist.Location = new Point(96, 28);
+            lblArtist.Location = new Point(53, 26);
             lblArtist.Margin = new Padding(3);
             lblArtist.Name = "lblArtist";
-            lblArtist.Size = new Size(40, 17);
+            lblArtist.Size = new Size(84, 17);
             lblArtist.TabIndex = 93;
             lblArtist.Text = " ";
-            lblArtist.TextAlign = ContentAlignment.MiddleLeft;
             lblArtist.UseMnemonic = false;
             lblArtist.DoubleClick += lbl_DoubleClick;
             // 
@@ -598,13 +581,12 @@ namespace PowerAudioPlayer
             // 
             lblTitle.AutoSize = true;
             lblTitle.Dock = DockStyle.Fill;
-            lblTitle.Location = new Point(96, 52);
+            lblTitle.Location = new Point(53, 49);
             lblTitle.Margin = new Padding(3);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(40, 17);
+            lblTitle.Size = new Size(84, 17);
             lblTitle.TabIndex = 92;
             lblTitle.Text = " ";
-            lblTitle.TextAlign = ContentAlignment.MiddleLeft;
             lblTitle.UseMnemonic = false;
             lblTitle.DoubleClick += lbl_DoubleClick;
             // 
@@ -613,10 +595,10 @@ namespace PowerAudioPlayer
             lblInfo.AutoSize = true;
             tableLayoutPanel1.SetColumnSpan(lblInfo, 2);
             lblInfo.Dock = DockStyle.Fill;
-            lblInfo.Location = new Point(45, 4);
+            lblInfo.Location = new Point(3, 3);
             lblInfo.Margin = new Padding(3);
             lblInfo.Name = "lblInfo";
-            lblInfo.Size = new Size(91, 17);
+            lblInfo.Size = new Size(134, 17);
             lblInfo.TabIndex = 91;
             lblInfo.Text = " ";
             lblInfo.UseMnemonic = false;
@@ -626,34 +608,37 @@ namespace PowerAudioPlayer
             // 
             label2.AutoSize = true;
             label2.Dock = DockStyle.Fill;
-            label2.Location = new Point(45, 25);
+            label2.Location = new Point(3, 23);
             label2.Name = "label2";
             label2.Size = new Size(44, 23);
             label2.TabIndex = 96;
             label2.Text = "艺术家";
-            label2.TextAlign = ContentAlignment.MiddleLeft;
+            label2.TextAlign = ContentAlignment.MiddleCenter;
+            label2.UseMnemonic = false;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Dock = DockStyle.Fill;
-            label3.Location = new Point(45, 49);
+            label3.Location = new Point(3, 46);
             label3.Name = "label3";
             label3.Size = new Size(44, 23);
             label3.TabIndex = 97;
             label3.Text = "标题";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
+            label3.TextAlign = ContentAlignment.MiddleCenter;
+            label3.UseMnemonic = false;
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Dock = DockStyle.Fill;
-            label4.Location = new Point(45, 73);
+            label4.Location = new Point(3, 69);
             label4.Name = "label4";
             label4.Size = new Size(44, 23);
             label4.TabIndex = 98;
             label4.Text = "专辑";
-            label4.TextAlign = ContentAlignment.MiddleLeft;
+            label4.TextAlign = ContentAlignment.MiddleCenter;
+            label4.UseMnemonic = false;
             // 
             // tableLayoutPanel3
             // 
@@ -729,7 +714,6 @@ namespace PowerAudioPlayer
             panel1.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pbAssocIcon).EndInit();
             tableLayoutPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             flowLayoutPanel1.ResumeLayout(false);
@@ -798,6 +782,5 @@ namespace PowerAudioPlayer
         private Label lblTitle;
         private Label lblInfo;
         private Label label4;
-        private PictureBox pbAssocIcon;
     }
 }

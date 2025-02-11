@@ -119,7 +119,6 @@ namespace PowerAudioPlayer
             Player.Core.Play();
             UpdateAudioInfo(PlaylistHelper.ActivePlaylist.Items[index].File);
             lblDisplayTitle.Text = PlaylistHelper.ActivePlaylist.Items[index].DisplayTitle;
-            pbAssocIcon.Image = Icon.ExtractAssociatedIcon(PlaylistHelper.ActivePlaylist.Items[index].File)?.ToBitmap();
             tmrPlayer.Start();
             LoadLyrics();
             UpdateControls();
@@ -211,7 +210,6 @@ namespace PowerAudioPlayer
             lblStatus.Text = Player.GetString("Stop");
             SetTaskbarOverlayIcon(null, lblStatus.Text);
             SetTaskbarProgressState(TaskbarProgressBarState.NoProgress);
-            pbAssocIcon.Image = SystemIcons.GetStockIcon(StockIconId.DocumentNoAssociation).ToBitmap();
         }
 
         private void UpdatePlayingControls()
