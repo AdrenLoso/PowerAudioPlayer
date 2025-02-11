@@ -15,6 +15,7 @@ using MessageBox = System.Windows.Forms.MessageBox;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 using Utils = PowerAudioPlayer.Controllers.Utils;
 using Newtonsoft.Json;
+using Microsoft.WindowsAPICodePack.Shell;
 
 namespace PowerAudioPlayer
 {
@@ -31,7 +32,7 @@ namespace PowerAudioPlayer
         private PlaylistEditorForm playlistEditorForm = new PlaylistEditorForm();
         private LyricsForm lyricsForm = new LyricsForm();
         private AlbumPictureForm albumPictureForm = new AlbumPictureForm();
-        
+
 
         public PlayerForm()
         {
@@ -118,7 +119,7 @@ namespace PowerAudioPlayer
             Player.Core.Play();
             UpdateAudioInfo(PlaylistHelper.ActivePlaylist.Items[index].File);
             lblDisplayTitle.Text = PlaylistHelper.ActivePlaylist.Items[index].DisplayTitle;
-
+            pbAssocIcon.Image = Icon.ExtractAssociatedIcon(PlaylistHelper.ActivePlaylist.Items[index].File)?.ToBitmap();
             tmrPlayer.Start();
             LoadLyrics();
             UpdateControls();
@@ -210,6 +211,7 @@ namespace PowerAudioPlayer
             lblStatus.Text = Player.GetString("Stop");
             SetTaskbarOverlayIcon(null, lblStatus.Text);
             SetTaskbarProgressState(TaskbarProgressBarState.NoProgress);
+            pbAssocIcon.Image = SystemIcons.GetStockIcon(StockIconId.DocumentNoAssociation).ToBitmap();
         }
 
         private void UpdatePlayingControls()
@@ -812,6 +814,7 @@ namespace PowerAudioPlayer
                 albumPictureForm.Show();
             }
         }
-        #endregion
+
+#endregion
     }
 }

@@ -80,7 +80,7 @@ namespace PowerAudioPlayer.UI
         {
             if (playlistEditor.IsWorking)
             {
-                if(MessageBox.Show(Player.GetString("MsgCancelTip"), Application.ProductName ?? string.Empty, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                if(MessageBox.Show(Player.GetString("MsgCancelTip"), Application.ProductName ?? string.Empty, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                 {
                     return;
                 }

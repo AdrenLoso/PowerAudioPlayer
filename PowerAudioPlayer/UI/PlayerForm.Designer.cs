@@ -36,28 +36,20 @@ namespace PowerAudioPlayer
             tmrPlayer = new System.Windows.Forms.Timer(components);
             tmrLyrics = new System.Windows.Forms.Timer(components);
             toolTip = new ToolTip(components);
+            trbPosition = new WinFormsExtendedControls.SelRangeTrackBar();
+            btnPrevious = new Button();
             btnPlay = new Button();
             btnPause = new Button();
             btnStop = new Button();
             btnNext = new Button();
-            lblDisplayTitle = new Label();
-            btnPrevious = new Button();
-            trbPosition = new WinFormsExtendedControls.SelRangeTrackBar();
             trbVolume = new TrackBar();
-            lblTitle = new Label();
-            lblAlbum = new Label();
-            lblArtist = new Label();
-            lblInfo = new Label();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            lblPosition = new Label();
-            lblVolume = new Label();
+            lblDisplayTitle = new Label();
             statusStrip = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             lblStatus1 = new ToolStripStatusLabel();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            panel1 = new Panel();
-            flowLayoutPanel1 = new FlowLayoutPanel();
-            tableLayoutPanel2 = new TableLayoutPanel();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            lblPosition = new ToolStripStatusLabel();
+            lblVolume = new ToolStripStatusLabel();
             menuStrip1 = new MenuStrip();
             tsmiFile = new ToolStripMenuItem();
             tsmiAddFile = new ToolStripMenuItem();
@@ -87,15 +79,31 @@ namespace PowerAudioPlayer
             tsmiMisc = new ToolStripMenuItem();
             tsmiCreateDesktopShortcut = new ToolStripMenuItem();
             tsmiAbout = new ToolStripMenuItem();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            panel1 = new Panel();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            pbAssocIcon = new PictureBox();
+            lblAlbum = new Label();
+            lblArtist = new Label();
+            lblTitle = new Label();
+            lblInfo = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            pictureBox1 = new PictureBox();
+            flowLayoutPanel1 = new FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)trbPosition).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trbVolume).BeginInit();
-            tableLayoutPanel3.SuspendLayout();
             statusStrip.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
-            panel1.SuspendLayout();
-            flowLayoutPanel1.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
             menuStrip1.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            panel1.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbAssocIcon).BeginInit();
+            tableLayoutPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // tmrPlayer
@@ -108,205 +116,125 @@ namespace PowerAudioPlayer
             tmrLyrics.Interval = 200;
             tmrLyrics.Tick += tmrLyrics_Tick;
             // 
+            // trbPosition
+            // 
+            trbPosition.AutoSize = false;
+            tableLayoutPanel2.SetColumnSpan(trbPosition, 2);
+            trbPosition.Dock = DockStyle.Fill;
+            trbPosition.Enabled = false;
+            trbPosition.EnableSelRange = false;
+            trbPosition.Location = new Point(3, 3);
+            trbPosition.Name = "trbPosition";
+            trbPosition.SelEnd = 0;
+            trbPosition.SelStart = 0;
+            trbPosition.Size = new Size(299, 22);
+            trbPosition.TabIndex = 83;
+            trbPosition.TickStyle = TickStyle.None;
+            toolTip.SetToolTip(trbPosition, "位置");
+            trbPosition.Scroll += trbPosition_Scroll;
+            // 
+            // btnPrevious
+            // 
+            btnPrevious.FlatAppearance.BorderSize = 0;
+            btnPrevious.FlatStyle = FlatStyle.Flat;
+            btnPrevious.Image = Resources.Previous;
+            btnPrevious.Location = new Point(3, 3);
+            btnPrevious.Name = "btnPrevious";
+            btnPrevious.Size = new Size(24, 24);
+            btnPrevious.TabIndex = 88;
+            toolTip.SetToolTip(btnPrevious, "上一个");
+            btnPrevious.UseVisualStyleBackColor = true;
+            btnPrevious.Click += btnPrevious_Click;
+            // 
             // btnPlay
             // 
-            btnPlay.FlatAppearance.MouseOverBackColor = Color.Red;
+            btnPlay.FlatAppearance.BorderSize = 0;
+            btnPlay.FlatStyle = FlatStyle.Flat;
             btnPlay.Image = Resources.Play;
             btnPlay.Location = new Point(33, 3);
             btnPlay.Name = "btnPlay";
             btnPlay.Size = new Size(24, 24);
-            btnPlay.TabIndex = 1;
+            btnPlay.TabIndex = 89;
             toolTip.SetToolTip(btnPlay, "播放");
             btnPlay.UseVisualStyleBackColor = true;
             btnPlay.Click += btnPlay_Click;
             // 
             // btnPause
             // 
+            btnPause.FlatAppearance.BorderSize = 0;
+            btnPause.FlatStyle = FlatStyle.Flat;
             btnPause.Image = Resources.Pause;
             btnPause.Location = new Point(63, 3);
             btnPause.Name = "btnPause";
             btnPause.Size = new Size(24, 24);
-            btnPause.TabIndex = 2;
+            btnPause.TabIndex = 90;
             toolTip.SetToolTip(btnPause, "暂停");
             btnPause.UseVisualStyleBackColor = true;
             btnPause.Click += btnPause_Click;
             // 
             // btnStop
             // 
+            btnStop.FlatAppearance.BorderSize = 0;
+            btnStop.FlatStyle = FlatStyle.Flat;
             btnStop.Image = Resources.Stop;
             btnStop.Location = new Point(93, 3);
             btnStop.Name = "btnStop";
             btnStop.Size = new Size(24, 24);
-            btnStop.TabIndex = 3;
+            btnStop.TabIndex = 91;
             toolTip.SetToolTip(btnStop, "停止");
             btnStop.UseVisualStyleBackColor = true;
             btnStop.Click += btnStop_Click;
             // 
             // btnNext
             // 
+            btnNext.FlatAppearance.BorderSize = 0;
+            btnNext.FlatStyle = FlatStyle.Flat;
             btnNext.Image = Resources.Next;
             btnNext.Location = new Point(123, 3);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(24, 24);
-            btnNext.TabIndex = 4;
+            btnNext.TabIndex = 92;
             toolTip.SetToolTip(btnNext, "下一个");
             btnNext.UseVisualStyleBackColor = true;
             btnNext.Click += btnNext_Click;
             // 
-            // lblDisplayTitle
-            // 
-            lblDisplayTitle.AutoEllipsis = true;
-            tableLayoutPanel1.SetColumnSpan(lblDisplayTitle, 2);
-            lblDisplayTitle.Dock = DockStyle.Fill;
-            lblDisplayTitle.Location = new Point(3, 0);
-            lblDisplayTitle.Name = "lblDisplayTitle";
-            lblDisplayTitle.Size = new Size(438, 17);
-            lblDisplayTitle.TabIndex = 0;
-            lblDisplayTitle.Text = "PowerAudioPlayer";
-            lblDisplayTitle.TextAlign = ContentAlignment.MiddleCenter;
-            toolTip.SetToolTip(lblDisplayTitle, "标题");
-            lblDisplayTitle.UseMnemonic = false;
-            lblDisplayTitle.DoubleClick += lblDisplayTitle_DoubleClick;
-            // 
-            // btnPrevious
-            // 
-            btnPrevious.Image = Resources.Previous;
-            btnPrevious.Location = new Point(3, 3);
-            btnPrevious.Name = "btnPrevious";
-            btnPrevious.Size = new Size(24, 24);
-            btnPrevious.TabIndex = 0;
-            toolTip.SetToolTip(btnPrevious, "上一个");
-            btnPrevious.UseVisualStyleBackColor = true;
-            btnPrevious.Click += btnPrevious_Click;
-            // 
-            // trbPosition
-            // 
-            trbPosition.AutoSize = false;
-            trbPosition.Dock = DockStyle.Fill;
-            trbPosition.Enabled = false;
-            trbPosition.EnableSelRange = false;
-            trbPosition.Location = new Point(92, 3);
-            trbPosition.Name = "trbPosition";
-            trbPosition.SelEnd = 0;
-            trbPosition.SelStart = 0;
-            trbPosition.Size = new Size(211, 29);
-            trbPosition.TabIndex = 1;
-            trbPosition.TickStyle = TickStyle.None;
-            toolTip.SetToolTip(trbPosition, "位置");
-            trbPosition.Scroll += trbPosition_Scroll;
-            trbPosition.MouseDown += trbPosition_MouseDown;
-            // 
             // trbVolume
             // 
             trbVolume.AutoSize = false;
-            trbVolume.Dock = DockStyle.Fill;
+            trbVolume.Dock = DockStyle.Top;
             trbVolume.LargeChange = 2;
-            trbVolume.Location = new Point(348, 3);
+            trbVolume.Location = new Point(34, 3);
             trbVolume.Maximum = 100;
             trbVolume.Name = "trbVolume";
-            trbVolume.Size = new Size(87, 29);
-            trbVolume.TabIndex = 2;
+            trbVolume.Size = new Size(59, 24);
+            trbVolume.TabIndex = 92;
             trbVolume.TickFrequency = 5;
             trbVolume.TickStyle = TickStyle.None;
             toolTip.SetToolTip(trbVolume, "音量");
             trbVolume.Value = 50;
             trbVolume.Scroll += trbVolume_Scroll;
             // 
-            // lblTitle
+            // lblDisplayTitle
             // 
-            lblTitle.AutoSize = true;
-            lblTitle.Location = new Point(4, 28);
-            lblTitle.Margin = new Padding(3);
-            lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(0, 17);
-            lblTitle.TabIndex = 1;
-            lblTitle.UseMnemonic = false;
-            lblTitle.DoubleClick += lbl_DoubleClick;
-            // 
-            // lblAlbum
-            // 
-            lblAlbum.AutoSize = true;
-            lblAlbum.Location = new Point(4, 76);
-            lblAlbum.Margin = new Padding(3);
-            lblAlbum.Name = "lblAlbum";
-            lblAlbum.Size = new Size(0, 17);
-            lblAlbum.TabIndex = 3;
-            lblAlbum.UseMnemonic = false;
-            lblAlbum.DoubleClick += lbl_DoubleClick;
-            // 
-            // lblArtist
-            // 
-            lblArtist.AutoSize = true;
-            lblArtist.Location = new Point(4, 52);
-            lblArtist.Margin = new Padding(3);
-            lblArtist.Name = "lblArtist";
-            lblArtist.Size = new Size(0, 17);
-            lblArtist.TabIndex = 2;
-            lblArtist.UseMnemonic = false;
-            lblArtist.DoubleClick += lbl_DoubleClick;
-            // 
-            // lblInfo
-            // 
-            lblInfo.AutoSize = true;
-            lblInfo.Location = new Point(4, 4);
-            lblInfo.Margin = new Padding(3);
-            lblInfo.Name = "lblInfo";
-            lblInfo.Size = new Size(0, 17);
-            lblInfo.TabIndex = 0;
-            lblInfo.UseMnemonic = false;
-            lblInfo.DoubleClick += lbl_DoubleClick;
-            // 
-            // tableLayoutPanel3
-            // 
-            tableLayoutPanel3.AutoSize = true;
-            tableLayoutPanel3.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            tableLayoutPanel3.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            tableLayoutPanel3.ColumnCount = 1;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel3.Controls.Add(lblInfo, 0, 0);
-            tableLayoutPanel3.Controls.Add(lblArtist, 0, 2);
-            tableLayoutPanel3.Controls.Add(lblTitle, 0, 1);
-            tableLayoutPanel3.Controls.Add(lblAlbum, 0, 3);
-            tableLayoutPanel3.Location = new Point(3, 3);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 4;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.Size = new Size(8, 97);
-            tableLayoutPanel3.TabIndex = 73;
-            // 
-            // lblPosition
-            // 
-            lblPosition.AutoSize = true;
-            lblPosition.Dock = DockStyle.Fill;
-            lblPosition.Location = new Point(3, 0);
-            lblPosition.Name = "lblPosition";
-            lblPosition.Size = new Size(83, 35);
-            lblPosition.TabIndex = 0;
-            lblPosition.Text = "00:00 / 00:00";
-            lblPosition.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lblVolume
-            // 
-            lblVolume.AutoSize = true;
-            lblVolume.Dock = DockStyle.Fill;
-            lblVolume.Location = new Point(309, 0);
-            lblVolume.Name = "lblVolume";
-            lblVolume.Size = new Size(33, 35);
-            lblVolume.TabIndex = 3;
-            lblVolume.Text = "50%";
-            lblVolume.TextAlign = ContentAlignment.MiddleCenter;
+            lblDisplayTitle.AutoEllipsis = true;
+            lblDisplayTitle.Dock = DockStyle.Top;
+            lblDisplayTitle.Location = new Point(0, 0);
+            lblDisplayTitle.Name = "lblDisplayTitle";
+            lblDisplayTitle.Size = new Size(299, 17);
+            lblDisplayTitle.TabIndex = 99;
+            lblDisplayTitle.Text = "PowerAudioPlayer";
+            lblDisplayTitle.TextAlign = ContentAlignment.MiddleCenter;
+            toolTip.SetToolTip(lblDisplayTitle, "标题");
+            lblDisplayTitle.UseMnemonic = false;
+            lblDisplayTitle.MouseCaptureChanged += lblDisplayTitle_DoubleClick;
             // 
             // statusStrip
             // 
-            statusStrip.Items.AddRange(new ToolStripItem[] { lblStatus, lblStatus1 });
-            statusStrip.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            statusStrip.Location = new Point(0, 240);
+            statusStrip.Items.AddRange(new ToolStripItem[] { lblStatus, lblStatus1, toolStripStatusLabel1, lblPosition, lblVolume });
+            statusStrip.Location = new Point(0, 232);
             statusStrip.Name = "statusStrip";
             statusStrip.ShowItemToolTips = true;
-            statusStrip.Size = new Size(444, 26);
+            statusStrip.Size = new Size(305, 26);
             statusStrip.SizingGrip = false;
             statusStrip.TabIndex = 76;
             statusStrip.Text = "statusStrip";
@@ -326,80 +254,31 @@ namespace PowerAudioPlayer
             lblStatus1.Size = new Size(36, 21);
             lblStatus1.Text = "就绪";
             // 
-            // tableLayoutPanel1
+            // toolStripStatusLabel1
             // 
-            tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(panel1, 0, 1);
-            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 0, 3);
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 2);
-            tableLayoutPanel1.Controls.Add(lblDisplayTitle, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 25);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 4;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(444, 215);
-            tableLayoutPanel1.TabIndex = 77;
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(97, 21);
+            toolStripStatusLabel1.Spring = true;
             // 
-            // panel1
+            // lblPosition
             // 
-            panel1.AutoScroll = true;
-            tableLayoutPanel1.SetColumnSpan(panel1, 2);
-            panel1.Controls.Add(tableLayoutPanel3);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(3, 20);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(438, 115);
-            panel1.TabIndex = 81;
+            lblPosition.BorderSides = ToolStripStatusLabelBorderSides.Right;
+            lblPosition.Name = "lblPosition";
+            lblPosition.Size = new Size(79, 21);
+            lblPosition.Text = "00:00/00:00";
             // 
-            // flowLayoutPanel1
+            // lblVolume
             // 
-            flowLayoutPanel1.AutoSize = true;
-            tableLayoutPanel1.SetColumnSpan(flowLayoutPanel1, 2);
-            flowLayoutPanel1.Controls.Add(btnPrevious);
-            flowLayoutPanel1.Controls.Add(btnPlay);
-            flowLayoutPanel1.Controls.Add(btnPause);
-            flowLayoutPanel1.Controls.Add(btnStop);
-            flowLayoutPanel1.Controls.Add(btnNext);
-            flowLayoutPanel1.Dock = DockStyle.Fill;
-            flowLayoutPanel1.Location = new Point(3, 182);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(438, 30);
-            flowLayoutPanel1.TabIndex = 78;
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.AutoSize = true;
-            tableLayoutPanel2.ColumnCount = 4;
-            tableLayoutPanel1.SetColumnSpan(tableLayoutPanel2, 2);
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            tableLayoutPanel2.Controls.Add(lblPosition, 0, 0);
-            tableLayoutPanel2.Controls.Add(trbPosition, 1, 0);
-            tableLayoutPanel2.Controls.Add(lblVolume, 2, 0);
-            tableLayoutPanel2.Controls.Add(trbVolume, 3, 0);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(3, 141);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(438, 35);
-            tableLayoutPanel2.TabIndex = 78;
+            lblVolume.Name = "lblVolume";
+            lblVolume.Size = new Size(40, 21);
+            lblVolume.Text = "100%";
             // 
             // menuStrip1
             // 
             menuStrip1.Items.AddRange(new ToolStripItem[] { tsmiFile, tsmiPlayControl, tsmiView, tsmiMisc });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(444, 25);
+            menuStrip1.Size = new Size(305, 25);
             menuStrip1.TabIndex = 80;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -545,7 +424,7 @@ namespace PowerAudioPlayer
             // 
             tsmiSettingsForm.Image = Resources.Settings;
             tsmiSettingsForm.Name = "tsmiSettingsForm";
-            tsmiSettingsForm.Size = new Size(180, 22);
+            tsmiSettingsForm.Size = new Size(160, 22);
             tsmiSettingsForm.Text = "设置";
             tsmiSettingsForm.Click += tsbtnSettings_Click;
             // 
@@ -553,7 +432,7 @@ namespace PowerAudioPlayer
             // 
             tsmiMediaLibraryForm.Image = Resources.Library;
             tsmiMediaLibraryForm.Name = "tsmiMediaLibraryForm";
-            tsmiMediaLibraryForm.Size = new Size(180, 22);
+            tsmiMediaLibraryForm.Size = new Size(160, 22);
             tsmiMediaLibraryForm.Text = "媒体库";
             tsmiMediaLibraryForm.Click += tsbtnMediaLibraryForm_Click;
             // 
@@ -561,7 +440,7 @@ namespace PowerAudioPlayer
             // 
             tsmiSoundEffectForm.Image = Resources.Equalizer;
             tsmiSoundEffectForm.Name = "tsmiSoundEffectForm";
-            tsmiSoundEffectForm.Size = new Size(180, 22);
+            tsmiSoundEffectForm.Size = new Size(160, 22);
             tsmiSoundEffectForm.Text = "声音效果";
             tsmiSoundEffectForm.Click += tsbtnSoundEffect_Click;
             // 
@@ -569,7 +448,7 @@ namespace PowerAudioPlayer
             // 
             tsmiLyricsForm.Image = Resources.Lyrics;
             tsmiLyricsForm.Name = "tsmiLyricsForm";
-            tsmiLyricsForm.Size = new Size(180, 22);
+            tsmiLyricsForm.Size = new Size(160, 22);
             tsmiLyricsForm.Text = "歌词";
             tsmiLyricsForm.Click += tsmiLyricsForm_Click;
             // 
@@ -577,7 +456,7 @@ namespace PowerAudioPlayer
             // 
             tsmiPlaylistEditorForm.Image = Resources.PlaylistEditor;
             tsmiPlaylistEditorForm.Name = "tsmiPlaylistEditorForm";
-            tsmiPlaylistEditorForm.Size = new Size(180, 22);
+            tsmiPlaylistEditorForm.Size = new Size(160, 22);
             tsmiPlaylistEditorForm.Text = "播放列表编辑器";
             tsmiPlaylistEditorForm.Click += tsmiPlaylistEditorForm_Click;
             // 
@@ -585,14 +464,14 @@ namespace PowerAudioPlayer
             // 
             tsmiAlbumPictureForm.Image = Resources.Picture;
             tsmiAlbumPictureForm.Name = "tsmiAlbumPictureForm";
-            tsmiAlbumPictureForm.Size = new Size(180, 22);
+            tsmiAlbumPictureForm.Size = new Size(160, 22);
             tsmiAlbumPictureForm.Text = "专辑图片";
             tsmiAlbumPictureForm.Click += tsmiAlbumPictureForm_Click;
             // 
             // tsmiSupportedFormatForm
             // 
             tsmiSupportedFormatForm.Name = "tsmiSupportedFormatForm";
-            tsmiSupportedFormatForm.Size = new Size(180, 22);
+            tsmiSupportedFormatForm.Size = new Size(160, 22);
             tsmiSupportedFormatForm.Text = "支持的格式列表";
             tsmiSupportedFormatForm.Click += tsmiSupportedFormat_Click;
             // 
@@ -617,14 +496,215 @@ namespace PowerAudioPlayer
             tsmiAbout.Text = "关于";
             tsmiAbout.Click += tsmiAbout_Click;
             // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 66.6666641F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+            tableLayoutPanel2.Controls.Add(panel1, 0, 2);
+            tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 1, 1);
+            tableLayoutPanel2.Controls.Add(flowLayoutPanel1, 0, 1);
+            tableLayoutPanel2.Controls.Add(trbPosition, 0, 0);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(0, 25);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 3;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle());
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Size = new Size(305, 207);
+            tableLayoutPanel2.TabIndex = 92;
+            // 
+            // panel1
+            // 
+            panel1.AutoScroll = true;
+            tableLayoutPanel2.SetColumnSpan(panel1, 2);
+            panel1.Controls.Add(tableLayoutPanel1);
+            panel1.Controls.Add(lblDisplayTitle);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(3, 68);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(299, 136);
+            panel1.TabIndex = 99;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.AutoSize = true;
+            tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            tableLayoutPanel1.ColumnCount = 3;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(pbAssocIcon, 0, 0);
+            tableLayoutPanel1.Controls.Add(lblAlbum, 2, 3);
+            tableLayoutPanel1.Controls.Add(lblArtist, 2, 1);
+            tableLayoutPanel1.Controls.Add(lblTitle, 2, 2);
+            tableLayoutPanel1.Controls.Add(lblInfo, 1, 0);
+            tableLayoutPanel1.Controls.Add(label2, 1, 1);
+            tableLayoutPanel1.Controls.Add(label3, 1, 2);
+            tableLayoutPanel1.Controls.Add(label4, 1, 3);
+            tableLayoutPanel1.Location = new Point(7, 24);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 5;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new Size(140, 98);
+            tableLayoutPanel1.TabIndex = 98;
+            // 
+            // pbAssocIcon
+            // 
+            pbAssocIcon.Dock = DockStyle.Fill;
+            pbAssocIcon.Location = new Point(4, 4);
+            pbAssocIcon.Name = "pbAssocIcon";
+            tableLayoutPanel1.SetRowSpan(pbAssocIcon, 5);
+            pbAssocIcon.Size = new Size(34, 90);
+            pbAssocIcon.SizeMode = PictureBoxSizeMode.CenterImage;
+            pbAssocIcon.TabIndex = 101;
+            pbAssocIcon.TabStop = false;
+            // 
+            // lblAlbum
+            // 
+            lblAlbum.AutoSize = true;
+            lblAlbum.Dock = DockStyle.Fill;
+            lblAlbum.Location = new Point(96, 76);
+            lblAlbum.Margin = new Padding(3);
+            lblAlbum.Name = "lblAlbum";
+            lblAlbum.Size = new Size(40, 17);
+            lblAlbum.TabIndex = 94;
+            lblAlbum.Text = " ";
+            lblAlbum.TextAlign = ContentAlignment.MiddleLeft;
+            lblAlbum.UseMnemonic = false;
+            lblAlbum.DoubleClick += lbl_DoubleClick;
+            // 
+            // lblArtist
+            // 
+            lblArtist.AutoSize = true;
+            lblArtist.Dock = DockStyle.Fill;
+            lblArtist.Location = new Point(96, 28);
+            lblArtist.Margin = new Padding(3);
+            lblArtist.Name = "lblArtist";
+            lblArtist.Size = new Size(40, 17);
+            lblArtist.TabIndex = 93;
+            lblArtist.Text = " ";
+            lblArtist.TextAlign = ContentAlignment.MiddleLeft;
+            lblArtist.UseMnemonic = false;
+            lblArtist.DoubleClick += lbl_DoubleClick;
+            // 
+            // lblTitle
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Dock = DockStyle.Fill;
+            lblTitle.Location = new Point(96, 52);
+            lblTitle.Margin = new Padding(3);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(40, 17);
+            lblTitle.TabIndex = 92;
+            lblTitle.Text = " ";
+            lblTitle.TextAlign = ContentAlignment.MiddleLeft;
+            lblTitle.UseMnemonic = false;
+            lblTitle.DoubleClick += lbl_DoubleClick;
+            // 
+            // lblInfo
+            // 
+            lblInfo.AutoSize = true;
+            tableLayoutPanel1.SetColumnSpan(lblInfo, 2);
+            lblInfo.Dock = DockStyle.Fill;
+            lblInfo.Location = new Point(45, 4);
+            lblInfo.Margin = new Padding(3);
+            lblInfo.Name = "lblInfo";
+            lblInfo.Size = new Size(91, 17);
+            lblInfo.TabIndex = 91;
+            lblInfo.Text = " ";
+            lblInfo.UseMnemonic = false;
+            lblInfo.DoubleClick += lbl_DoubleClick;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Dock = DockStyle.Fill;
+            label2.Location = new Point(45, 25);
+            label2.Name = "label2";
+            label2.Size = new Size(44, 23);
+            label2.TabIndex = 96;
+            label2.Text = "艺术家";
+            label2.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Dock = DockStyle.Fill;
+            label3.Location = new Point(45, 49);
+            label3.Name = "label3";
+            label3.Size = new Size(44, 23);
+            label3.TabIndex = 97;
+            label3.Text = "标题";
+            label3.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Dock = DockStyle.Fill;
+            label4.Location = new Point(45, 73);
+            label4.Name = "label4";
+            label4.Size = new Size(44, 23);
+            label4.TabIndex = 98;
+            label4.Text = "专辑";
+            label4.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.AutoSize = true;
+            tableLayoutPanel3.ColumnCount = 2;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle());
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.Controls.Add(trbVolume, 1, 0);
+            tableLayoutPanel3.Controls.Add(pictureBox1, 0, 0);
+            tableLayoutPanel3.Dock = DockStyle.Top;
+            tableLayoutPanel3.Location = new Point(206, 31);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 1;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.Size = new Size(96, 31);
+            tableLayoutPanel3.TabIndex = 95;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = Resources.Vol;
+            pictureBox1.Location = new Point(3, 3);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(25, 25);
+            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox1.TabIndex = 91;
+            pictureBox1.TabStop = false;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.AutoSize = true;
+            flowLayoutPanel1.Controls.Add(btnPrevious);
+            flowLayoutPanel1.Controls.Add(btnPlay);
+            flowLayoutPanel1.Controls.Add(btnPause);
+            flowLayoutPanel1.Controls.Add(btnStop);
+            flowLayoutPanel1.Controls.Add(btnNext);
+            flowLayoutPanel1.Dock = DockStyle.Top;
+            flowLayoutPanel1.Location = new Point(3, 31);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(197, 30);
+            flowLayoutPanel1.TabIndex = 94;
+            // 
             // PlayerForm
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
+            AutoScroll = true;
             AutoSize = true;
-            ClientSize = new Size(444, 266);
-            Controls.Add(tableLayoutPanel1);
+            ClientSize = new Size(305, 258);
+            Controls.Add(tableLayoutPanel2);
             Controls.Add(statusStrip);
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -639,19 +719,20 @@ namespace PowerAudioPlayer
             MouseWheel += PlayerForm_MouseWheel;
             ((System.ComponentModel.ISupportInitialize)trbPosition).EndInit();
             ((System.ComponentModel.ISupportInitialize)trbVolume).EndInit();
-            tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel3.PerformLayout();
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
-            flowLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbAssocIcon).EndInit();
+            tableLayoutPanel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            flowLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -660,29 +741,11 @@ namespace PowerAudioPlayer
         private System.Windows.Forms.Timer tmrPlayer;
         private System.Windows.Forms.Timer tmrLyrics;
         private ToolTip toolTip;
-        private Button btnPlay;
-        private Button btnPause;
-        private Button btnStop;
-        private Button btnNext;
-        private Label lblDisplayTitle;
-        private Label lblTitle;
-        private Label lblAlbum;
-        private Label lblArtist;
-        private Button btnPrevious;
-        private Label lblInfo;
-        private TableLayoutPanel tableLayoutPanel3;
-        private Label lblPosition;
-        private Label lblVolume;
-        private TrackBar trbVolume;
-        private WinFormsExtendedControls.SelRangeTrackBar trbPosition;
         private ToolStripMenuItem tsmiAbout;
        
         private StatusStrip statusStrip;
         private ToolStripStatusLabel lblStatus;
         private ToolStripStatusLabel lblStatus1;
-        private TableLayoutPanel tableLayoutPanel1;
-        private TableLayoutPanel tableLayoutPanel2;
-        private FlowLayoutPanel flowLayoutPanel1;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem tsmiFile;
         private ToolStripMenuItem tsmiPlayControl;
@@ -710,7 +773,31 @@ namespace PowerAudioPlayer
         private ToolStripMenuItem tsmiSupportedFormatForm;
         private ToolStripMenuItem tsmiLyricsForm;
         private ToolStripMenuItem tsmiPlaylistEditorForm;
-        private Panel panel1;
         private ToolStripMenuItem tsmiAlbumPictureForm;
+        private ToolStripStatusLabel lblPosition;
+        private ToolStripStatusLabel lblVolume;
+        private ToolStripStatusLabel toolStripStatusLabel1;
+        private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel tableLayoutPanel3;
+        private TrackBar trbVolume;
+        private PictureBox pictureBox1;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Button btnPrevious;
+        private Button btnPlay;
+        private Button btnPause;
+        private Button btnStop;
+        private Button btnNext;
+        private WinFormsExtendedControls.SelRangeTrackBar trbPosition;
+        private Panel panel1;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Label label2;
+        private Label label3;
+        private Label lblDisplayTitle;
+        private Label lblAlbum;
+        private Label lblArtist;
+        private Label lblTitle;
+        private Label lblInfo;
+        private Label label4;
+        private PictureBox pbAssocIcon;
     }
 }
