@@ -14,7 +14,7 @@ namespace PowerAudioPlayer.UI.CustomControls
     public partial class PlaylistEditor : UserControl
     {
         private readonly OLVColumn olvColumn1 = new OLVColumn(Player.GetString("DisplayTitle"), "DisplayTitle") { Width = 430, MinimumWidth = 20 };
-        private readonly OLVColumn olvColumn2 = new OLVColumn(Player.GetString("Length"), "Length") { Width = 70, MinimumWidth = 10, AspectGetter = delegate (object rowObject) { return TimeFormatter.Format(((PlaylistItem)rowObject).Length, TimeUnit.Milliseconds); } };
+        private readonly OLVColumn olvColumn2 = new OLVColumn(Player.GetString("Length"), "Length") { Width = 70, MinimumWidth = 10, AspectGetter = delegate (object rowObject) { return TimeFormatter.Format(((PlaylistItem)rowObject).Length); } };
         private readonly OLVColumn olvColumn3 = new OLVColumn(Player.GetString("FileName"), "File") { Width = 420, MinimumWidth = 20, AspectGetter = delegate (object rowObject) { return Path.GetFileName(((PlaylistItem)rowObject).File); } };
         private DoWorkEventHandler doWorkEvent = (object? sender, DoWorkEventArgs e) => { };
         private int workingPlaylistIndex = -1;

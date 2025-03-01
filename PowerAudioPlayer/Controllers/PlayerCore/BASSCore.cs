@@ -343,7 +343,7 @@ namespace PowerAudioPlayer.Controllers.PlayerCore
                         {
                             if (newLine)
                             {
-                                line = $"[{TimeFormatter.Format((decimal)Bass.BASS_ChannelBytes2Seconds(hStream, mark.pos), TimeUnit.Milliseconds, @"mm\:ss\.ff")}]{mark.text}";
+                                line = $"[{TimeFormatter.Format((decimal)Bass.BASS_ChannelBytes2Seconds(hStream, mark.pos), TimeUnit.Seconds, @"mm\:ss\.ff")}]{mark.text}";
                                 newLine = false;
                             }
                             else

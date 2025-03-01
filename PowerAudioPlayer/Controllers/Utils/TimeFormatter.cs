@@ -14,7 +14,7 @@ namespace PowerAudioPlayer.Controllers.Utils
         public static string Format(
             decimal duration,
             TimeUnit unit = TimeUnit.Seconds,
-            string format = "M\\:ss",
+            string format = "MM:ss",
             bool ignoreOverflow = false)
         {
             try
@@ -42,17 +42,17 @@ namespace PowerAudioPlayer.Controllers.Utils
 
         private static TimeComponents DecomposeTime(decimal totalMicroseconds)
         {
-            const decimal microsecondPerDay = 86_400_000_000m;
-            const decimal microsecondPerHour = 3_600_000m;
-            const decimal microsecondPerMinute = 60_000m;
+            const decimal microsecondPerDay = 86_400_000_000m;    // 正确：86400秒
+            const decimal microsecondPerHour = 3_600_000_000m;    // 修正前少3个零
+            const decimal microsecondPerMinute = 60_000_000m;     // 修正前少3个零
 
             return new TimeComponents
             {
                 Days = Math.Floor(totalMicroseconds / microsecondPerDay),
-                Hours = (int)(totalMicroseconds % microsecondPerDay / microsecondPerHour),
-                Minutes = (int)(totalMicroseconds % microsecondPerHour / microsecondPerMinute),
-                Seconds = (int)(totalMicroseconds % microsecondPerMinute / 1_000m),
-                Milliseconds = (int)(totalMicroseconds % 1_000m / 1),
+                Hours = (int)((totalMicroseconds % microsecondPerDay) / microsecondPerHour),
+                Minutes = (int)((totalMicroseconds % microsecondPerHour) / microsecondPerMinute),
+                Seconds = (int)((totalMicroseconds % microsecondPerMinute) / 1_000_000m),
+                Milliseconds = (int)((totalMicroseconds % 1_000_000m) / 1_000m),
                 TotalMicroseconds = totalMicroseconds
             };
         }
@@ -160,14 +160,24 @@ namespace PowerAudioPlayer.Controllers.Utils
         private static string FormatTotalMinutes(TimeComponents time, int length)
         {
             decimal totalMinutes = time.Days * 1440 + time.Hours * 60 + time.Minutes;
-            return totalMinutes.ToString($"D{length}");
+            // 使用新的安全格式化方法
+            return FormatPaddedInteger(totalMinutes, length);
         }
 
         private static string FormatTotalSeconds(TimeComponents time, int length)
         {
             decimal totalSeconds = time.Days * 86400 + time.Hours * 3600 +
                                  time.Minutes * 60 + time.Seconds;
-            return totalSeconds.ToString($"D{length}");
+            return FormatPaddedInteger(totalSeconds, length);
+        }
+        private static string FormatPaddedInteger(decimal value, int length)
+        {
+            if (value % 1 != 0)
+                throw new ArgumentException("Value must be an integer");
+
+            return ((long)value).ToString()
+                               .PadLeft(Math.Max(length, 1), '0')
+                               .Substring(0, length);
         }
 
         private struct TimeComponents

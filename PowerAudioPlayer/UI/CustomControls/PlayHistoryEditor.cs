@@ -13,7 +13,7 @@ namespace PowerAudioPlayer.UI.CustomControls
         private readonly OLVColumn olvColumn1 = new OLVColumn(Player.GetString("LastPlaybackTime"), "LastPlaybackTime") { Width = 130, MinimumWidth = 10 };
         private readonly OLVColumn olvColumn2 = new OLVColumn(Player.GetString("PlayCount"), "PlayCount") { Width = 70, MinimumWidth = 10 };
         private readonly OLVColumn olvColumn3 = new OLVColumn(Player.GetString("DisplayTitle"), "DisplayTitle") { Width = 430, MinimumWidth = 20 };
-        private readonly OLVColumn olvColumn4 = new OLVColumn(Player.GetString("Length"), "Length") { Width = 70, MinimumWidth = 10, AspectGetter = delegate (object rowObject) { return TimeFormatter.Format(((PlayHistoryItem)rowObject).Length, TimeUnit.Milliseconds); } };
+        private readonly OLVColumn olvColumn4 = new OLVColumn(Player.GetString("Length"), "Length") { Width = 70, MinimumWidth = 10, AspectGetter = delegate (object rowObject) { return TimeFormatter.Format(((PlayHistoryItem)rowObject).Length); } };
         private readonly OLVColumn olvColumn5 = new OLVColumn(Player.GetString("FileName"), "File") { Width = 430, MinimumWidth = 20, AspectGetter = delegate (object rowObject) { return Path.GetFileName(((PlayHistoryItem)rowObject).File); } };
 
         public event EventHandler? PlayItem;

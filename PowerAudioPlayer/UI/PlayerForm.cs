@@ -15,7 +15,6 @@ using MessageBox = System.Windows.Forms.MessageBox;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 using MiscUtils = PowerAudioPlayer.Controllers.Utils.MiscUtils;
 using Newtonsoft.Json;
-using Microsoft.WindowsAPICodePack.Shell;
 using PowerAudioPlayer.Controllers.Utils;
 
 namespace PowerAudioPlayer
@@ -215,7 +214,7 @@ namespace PowerAudioPlayer
 
         private void UpdatePlayingControls()
         {
-            lblPosition.Text = $"{TimeFormatter.Format(Player.Core.GetPositionSecond(), TimeUnit.Milliseconds)}/{TimeFormatter.Format(Player.Core.GetLengthSecond(), TimeUnit.Milliseconds)}({((double)Player.Core.GetPositionMillisecond() / Player.Core.GetLengthMillisecond()):P1})";
+            lblPosition.Text = $"{TimeFormatter.Format(Player.Core.GetPositionSecond())}/{TimeFormatter.Format(Player.Core.GetLengthSecond())}({((double)Player.Core.GetPositionMillisecond() / Player.Core.GetLengthMillisecond()):P1})";
             trbPosition.Maximum = Player.Core.GetLengthMillisecond();
             if (Player.Core.GetChannelStatus() == PlayerChannelStatus.Playing)
             {

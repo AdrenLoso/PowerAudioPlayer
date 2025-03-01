@@ -98,40 +98,6 @@ namespace PowerAudioPlayer.Controllers.Utils
             return lSize;
         }
 
-        public static string FormatTimeSecond(int t)
-        {
-            if (t <= 0)
-                return "00:00";
-            long minutes = t / 60;
-            long seconds = t % 60;
-            string formattedMinutes = minutes.ToString().PadLeft(2, '0');
-            string formattedSeconds = seconds.ToString().PadLeft(2, '0');
-            return $"{formattedMinutes}:{formattedSeconds}";
-        }
-
-        public static string FormatTimeSecond(double t)
-        {
-            if (t <= 0)
-                return "00:00.00";
-            int minutes = (int)Math.Truncate(t / 60);
-            int seconds = (int)Math.Truncate(t % 60);
-            double fractionalSeconds = (t - Math.Truncate(t)) * 100;
-            fractionalSeconds = Math.Round(fractionalSeconds, 2);
-            return $"{minutes:D2}:{seconds:D2}.{fractionalSeconds:F2}";
-        }
-
-        public static string FormatTimeMillisecond(int t)
-        {
-            if (t <= 0)
-                return "00:00";
-            long seconds = t / 1000;
-            long minutes = seconds / 60;
-            long sec = seconds % 60;
-            string formattedMinutes = minutes.ToString().PadLeft(2, '0');
-            string formattedSeconds = sec.ToString().PadLeft(2, '0');
-            return $"{formattedMinutes}:{formattedSeconds}";
-        }
-
         public static string FormatFileSize(long factSize)
         {
             string size;
