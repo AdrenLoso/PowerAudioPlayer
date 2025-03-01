@@ -4,6 +4,7 @@ using System.Resources;
 using System.Text;
 using Microsoft.Win32;
 using PowerAudioPlayer.Controllers;
+using PowerAudioPlayer.Controllers.Utils;
 using PowerAudioPlayer.UI;
 
 namespace PowerAudioPlayer
@@ -48,18 +49,18 @@ namespace PowerAudioPlayer
             if (e.Category == UserPreferenceCategory.Color)
             {
                 Application.SetColorMode(SystemColorMode.System);
-                if (Utils.IsDarkMode())
+                if (MiscUtils.IsDarkMode())
                 {
                     foreach(Form form in Application.OpenForms)
                     {
-                        Utils.EnableDarkModeForWindowTitle(form.Handle, true);
+                        MiscUtils.EnableDarkModeForWindowTitle(form.Handle, true);
                     }
                 }
                 else
                 {
                     foreach (Form win in Application.OpenForms)
                     {
-                        Utils.EnableDarkModeForWindowTitle(win.Handle, false);
+                        MiscUtils.EnableDarkModeForWindowTitle(win.Handle, false);
                     }
                 }
             }

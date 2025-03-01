@@ -1,4 +1,5 @@
 ﻿using PowerAudioPlayer.Controllers;
+using PowerAudioPlayer.Controllers.Utils;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -17,15 +18,15 @@ namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
             }
             else
             {
-                lblMsg.Text = Player.GetString("MsgDataFile1", Utils.GetCurrentUserFullName(), Player.GetExactDataFilePath());
+                lblMsg.Text = Player.GetString("MsgDataFile1", MiscUtils.GetCurrentUserFullName(), Player.GetExactDataFilePath());
             }
-            pbUserAvatar.Load(Utils.GetCurrentUserAvatarPath());
-            Utils.AddShieldToButton(btnSetSavePath);
+            pbUserAvatar.Load(MiscUtils.GetCurrentUserAvatarPath());
+            MiscUtils.AddShieldToButton(btnSetSavePath);
         }
 
         private void btnExploreFolder_Click(object sender, EventArgs e)
         {
-            Utils.ExploreFile(Player.GetExactDataFilePath());
+            MiscUtils.ExploreFile(Player.GetExactDataFilePath());
         }
 
         private void btnExport_Click(object sender, EventArgs e)
@@ -65,7 +66,7 @@ namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
 
         private void btnClearCurrentUser_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(Player.GetDataFilePath() == DataFilePath.LocalAppData ? Player.GetString("MsgClearDataFile1", Utils.GetCurrentUserFullName()) : Player.GetString("MsgClearDataFile2"), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MessageBox.Show(Player.GetDataFilePath() == DataFilePath.LocalAppData ? Player.GetString("MsgClearDataFile1", MiscUtils.GetCurrentUserFullName()) : Player.GetString("MsgClearDataFile2"), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 Directory.Delete(Player.GetExactDataFilePath(), true);
                 MessageBox.Show(Player.GetString("MsgClearDataFileOK"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -76,7 +77,7 @@ namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
 
         private void btnSetSavePath_Click(object sender, EventArgs e)
         {
-            if(Utils.IsRunAsAdministrator())
+            if(MiscUtils.IsRunAsAdministrator())
             {
                 var radioButton1 = new TaskDialogRadioButton(Player.GetString("SaveToLocalAppData"));
                 var radioButton2 = new TaskDialogRadioButton(Player.GetString("SaveToProgramPath"));

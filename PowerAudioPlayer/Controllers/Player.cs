@@ -1,5 +1,6 @@
 ﻿using PowerAudioPlayer.Controllers.Helper;
 using PowerAudioPlayer.Controllers.PlayerCore;
+using PowerAudioPlayer.Controllers.Utils;
 using System.IO;
 
 namespace PowerAudioPlayer.Controllers
@@ -79,7 +80,7 @@ namespace PowerAudioPlayer.Controllers
         {
             try
             {
-                using FileStream fs = new FileStream(Path.Combine(Utils.GetProgramExecuableFilePath(), "DataFileSavePath.dat"), FileMode.Open, FileAccess.Read);
+                using FileStream fs = new FileStream(Path.Combine(MiscUtils.GetProgramExecuableFilePath(), "DataFileSavePath.dat"), FileMode.Open, FileAccess.Read);
                 {
                     var b = fs.ReadByte();
                     if (b == 0x0)
@@ -136,7 +137,7 @@ namespace PowerAudioPlayer.Controllers
 
         public static string GetString(string id, params object?[] args)
         {
-            if (Utils.IsDesignMode())
+            if (MiscUtils.IsDesignMode())
                 return id;
             if (args.Length == 0)
             {
@@ -230,12 +231,12 @@ namespace PowerAudioPlayer.Controllers
 
         public static Color GetThemeColor()
         {
-            return Settings.Default.ThemeColorFollowingSystem ? Utils.GetSystemThemeColor() : Settings.Default.ThemeColor;
+            return Settings.Default.ThemeColorFollowingSystem ? MiscUtils.GetSystemThemeColor() : Settings.Default.ThemeColor;
         }
 
-        public static void SetDataFilePath(DataFilePath dataFilePath) //应用重启后，GetExactDataFilePath() 和 GetDataFilePath() 才会获取到新值。
+        public static void SetDataFilePath(DataFilePath dataFilePath)
         {
-            using FileStream fs = new FileStream(Path.Combine(Utils.GetProgramExecuableFilePath(), "DataFileSavePath.dat"), FileMode.Create, FileAccess.Write);
+            using FileStream fs = new FileStream(Path.Combine(MiscUtils.GetProgramExecuableFilePath(), "DataFileSavePath.dat"), FileMode.Create, FileAccess.Write);
             if (dataFilePath == DataFilePath.LocalAppData)
                 fs.WriteByte(0x0);
             else
@@ -248,14 +249,14 @@ namespace PowerAudioPlayer.Controllers
             {
                 if (DataFilePath == DataFilePath.LocalAppData)
                 {
-                    string path = Utils.GetProgramLocalAppDataPath();
+                    string path = MiscUtils.GetProgramLocalAppDataPath();
                     if (!Path.Exists(path))
                         Directory.CreateDirectory(path);
-                    return Utils.GetProgramLocalAppDataPath();
+                    return MiscUtils.GetProgramLocalAppDataPath();
                 }
                 else
                 {
-                    string path = Path.Combine(Utils.GetProgramExecuableFilePath(), "DataFile");
+                    string path = Path.Combine(MiscUtils.GetProgramExecuableFilePath(), "DataFile");
                     if (!Path.Exists(path))
                         Directory.CreateDirectory(path);
                     return path;
@@ -264,7 +265,7 @@ namespace PowerAudioPlayer.Controllers
             catch
             {
                 DataFilePath = DataFilePath.LocalAppData;
-                return Utils.GetProgramLocalAppDataPath();
+                return MiscUtils.GetProgramLocalAppDataPath();
             }
         }
 

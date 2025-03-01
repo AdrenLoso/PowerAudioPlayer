@@ -13,9 +13,10 @@ using DragDropEffects = System.Windows.Forms.DragDropEffects;
 using DragEventArgs = System.Windows.Forms.DragEventArgs;
 using MessageBox = System.Windows.Forms.MessageBox;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
-using Utils = PowerAudioPlayer.Controllers.Utils;
+using MiscUtils = PowerAudioPlayer.Controllers.Utils.MiscUtils;
 using Newtonsoft.Json;
 using Microsoft.WindowsAPICodePack.Shell;
+using PowerAudioPlayer.Controllers.Utils;
 
 namespace PowerAudioPlayer
 {
@@ -214,7 +215,7 @@ namespace PowerAudioPlayer
 
         private void UpdatePlayingControls()
         {
-            lblPosition.Text = $"{Utils.FormatTimeSecond(Player.Core.GetPositionSecond())}/{Utils.FormatTimeSecond(Player.Core.GetLengthSecond())}({((double)Player.Core.GetPositionMillisecond() / Player.Core.GetLengthMillisecond()):P1})";
+            lblPosition.Text = $"{TimeFormatter.Format(Player.Core.GetPositionSecond(), TimeUnit.Milliseconds)}/{TimeFormatter.Format(Player.Core.GetLengthSecond(), TimeUnit.Milliseconds)}({((double)Player.Core.GetPositionMillisecond() / Player.Core.GetLengthMillisecond()):P1})";
             trbPosition.Maximum = Player.Core.GetLengthMillisecond();
             if (Player.Core.GetChannelStatus() == PlayerChannelStatus.Playing)
             {
@@ -507,7 +508,7 @@ namespace PowerAudioPlayer
         private void HandleCopyData(Message m)
         {
             NativeAPI.COPYDATASTRUCT cdata = (NativeAPI.COPYDATASTRUCT?)m.GetLParam(typeof(NativeAPI.COPYDATASTRUCT)) ?? default;
-            var args = Utils.SegmentCommandLine(cdata.lpData);
+            var args = MiscUtils.SegmentCommandLine(cdata.lpData);
             args[0] = string.Empty;
             if (args.Length > 1)
             {
@@ -703,7 +704,7 @@ namespace PowerAudioPlayer
 
         private void tsmiCreateDesktopShortcut_Click(object sender, EventArgs e)
         {
-            Utils.CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), Application.ProductName + ".lnk"), Application.ExecutablePath, "");
+            MiscUtils.CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), Application.ProductName + ".lnk"), Application.ExecutablePath, "");
         }
 
         private void tsmiABRepeat_Click(object sender, EventArgs e)
@@ -785,7 +786,7 @@ namespace PowerAudioPlayer
             {
                 PlaylistHelper.ActivePlaylist.Items.Clear();
                 string[] supportedExtensions = Player.Core.GetAllSupportedFileArray();
-                IEnumerable<string> files = Utils.SearchFiles(commonOpenFileDialog.FileName, supportedExtensions, checkBox.IsChecked);
+                IEnumerable<string> files = FileSearcher.SearchFiles(commonOpenFileDialog.FileName, supportedExtensions, checkBox.IsChecked);
                 foreach (string file in files)
                 {
                     PlaylistHelper.ActivePlaylist.Items.Add(PlaylistItem.FormFile(file));

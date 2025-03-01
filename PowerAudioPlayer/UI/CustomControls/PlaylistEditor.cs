@@ -7,13 +7,14 @@ using System.ComponentModel;
 using System.IO;
 using PowerAudioPlayer.Controllers.Helper;
 using WinFormsExtendedControls.ExtendedForms;
+using PowerAudioPlayer.Controllers.Utils;
 
 namespace PowerAudioPlayer.UI.CustomControls
 {
     public partial class PlaylistEditor : UserControl
     {
         private readonly OLVColumn olvColumn1 = new OLVColumn(Player.GetString("DisplayTitle"), "DisplayTitle") { Width = 430, MinimumWidth = 20 };
-        private readonly OLVColumn olvColumn2 = new OLVColumn(Player.GetString("Length"), "Length") { Width = 70, MinimumWidth = 10, AspectGetter = delegate (object rowObject) { return Utils.FormatTimeSecond(((PlaylistItem)rowObject).Length); } };
+        private readonly OLVColumn olvColumn2 = new OLVColumn(Player.GetString("Length"), "Length") { Width = 70, MinimumWidth = 10, AspectGetter = delegate (object rowObject) { return TimeFormatter.Format(((PlaylistItem)rowObject).Length, TimeUnit.Milliseconds); } };
         private readonly OLVColumn olvColumn3 = new OLVColumn(Player.GetString("FileName"), "File") { Width = 420, MinimumWidth = 20, AspectGetter = delegate (object rowObject) { return Path.GetFileName(((PlaylistItem)rowObject).File); } };
         private DoWorkEventHandler doWorkEvent = (object? sender, DoWorkEventArgs e) => { };
         private int workingPlaylistIndex = -1;
@@ -24,7 +25,7 @@ namespace PowerAudioPlayer.UI.CustomControls
 
         public new bool DesignMode
         {
-            get => Utils.IsDesignMode();
+            get => MiscUtils.IsDesignMode();
         }
 
         private bool _isEditActivePlaylist = false;
@@ -122,7 +123,7 @@ namespace PowerAudioPlayer.UI.CustomControls
             try
             {
                 lblTotalCount.Text = PlaylistHelper.Playlists[_editPlaylistIndex].Count.ToString();
-                lblTotalLength.Text = Utils.FormatTimeSecond(PlaylistHelper.Playlists[_editPlaylistIndex].TotalLength);
+                lblTotalLength.Text = TimeFormatter.Format(PlaylistHelper.Playlists[_editPlaylistIndex].TotalLength, TimeUnit.Seconds, @"hh\:mm\:ss");
             }
             catch
             {
@@ -212,49 +213,6 @@ namespace PowerAudioPlayer.UI.CustomControls
 
         private void tsmiAddFolder_Click(object sender, EventArgs e)
         {
-            {
-                //CommonOpenFileDialog commonOpenFileDialog = new CommonOpenFileDialog();
-                //CommonFileDialogCheckBox checkBox = new CommonFileDialogCheckBox();
-                //checkBox.Text = Player.GetString("IncludingSubDir");
-                //commonOpenFileDialog.Controls.Add(checkBox);
-                //commonOpenFileDialog.IsFolderPicker = true;
-                //if (commonOpenFileDialog.ShowDialog() == CommonFileDialogResult.Ok && commonOpenFileDialog.FileName != null)
-                //{
-                //    doWorkEvent = (object? sender, DoWorkEventArgs e) =>
-                //    {
-                //        if (e.Argument != null)
-                //        {
-                //            var progressDialog = new ProgressDialog() { Title = Player.GetString("Working"), Marquee = true, CancelButton = true };
-                //            progressDialog.Show();
-                //            progressDialog.Line1 = Player.GetString("MsgSearchingFiles");
-                //            var args = (FileSearchArgs)e.Argument;
-                //            string[] supportedExtensions = Player.Core.GetAllSupportedFileArray();
-                //            IEnumerable<string> files = Utils.SearchFiles(args.Directory, supportedExtensions, args.SearchSubDir);
-                //            progressDialog.Marquee = false;
-                //            progressDialog.Maximum = files.Count();
-                //            progressDialog.Line1 = Player.GetString("MsgAddingFiles");
-                //            foreach (string file in files)
-                //            {
-                //                if (backgroundWorker.CancellationPending || progressDialog.HasUserCancelled)
-                //                {
-                //                    break;
-                //                }
-                //                progressDialog.Value++;
-                //                progressDialog.Line2 = Path.GetFileName(file);
-                //                PlaylistHelper.Playlists[workingPlaylistIndex].Add(file);
-                //            }
-                //            progressDialog.Close();
-                //        }
-                //    };
-                //    backgroundWorker.DoWork += doWorkEvent;
-                //    workingPlaylistIndex = _editPlaylistIndex;
-                //    backgroundWorker.RunWorkerAsync(new FileSearchArgs(commonOpenFileDialog.FileName, checkBox.IsChecked));
-                //    IsEnableControls(false);
-                //    //lblStatus.Text = Player.GetString("MsgAddingFiles");
-                //    //lblStatus.Visible = true;
-                //    WorkStart?.Invoke(this, e);
-                //}
-            }
             CommonOpenFileDialog commonOpenFileDialog = new CommonOpenFileDialog();
             CommonFileDialogCheckBox checkBox = new CommonFileDialogCheckBox();
             checkBox.Text = Player.GetString("IncludingSubDir");
@@ -270,8 +228,9 @@ namespace PowerAudioPlayer.UI.CustomControls
                         progressDialog.Show();
                         progressDialog.Line1 = Player.GetString("MsgAddingFiles");
                         var args = (FileSearchArgs)e.Argument;
-                        Utils.SearchFiles(args.Directory, Player.Core.GetAllSupportedFileArray(), args.SearchSubDir, (string file) => {
-                            if(backgroundWorker.CancellationPending || progressDialog.HasUserCancelled)
+                        FileSearcher.SearchFiles(args.Directory, Player.Core.GetAllSupportedFileArray(), args.SearchSubDir, file =>
+                        {
+                            if (backgroundWorker.CancellationPending || progressDialog.HasUserCancelled)
                             {
                                 return false;
                             }
@@ -279,6 +238,7 @@ namespace PowerAudioPlayer.UI.CustomControls
                             PlaylistHelper.Playlists[workingPlaylistIndex].Add(file);
                             return true;
                         });
+
                         progressDialog.Close();
                     }
                 };
@@ -359,12 +319,16 @@ namespace PowerAudioPlayer.UI.CustomControls
             backgroundWorker.DoWork -= doWorkEvent;
             RefreshItems();
             EnableControls(true);
-           // lblStatus.Visible = false;
             workingPlaylistIndex = 0;
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
+            if(lvPlaylist.SelectedObjects.Count > 1)
+            {
+                tsmiFileInfo.Enabled = false;
+                tsmiMediaExplorer.Enabled = false;
+            }
             tsmiSelectedCount.Text = Player.GetString("SelectedCount", lvPlaylist.SelectedObjects.Count.ToString());
         }
 
@@ -372,7 +336,7 @@ namespace PowerAudioPlayer.UI.CustomControls
         {
             if (lvPlaylist.SelectedObjects.Count > 0)
             {
-                Utils.ExploreFile(SelectedItem.File);
+                MiscUtils.ExploreFile(SelectedItem.File);
             }
         }
 

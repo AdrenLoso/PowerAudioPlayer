@@ -1,11 +1,12 @@
-﻿using PowerAudioPlayer.Model;
+﻿using PowerAudioPlayer.Controllers.Utils;
+using PowerAudioPlayer.Model;
 using System.IO;
 using Un4seen.Bass;
 using Un4seen.Bass.AddOn.Tags;
 
 namespace PowerAudioPlayer.Controllers.Helper
 {
-    internal static class AudioInfoHelper
+    public static class AudioInfoHelper
     {
         public static AudioInfo GetAudioInfo(string file)
         {
@@ -27,7 +28,7 @@ namespace PowerAudioPlayer.Controllers.Helper
             int stream = Bass.BASS_StreamCreateFile(file, 0, 0, BASSFlag.BASS_STREAM_PRESCAN | BASSFlag.BASS_STREAM_DECODE);
             TAG_INFO bassTagInfo = GetTagInfo(stream, file);
             FreeStream(stream);
-            return bassTagInfo?.PictureCount > 0 ? Utils.ByteToImage(bassTagInfo.PictureGet(0).Data) : null;
+            return bassTagInfo?.PictureCount > 0 ? MiscUtils.ByteToImage(bassTagInfo.PictureGet(0).Data) : null;
         }
 
         private static int LoadStream(string file)
@@ -43,7 +44,7 @@ namespace PowerAudioPlayer.Controllers.Helper
         private static TAG_INFO GetTagInfo(int stream, string file)
         {
             TAG_INFO bassTagInfo = new TAG_INFO();
-            if (Utils.IsUrl(file))
+            if (MiscUtils.IsUrl(file))
             {
                 BassTags.BASS_TAG_GetFromURL(stream, bassTagInfo);
             }
@@ -80,7 +81,7 @@ namespace PowerAudioPlayer.Controllers.Helper
 
         private static string ConvertToGB2312IfNeeded(string text, BASSChannelType ctype)
         {
-            return ctype != BASSChannelType.BASS_CTYPE_STREAM_MIDI ? text : Utils.Windows1254ToGB2312(text);
+            return ctype != BASSChannelType.BASS_CTYPE_STREAM_MIDI ? text : MiscUtils.Windows1254ToGB2312(text);
         }
 
         public static AudioType GetAudioTypeByCType(BASSChannelType? type)

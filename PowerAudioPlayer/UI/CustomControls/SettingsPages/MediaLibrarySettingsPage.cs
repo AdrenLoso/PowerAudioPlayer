@@ -4,6 +4,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using PowerAudioPlayer.Controllers;
 using PowerAudioPlayer.Controllers.Helper;
 using System.ComponentModel;
+using PowerAudioPlayer.Controllers.Utils;
 
 namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
 {
@@ -29,7 +30,7 @@ namespace PowerAudioPlayer.UI.CustomControls.SettingsPages
 
 
             lvMediaLibraryDirs.Columns.AddRange([olvColumn1, olvColumn2]);
-            if (!Utils.IsDesignMode())
+            if (!MiscUtils.IsDesignMode())
                 lvMediaLibraryDirs.SetObjects(Settings.Default.MediaLibraryDirectories);
         }
 

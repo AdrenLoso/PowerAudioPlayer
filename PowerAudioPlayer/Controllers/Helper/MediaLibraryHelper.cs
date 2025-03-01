@@ -1,4 +1,5 @@
 ﻿using MemoryPack;
+using PowerAudioPlayer.Controllers.Utils;
 using PowerAudioPlayer.Model;
 using System.IO;
 
@@ -27,7 +28,7 @@ namespace PowerAudioPlayer.Controllers.Helper
 
         public static long Size
         {
-            get => Utils.GetFileSize(defaultFile);
+            get => MiscUtils.GetFileSize(defaultFile);
         }
 
         public static void SaveMediaLibrary(string file = "")
@@ -80,7 +81,7 @@ namespace PowerAudioPlayer.Controllers.Helper
             string? path = Path.GetDirectoryName(file);
             if (path == null) return false;
             return Settings.Default.MediaLibraryDirectories
-                .Any(d => Utils.IsSubDirectoryOf(path, d.Directory));
+                .Any(d => MiscUtils.IsSubDirectoryOf(path, d.Directory));
         }
 
         public static bool Add(string file, AudioInfo audioInfo)
@@ -120,7 +121,7 @@ namespace PowerAudioPlayer.Controllers.Helper
             var mediaLibraryDirectories = Settings.Default.MediaLibraryDirectories;
             Parallel.ForEach(mediaLibraryDirectories, dir =>
             {
-                Utils.SearchFiles(dir.Directory, supportedFiles, true, file =>
+                FileSearcher.SearchFiles(dir.Directory, supportedFiles, true, file =>
                 {
                     Add(file);
                     return true;

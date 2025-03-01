@@ -446,8 +446,8 @@ System Information: {8}</value>
   <data name="MsgDataFile2" xml:space="preserve">
     <value>数据文件被储存在此处：{0}。</value>
   </data>
-  <data name="dotNETRTVersion" xml:space="preserve">
-    <value>.NET运行时版本：.NET {0}</value>
+  <data name="dotNETVersion" xml:space="preserve">
+    <value>.NET 版本：{0}</value>
   </data>
   <data name="FilterZIP" xml:space="preserve">
     <value>ZIP压缩文件|*.zip|所有文件|*.*</value>
@@ -483,7 +483,7 @@ System Information: {8}</value>
     <value>A点已设置，请将进度条向后移动，然后右键单击进度条</value>
   </data>
   <data name="ArchitectureMode" xml:space="preserve">
-    <value>运行模式：{0}</value>
+    <value>程序架构：{0}</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>作者：{0}</value>

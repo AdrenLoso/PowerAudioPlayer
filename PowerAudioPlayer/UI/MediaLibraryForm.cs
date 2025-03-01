@@ -169,7 +169,7 @@ namespace PowerAudioPlayer.UI
             int playlistIndex = Convert.ToInt32(node.Tag);
             if (node.Parent?.Name == "nodePlaylist" || node.Level == 1)
             {
-                var ib = new WinFormsExtendedControls.ExtendedForms.InputDialog { WindowTitle = Application.ProductName ?? string.Empty, MainInstruction = Player.GetString("MsgRenamePlaylist", PlaylistHelper.Playlists[playlistIndex].Name) };
+                var ib = new InputDialog { WindowTitle = Application.ProductName ?? string.Empty, MainInstruction = Player.GetString("MsgRenamePlaylist", PlaylistHelper.Playlists[playlistIndex].Name), Input = PlaylistHelper.Playlists[playlistIndex].Name };
                 if (ib.ShowDialog() == DialogResult.OK && ib.Input != "")
                 {
                     if (PlaylistHelper.Rename(ib.Input, playlistIndex))

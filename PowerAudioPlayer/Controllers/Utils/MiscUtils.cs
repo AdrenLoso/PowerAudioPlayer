@@ -6,56 +6,55 @@ using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Collections.Concurrent;
-using File = System.IO.File;
 using System.Security.Principal;
+using File = System.IO.File;
 
-namespace PowerAudioPlayer.Controllers
+namespace PowerAudioPlayer.Controllers.Utils
 {
-    public static class Utils
+    public static class MiscUtils
     {
-        public delegate bool SearchFileCallback(string file);
-        public static IEnumerable<string> SearchFiles(string directoryPath, string[] fileExtensions, bool searchSubdirectories, SearchFileCallback? callback = null, bool ignoreInaccessible = true)
-        {
-            if (!Directory.Exists(directoryPath))
-            {
-                throw new DirectoryNotFoundException(directoryPath);
-            }
+        //public delegate bool SearchFileCallback(string file);
+        //public static IEnumerable<string> SearchFiles(string directoryPath, string[] fileExtensions, bool searchSubdirectories, SearchFileCallback? callback = null, bool ignoreInaccessible = true)
+        //{
+        //    if (!Directory.Exists(directoryPath))
+        //    {
+        //        throw new DirectoryNotFoundException(directoryPath);
+        //    }
 
-            var options = searchSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            var matchingFiles = new ConcurrentBag<string>();
+        //    var options = searchSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+        //    var matchingFiles = new ConcurrentBag<string>();
 
-            try
-            {
-                Parallel.ForEach(fileExtensions, (extension, ParallelLoopState) =>
-                {
-                    try
-                    {
-                        var files = Directory.EnumerateFiles(directoryPath, "*" + extension, options);
-                        foreach (var file in files)
-                        {
-                            matchingFiles.Add(file);
-                            if (callback != null)
-                            {
-                                if (!callback.Invoke(file))
-                                {
-                                    ParallelLoopState.Stop();
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    catch (UnauthorizedAccessException) when (ignoreInaccessible)
-                    {
-                    }
-                });
-                return matchingFiles;
-            }
-            catch (UnauthorizedAccessException) when (ignoreInaccessible)
-            {
-                return [];
-            }
-        }
+        //    try
+        //    {
+        //        Parallel.ForEach(fileExtensions, (extension, ParallelLoopState) =>
+        //        {
+        //            try
+        //            {
+        //                var files = Directory.EnumerateFiles(directoryPath, "*" + extension, options);
+        //                foreach (var file in files)
+        //                {
+        //                    matchingFiles.Add(file);
+        //                    if (callback != null)
+        //                    {
+        //                        if (!callback.Invoke(file))
+        //                        {
+        //                            ParallelLoopState.Stop();
+        //                            return;
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            catch (UnauthorizedAccessException) when (ignoreInaccessible)
+        //            {
+        //            }
+        //        });
+        //        return matchingFiles;
+        //    }
+        //    catch (UnauthorizedAccessException) when (ignoreInaccessible)
+        //    {
+        //        return [];
+        //    }
+        //}
 
         public static bool IsSubDirectoryOf(string potentialSubdirectory, string directory)
         {
@@ -178,7 +177,7 @@ namespace PowerAudioPlayer.Controllers
             return (int)registryValueObject <= 0;
         }
 
-        public static bool EnableDarkModeForWindowTitle(IntPtr hWnd, bool enable)
+        public static bool EnableDarkModeForWindowTitle(nint hWnd, bool enable)
         {
             int darkMode = enable ? 1 : 0;
             int hResult = NativeAPI.DwmSetWindowAttribute(hWnd, NativeAPI.DWMWA_USE_IMMERSIVE_DARK_MODE, ref darkMode, sizeof(int));
@@ -221,7 +220,7 @@ namespace PowerAudioPlayer.Controllers
 
         public static Color GetForColorByBackgroundColor(Color backgroundColor)
         {
-            int brightness = (int)((backgroundColor.R * 0.299) + (backgroundColor.G * 0.587) + (backgroundColor.B * 0.114));
+            int brightness = (int)(backgroundColor.R * 0.299 + backgroundColor.G * 0.587 + backgroundColor.B * 0.114);
             if (brightness > 128)
                 return Color.Black;
             else
@@ -236,12 +235,12 @@ namespace PowerAudioPlayer.Controllers
                 Process.Start(@"explorer.exe", "/select,\"" + filePath + "\"");
             else
             {
-                IntPtr pidlList = NativeAPI.ILCreateFromPath(filePath);
-                if (pidlList != IntPtr.Zero)
+                nint pidlList = NativeAPI.ILCreateFromPath(filePath);
+                if (pidlList != nint.Zero)
                 {
                     try
                     {
-                        Marshal.ThrowExceptionForHR(NativeAPI.SHOpenFolderAndSelectItems(pidlList, 0, IntPtr.Zero, 0));
+                        Marshal.ThrowExceptionForHR(NativeAPI.SHOpenFolderAndSelectItems(pidlList, 0, nint.Zero, 0));
                     }
                     finally
                     {
@@ -336,7 +335,7 @@ namespace PowerAudioPlayer.Controllers
                         numslash--;
                         result += '\\';
                     }
-                    if (currentIndex == psrc.Length || (!inquote && (psrc[currentIndex] == ' ' || psrc[currentIndex] == '\t')))
+                    if (currentIndex == psrc.Length || !inquote && (psrc[currentIndex] == ' ' || psrc[currentIndex] == '\t'))
                         break;
                     if (copychar)
                     {
@@ -392,12 +391,12 @@ namespace PowerAudioPlayer.Controllers
 
         public static int FFTIndex2Frequency(int index, int length, int samplerate)
         {
-            return (int)Math.Round((double)index * (double)samplerate / (double)length);
+            return (int)Math.Round(index * (double)samplerate / length);
         }
 
         public static int FFTFrequency2Index(int frequency, int length, int samplerate)
         {
-            int num = (int)Math.Round((double)length * (double)frequency / (double)samplerate);
+            int num = (int)Math.Round(length * (double)frequency / samplerate);
             if (num > length / 2 - 1)
             {
                 num = length / 2 - 1;

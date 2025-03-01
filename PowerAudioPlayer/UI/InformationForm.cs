@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using Un4seen.Bass;
 using Un4seen.Bass.AddOn.Tags;
-using Utils = PowerAudioPlayer.Controllers.Utils;
+using MiscUtils = PowerAudioPlayer.Controllers.Utils.MiscUtils;
 
 namespace PowerAudioPlayer.UI
 {
@@ -19,12 +19,12 @@ namespace PowerAudioPlayer.UI
 
         private void LoadInfo(string file)
         {
-            tbFileName.Text = Utils.IsUrl(file) ? file : Path.GetFileName(file);
+            tbFileName.Text = MiscUtils.IsUrl(file) ? file : Path.GetFileName(file);
             tbPath.Text = file;
             if (Path.Exists(file))
             {
                 int hStream = 0;
-                if (Utils.IsUrl(file))
+                if (MiscUtils.IsUrl(file))
                 {
                     hStream = Bass.BASS_StreamCreateURL(file, 0, 0, null, IntPtr.Zero);
                 }
@@ -38,7 +38,7 @@ namespace PowerAudioPlayer.UI
                 {
                     BASS_CHANNELINFO channelInfo = new BASS_CHANNELINFO();
                     Bass.BASS_ChannelGetInfo(hStream, channelInfo);
-                    tbSize.Text = Utils.FormatFileSize(Utils.GetFileSize(file));
+                    tbSize.Text = MiscUtils.FormatFileSize(MiscUtils.GetFileSize(file));
                     tbType.Text = AudioInfoHelper.GetAudioTypeByCType(channelInfo.ctype).ToString();
                     tbSamplerate.Text = string.Format("{0} Hz", channelInfo.freq);
                     tbBitrate.Text = string.Format("{0} Bit", channelInfo.sample);
@@ -77,9 +77,9 @@ namespace PowerAudioPlayer.UI
 
         private void llblView_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (!Utils.IsUrl(tbPath.Text))
+            if (!MiscUtils.IsUrl(tbPath.Text))
             {
-                Utils.ExploreFile(tbPath.Text);
+                MiscUtils.ExploreFile(tbPath.Text);
             }
             else
             {

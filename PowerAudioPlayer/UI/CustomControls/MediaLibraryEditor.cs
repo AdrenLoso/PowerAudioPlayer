@@ -6,6 +6,7 @@ using Microsoft.VisualBasic;
 using System.ComponentModel;
 using System.Windows.Input;
 using PowerAudioPlayer.Controllers.Helper;
+using PowerAudioPlayer.Controllers.Utils;
 
 namespace PowerAudioPlayer.UI.CustomControls
 {
@@ -20,7 +21,7 @@ namespace PowerAudioPlayer.UI.CustomControls
         private readonly OLVColumn olvColumn2 = new OLVColumn(Player.GetString("Album"), "Tag.Album") { Width = 100, MinimumWidth = 20, Name = "Album" };
         private readonly OLVColumn olvColumn3 = new OLVColumn(Player.GetString("Title"), "Tag.Title") { Width = 250, MinimumWidth = 20, Name = "Title", AspectGetter = delegate (object rowObject) { AudioInfo info = (AudioInfo)rowObject; return string.IsNullOrEmpty(info.Tag.Title) ? Path.GetFileName(info.File) : info.Tag.Title; } };
         private readonly OLVColumn olvColumn4 = new OLVColumn(Player.GetString("Genre"), "Tag.Genre") { Width = 90, MinimumWidth = 20, Name = "Genre" };
-        private readonly OLVColumn olvColumn5 = new OLVColumn(Player.GetString("Length"), "Length") { Width = 70, MinimumWidth = 10, Name = "Length", AspectGetter = delegate (object rowObject) { return Utils.FormatTimeSecond(((AudioInfo)rowObject).Length); } };
+        private readonly OLVColumn olvColumn5 = new OLVColumn(Player.GetString("Length"), "Length") { Width = 70, MinimumWidth = 10, Name = "Length", AspectGetter = delegate (object rowObject) { return TimeFormatter.Format(((AudioInfo)rowObject).Length); } };
         private readonly OLVColumn olvColumn6 = new OLVColumn(Player.GetString("Track"), "Tag.Track") { Width = 70, MinimumWidth = 10, Name = "Track" };
         private readonly OLVColumn olvColumn7 = new OLVColumn(Player.GetString("Disc"), "Tag.Disc") { Width = 70, MinimumWidth = 10, Name = "Disc" };
         private readonly OLVColumn olvColumn8 = new OLVColumn(Player.GetString("Year"), "Tag.Year") { Width = 70, MinimumWidth = 10, Name = "Year" };
@@ -88,12 +89,12 @@ namespace PowerAudioPlayer.UI.CustomControls
             if (AllMode)
             {
                 lblTotalCount.Text = MediaLibraryHelper.Count.ToString();
-                lblTotalLength.Text = Utils.FormatTimeSecond(MediaLibraryHelper.TotalLength);
+                lblTotalLength.Text = TimeFormatter.Format(MediaLibraryHelper.TotalLength, TimeUnit.Seconds, @"hh\:mm\:ss");
             }
             else
             {
                 lblTotalCount.Text = result.Count.ToString();
-                lblTotalLength.Text = Utils.FormatTimeSecond(result.Values.Sum(x => x.Length));
+                lblTotalLength.Text = TimeFormatter.Format(result.Values.Sum(x => x.Length), TimeUnit.Seconds, @"hh\:mm\:ss");
             }
         }
 
@@ -229,7 +230,7 @@ namespace PowerAudioPlayer.UI.CustomControls
         {
             if (lvResult.SelectedObjects.Count != 0)
             {
-                Utils.ExploreFile(((AudioInfo)lvResult.SelectedObject).File);
+                MiscUtils.ExploreFile(((AudioInfo)lvResult.SelectedObject).File);
             }
         }
 

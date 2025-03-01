@@ -30,9 +30,7 @@
         {
             groupBox1 = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
-            nudSampleRate = new NumericUpDown();
             label1 = new Label();
-            label2 = new Label();
             cmbDevice = new ComboBox();
             groupBox2 = new GroupBox();
             tbMIDISoundFont = new WinFormsExtendedControls.FilePanel.OpenFilePanel();
@@ -44,11 +42,10 @@
             numNetBuffer = new WinFormsExtendedControls.LabeledNumericUpDown();
             numPlayBuffer = new WinFormsExtendedControls.LabeledNumericUpDown();
             groupBox5 = new GroupBox();
-            rbCoreBASS = new RadioButton();
             rbCoreMCI = new RadioButton();
+            rbCoreBASS = new RadioButton();
             groupBox1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)nudSampleRate).BeginInit();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -62,7 +59,7 @@
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(337, 82);
+            groupBox1.Size = new Size(337, 53);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "设备";
@@ -73,29 +70,15 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(nudSampleRate, 1, 1);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Controls.Add(label2, 0, 1);
             tableLayoutPanel1.Controls.Add(cmbDevice, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Top;
             tableLayoutPanel1.Location = new Point(3, 19);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(331, 60);
+            tableLayoutPanel1.Size = new Size(331, 31);
             tableLayoutPanel1.TabIndex = 0;
-            // 
-            // nudSampleRate
-            // 
-            nudSampleRate.Dock = DockStyle.Top;
-            nudSampleRate.Location = new Point(109, 34);
-            nudSampleRate.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
-            nudSampleRate.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            nudSampleRate.Name = "nudSampleRate";
-            nudSampleRate.Size = new Size(219, 23);
-            nudSampleRate.TabIndex = 5;
-            nudSampleRate.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label1
             // 
@@ -103,19 +86,9 @@
             label1.AutoSize = true;
             label1.Location = new Point(3, 7);
             label1.Name = "label1";
-            label1.Size = new Size(100, 17);
+            label1.Size = new Size(61, 17);
             label1.TabIndex = 0;
             label1.Text = "*输出设备";
-            // 
-            // label2
-            // 
-            label2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            label2.AutoSize = true;
-            label2.Location = new Point(3, 37);
-            label2.Name = "label2";
-            label2.Size = new Size(100, 17);
-            label2.TabIndex = 1;
-            label2.Text = "*输出频率（Hz）";
             // 
             // cmbDevice
             // 
@@ -125,9 +98,9 @@
             cmbDevice.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDevice.FormattingEnabled = true;
             cmbDevice.Items.AddRange(new object[] { "-1.默认设备", "0.无声音设备" });
-            cmbDevice.Location = new Point(109, 3);
+            cmbDevice.Location = new Point(70, 3);
             cmbDevice.Name = "cmbDevice";
-            cmbDevice.Size = new Size(219, 25);
+            cmbDevice.Size = new Size(258, 25);
             cmbDevice.TabIndex = 2;
             // 
             // groupBox2
@@ -136,7 +109,7 @@
             groupBox2.Controls.Add(tbMIDISoundFont);
             groupBox2.Controls.Add(numMIDIVoices);
             groupBox2.Dock = DockStyle.Top;
-            groupBox2.Location = new Point(0, 82);
+            groupBox2.Location = new Point(0, 53);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(337, 78);
             groupBox2.TabIndex = 1;
@@ -184,7 +157,7 @@
             groupBox3.AutoSize = true;
             groupBox3.Controls.Add(cbStopPlayingWhenError);
             groupBox3.Dock = DockStyle.Top;
-            groupBox3.Location = new Point(0, 160);
+            groupBox3.Location = new Point(0, 131);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(337, 43);
             groupBox3.TabIndex = 2;
@@ -209,7 +182,7 @@
             groupBox4.Controls.Add(numNetBuffer);
             groupBox4.Controls.Add(numPlayBuffer);
             groupBox4.Dock = DockStyle.Top;
-            groupBox4.Location = new Point(0, 203);
+            groupBox4.Location = new Point(0, 174);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(337, 112);
             groupBox4.TabIndex = 3;
@@ -291,12 +264,22 @@
             groupBox5.Controls.Add(rbCoreMCI);
             groupBox5.Controls.Add(rbCoreBASS);
             groupBox5.Dock = DockStyle.Top;
-            groupBox5.Location = new Point(0, 315);
+            groupBox5.Location = new Point(0, 286);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new Size(337, 65);
             groupBox5.TabIndex = 4;
             groupBox5.TabStop = false;
             groupBox5.Text = "*播放内核";
+            // 
+            // rbCoreMCI
+            // 
+            rbCoreMCI.AutoSize = true;
+            rbCoreMCI.Location = new Point(68, 22);
+            rbCoreMCI.Name = "rbCoreMCI";
+            rbCoreMCI.Size = new Size(50, 21);
+            rbCoreMCI.TabIndex = 1;
+            rbCoreMCI.Text = "MCI";
+            rbCoreMCI.UseVisualStyleBackColor = true;
             // 
             // rbCoreBASS
             // 
@@ -309,16 +292,6 @@
             rbCoreBASS.TabStop = true;
             rbCoreBASS.Text = "BASS";
             rbCoreBASS.UseVisualStyleBackColor = true;
-            // 
-            // rbCoreMCI
-            // 
-            rbCoreMCI.AutoSize = true;
-            rbCoreMCI.Location = new Point(68, 22);
-            rbCoreMCI.Name = "rbCoreMCI";
-            rbCoreMCI.Size = new Size(50, 21);
-            rbCoreMCI.TabIndex = 1;
-            rbCoreMCI.Text = "MCI";
-            rbCoreMCI.UseVisualStyleBackColor = true;
             // 
             // PlaySettingsPage
             // 
@@ -336,7 +309,6 @@
             groupBox1.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)nudSampleRate).EndInit();
             groupBox2.ResumeLayout(false);
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
@@ -352,9 +324,7 @@
         private GroupBox groupBox1;
         private TableLayoutPanel tableLayoutPanel1;
         private Label label1;
-        private Label label2;
         private ComboBox cmbDevice;
-        private NumericUpDown nudSampleRate;
         private GroupBox groupBox2;
         private WinFormsExtendedControls.FilePanel.OpenFilePanel tbMIDISoundFont;
         private GroupBox groupBox3;

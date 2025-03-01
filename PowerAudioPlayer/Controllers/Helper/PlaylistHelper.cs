@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PowerAudioPlayer.Controllers.Utils;
 using PowerAudioPlayer.Model;
 using System.IO;
 
@@ -30,7 +31,7 @@ namespace PowerAudioPlayer.Controllers.Helper
             var cmd = Environment.GetCommandLineArgs();
             cmd[0] = string.Empty;
             Directory.CreateDirectory(DefaultPlaylistDir);
-            var files = Utils.SearchFiles(DefaultPlaylistDir, ["*.json"], false);
+            var files = FileSearcher.SearchFiles(DefaultPlaylistDir, ["*.json"], false);
             foreach (var file in files)
             {
                 var name = Path.GetFileNameWithoutExtension(file);
@@ -109,7 +110,7 @@ namespace PowerAudioPlayer.Controllers.Helper
 
         public static bool Rename(string newName, int index = 0)
         {
-            if (CheckName(newName) && index != 0)
+            if (CheckName(newName) && index != ActivePlaylistIndex)
             {
                 try
                 {
@@ -117,6 +118,7 @@ namespace PowerAudioPlayer.Controllers.Helper
                 }
                 catch
                 {
+                    return false;
                 }
                 _playlists[index].Name = newName;
                 return true;

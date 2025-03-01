@@ -18,7 +18,7 @@ namespace PowerAudioPlayer.UI
             lblProductName.Text = Application.ProductName;
             lblVersion.Text = string.Format(Player.GetString("MsgVersion"), Assembly.GetExecutingAssembly().GetName().Version);
             lblCompany.Text = string.Format(Player.GetString("Author"), Application.CompanyName);
-            lbldotNETVersion.Text = Player.GetString("dotNETRTVersion", Environment.Version.ToString());
+            lbldotNETVersion.Text = Player.GetString("dotNETVersion", Environment.Version.ToString());
             lblLastCompileTime.Text = Player.GetString("MsgLastCompileTime", File.GetLastWriteTime(GetType().Assembly.Location).ToString());
         }
 

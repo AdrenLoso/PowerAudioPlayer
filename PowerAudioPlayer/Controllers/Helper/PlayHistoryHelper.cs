@@ -1,4 +1,5 @@
 ﻿using MemoryPack;
+using PowerAudioPlayer.Controllers.Utils;
 using PowerAudioPlayer.Model;
 using System.IO;
 
@@ -25,9 +26,19 @@ namespace PowerAudioPlayer.Controllers.Helper
             get => _history.Values.Where(x => x.Length > 0).ToList().Sum(x => x.Length);
         }
 
+        public static int TotalLengthWithTimesPlayed
+        {
+            get => _history.Values.Where(x => x.Length > 0).ToList().Sum(x => x.Length * x.PlayCount);
+        }
+
+        public static int TotalPlayTimesCount
+        {
+            get => _history.Values.Sum(x => x.PlayCount);
+        }
+
         public static long Size
         {
-            get => Utils.GetFileSize(defaultFile);
+            get => MiscUtils.GetFileSize(defaultFile);
         }
 
         public static void SaveHistory(string file = "")

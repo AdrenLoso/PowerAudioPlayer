@@ -35,6 +35,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Update="Controllers\Utils\FileSearcher.cs">
+          <Generator></Generator>
+        </Compile>
         <Compile Update="Language\Strings.zh-CN.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>

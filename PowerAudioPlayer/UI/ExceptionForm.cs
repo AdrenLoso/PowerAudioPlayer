@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.ComponentModel;
+using PowerAudioPlayer.Controllers.Utils;
 
 namespace PowerAudioPlayer.UI
 {
@@ -19,12 +20,12 @@ namespace PowerAudioPlayer.UI
             string dumpFile = Path.Combine(Path.GetTempPath(), Process.GetCurrentProcess().ProcessName + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".dmp");
             MiniDumpHelper.Write(dumpFile);
             linkLabel.Text = dumpFile;
-            textBox.Text = Player.GetString("ErrorMessage", exception.GetType().Name, exception.Message, exception.Data.ToString(), exception.StackTrace, exception.Source, exception.TargetSite?.ToString(), Environment.Version.ToString(), Environment.CommandLine, Utils.RunCommandExeAndReturnOutput("systeminfo.exe", ""));
+            textBox.Text = Player.GetString("ErrorMessage", exception.GetType().Name, exception.Message, exception.Data.ToString(), exception.StackTrace, exception.Source, exception.TargetSite?.ToString(), Environment.Version.ToString(), Environment.CommandLine, MiscUtils.RunCommandExeAndReturnOutput("systeminfo.exe", ""));
         }
 
         private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Utils.ExploreFile(linkLabel.Text);
+            MiscUtils.ExploreFile(linkLabel.Text);
         }
 
         private void ExceptionForm_Load(object sender, EventArgs e)

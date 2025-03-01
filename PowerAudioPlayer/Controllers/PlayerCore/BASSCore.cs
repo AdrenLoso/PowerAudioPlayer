@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using PowerAudioPlayer.Model;
 using PowerAudioPlayer.Controllers.Helper;
+using PowerAudioPlayer.Controllers.Utils;
 
 namespace PowerAudioPlayer.Controllers.PlayerCore
 {
@@ -145,13 +146,13 @@ namespace PowerAudioPlayer.Controllers.PlayerCore
                 Close();
             try
             {
-                if (Utils.IsUrl(file))
+                if (MiscUtils.IsUrl(file))
                 {
                     hStream = Bass.BASS_StreamCreateURL(file, 0, 0, null, IntPtr.Zero);
                 }
                 else
                 {
-                    hStream = Bass.BASS_MusicLoad(file, 0, 0, BASSFlag.BASS_MUSIC_PRESCAN | BASSFlag.BASS_MUSIC_STOPBACK, Settings.Default.OutputSampleRate);
+                    hStream = Bass.BASS_MusicLoad(file, 0, 0, BASSFlag.BASS_MUSIC_PRESCAN | BASSFlag.BASS_MUSIC_STOPBACK, 44100);
                     if (hStream == 0)
                         hStream = Bass.BASS_StreamCreateFile(file, 0, 0, 0);
                 }
@@ -342,7 +343,7 @@ namespace PowerAudioPlayer.Controllers.PlayerCore
                         {
                             if (newLine)
                             {
-                                line = $"[{Utils.FormatTimeSecond(Bass.BASS_ChannelBytes2Seconds(hStream, mark.pos))}]{mark.text}";
+                                line = $"[{TimeFormatter.Format((decimal)Bass.BASS_ChannelBytes2Seconds(hStream, mark.pos), TimeUnit.Milliseconds, @"mm\:ss\.ff")}]{mark.text}";
                                 newLine = false;
                             }
                             else
@@ -351,7 +352,7 @@ namespace PowerAudioPlayer.Controllers.PlayerCore
                             }
                         }
                     }
-                    lrc = Utils.Windows1254ToGB2312(lrc).Replace('\\', new char()).Replace("\0", " ");
+                    lrc = MiscUtils.Windows1254ToGB2312(lrc).Replace('\\', new char()).Replace("\0", " ");
                 }
             }
             return lrc;

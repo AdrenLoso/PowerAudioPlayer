@@ -14,9 +14,6 @@
     <Setting Name="Language" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)">zh-CN</Value>
     </Setting>
-    <Setting Name="OutputSampleRate" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">44100</Value>
-    </Setting>
     <Setting Name="OutputDevice" Provider="PowerAudioPlayer.PowerSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">-1</Value>
     </Setting>

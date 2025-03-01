@@ -78,19 +78,6 @@ namespace PowerAudioPlayer {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Configuration.SettingsProviderAttribute(typeof(PowerAudioPlayer.PowerSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("44100")]
-        public int OutputSampleRate {
-            get {
-                return ((int)(this["OutputSampleRate"]));
-            }
-            set {
-                this["OutputSampleRate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsProviderAttribute(typeof(PowerAudioPlayer.PowerSettingsProvider))]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("-1")]
         public int OutputDevice {
             get {
