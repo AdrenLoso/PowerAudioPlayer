@@ -5,6 +5,12 @@ using System.Text.RegularExpressions;
 
 namespace PowerAudioPlayer.UI.CustomControls
 {
+    public enum LyricsAlignment
+    {
+        Left,
+        Center
+    }
+
     public partial class LyricsView : UserControl
     {
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -21,6 +27,19 @@ namespace PowerAudioPlayer.UI.CustomControls
             set
             {
                 _lineMargin = value;
+                surface.Invalidate();
+            }
+        }
+
+        private LyricsAlignment _alignment = LyricsAlignment.Left;
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public LyricsAlignment Alignment
+        {
+            get => _alignment;
+            set
+            {
+                _alignment = value;
                 surface.Invalidate();
             }
         }
@@ -115,6 +134,23 @@ namespace PowerAudioPlayer.UI.CustomControls
 
         private void surface_PaintSurface(object sender, SkiaSharp.Views.Desktop.SKPaintGLSurfaceEventArgs e)
         {
+            //SKCanvas? canvas = e.Surface.Canvas;
+            //canvas.Clear();
+            //canvas.DrawRect(0, 0, Width, Height, new SKPaint { Color = new SKColor(BackColor.R, BackColor.G, BackColor.B, BackColor.A) });
+
+            //if (LyricsLines.Count > 0)
+            //{
+            //    SKFont font = new SKFont(SKTypeface.FromFamilyName(Font.FontFamily.Name), GetScaledFontSize(Font.Size * 1.3f));
+            //    SKPaint paintNormal = new SKPaint { Color = new SKColor(ForeColor.R, ForeColor.G, ForeColor.B, ForeColor.A) };
+            //    SKPaint paintHighlight = new SKPaint { Color = new SKColor(_highlightColor.R, _highlightColor.G, _highlightColor.B, _highlightColor.A) };
+
+            //    font.MeasureText(LyricsLines[LineIndex].Text, out SKRect rect, paintHighlight);
+            //    int midY = (int)(Height / 2 - rect.Height / 2);
+            //    canvas.DrawText(LyricsLines[LineIndex].Text, 10, midY, font, paintHighlight);
+
+            //    DrawRemainingLines(canvas, font, paintNormal, midY, 1);
+            //    DrawRemainingLines(canvas, font, paintNormal, midY, -1);
+            //}
             SKCanvas? canvas = e.Surface.Canvas;
             canvas.Clear();
             canvas.DrawRect(0, 0, Width, Height, new SKPaint { Color = new SKColor(BackColor.R, BackColor.G, BackColor.B, BackColor.A) });
@@ -127,7 +163,15 @@ namespace PowerAudioPlayer.UI.CustomControls
 
                 font.MeasureText(LyricsLines[LineIndex].Text, out SKRect rect, paintHighlight);
                 int midY = (int)(Height / 2 - rect.Height / 2);
-                canvas.DrawText(LyricsLines[LineIndex].Text, 10, midY, font, paintHighlight);
+
+                // 根据对齐方式调整 x 坐标
+                float x = 10; // 默认居左
+                if (_alignment == LyricsAlignment.Center)
+                {
+                    x = (Width - rect.Width) / 2; // 居中
+                }
+
+                canvas.DrawText(LyricsLines[LineIndex].Text, x, midY, font, paintHighlight);
 
                 DrawRemainingLines(canvas, font, paintNormal, midY, 1);
                 DrawRemainingLines(canvas, font, paintNormal, midY, -1);
@@ -136,12 +180,28 @@ namespace PowerAudioPlayer.UI.CustomControls
 
         private void DrawRemainingLines(SKCanvas canvas, SKFont font, SKPaint paint, int startY, int direction)
         {
+            //int counter = LineIndex;
+            //for (int i = startY + direction * GetScaledLineMargin(_lineMargin); i >= 0 && i <= Height; i += direction * GetScaledLineMargin(_lineMargin))
+            //{
+            //    counter += direction;
+            //    if (counter < 0 || counter >= LyricsLines.Count) break;
+            //    canvas.DrawText(LyricsLines[counter].Text, 10, i, font, paint);
+            //}
             int counter = LineIndex;
             for (int i = startY + direction * GetScaledLineMargin(_lineMargin); i >= 0 && i <= Height; i += direction * GetScaledLineMargin(_lineMargin))
             {
                 counter += direction;
                 if (counter < 0 || counter >= LyricsLines.Count) break;
-                canvas.DrawText(LyricsLines[counter].Text, 10, i, font, paint);
+
+                // 根据对齐方式调整 x 坐标
+                float x = 10; // 默认居左
+                if (_alignment == LyricsAlignment.Center)
+                {
+                    font.MeasureText(LyricsLines[counter].Text, out SKRect rect, paint);
+                    x = (Width - rect.Width) / 2; // 居中
+                }
+
+                canvas.DrawText(LyricsLines[counter].Text, x, i, font, paint);
             }
         }
 

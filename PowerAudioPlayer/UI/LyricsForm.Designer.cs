@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LyricsForm));
-            lyricsView = new CustomControls.LyricsView();
+            lyricsView = new PowerAudioPlayer.UI.CustomControls.LyricsView();
             SuspendLayout();
             // 
             // lyricsView
@@ -39,6 +39,7 @@
             lyricsView.Name = "lyricsView";
             lyricsView.Size = new Size(365, 392);
             lyricsView.TabIndex = 0;
+            lyricsView.Alignment = CustomControls.LyricsAlignment.Center;
             // 
             // LyricsForm
             // 
