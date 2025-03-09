@@ -18,35 +18,6 @@ namespace PowerAudioPlayer.Controllers.PlayerCore
         Paused
     }
 
-    public class PlayerChannelInfo
-    {
-        public int freq;
-        public int chans;
-        public AudioType type;
-
-        public override string ToString()
-        {
-            return string.Format("{0}, {1}Hz, {2}", AudioInfoHelper.AudioTypeToString(type), freq, AudioInfoHelper.ChannelNumberToString(chans));
-        }
-    }
-
-    public class SupportrdFormat
-    {
-        public string Name { get; set; } = "";
-
-        public string Extensions { get; set; } = "";
-
-
-        public SupportrdFormat(string name, string extension)
-        {
-            Name = name;
-            Extensions = extension;
-        }
-
-        public SupportrdFormat()
-        {
-        }
-    }
     public interface IPlayerCore
     {
         void Open(string file);
