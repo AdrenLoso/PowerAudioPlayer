@@ -14,6 +14,7 @@
         <_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
         <_SuppressWpfTrimError>true</_SuppressWpfTrimError>
         <UseWPF>True</UseWPF>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
     </PropertyGroup>
     
     <ItemGroup>
@@ -80,16 +81,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Lib\ARM64\" />
-        <Folder Include="Lib\Intel32\Plugins\" />
-        <Folder Include="Properties\" />
-    </ItemGroup>
-
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="set libarch=AMD64&#xD;&#xA;echo Copying files to $(OutDir).&#xD;&#xA;echo Libraries architecture: %25libarch%25&#xD;&#xA;if not exist &quot;$(OutDir)Lib\Plugins&quot; (&#xD;&#xA; mkdir &quot;$(OutDir)Plugins&quot;&#xD;&#xA;)&#xD;&#xA;xcopy Lib\%25libarch%25\%25Plugins &quot;$(OutDir)Plugins&quot; /Y /Q&#xD;&#xA;copy Lib\%25libarch%25\bass.dll &quot;$(OutDir)&quot; /Y&#xD;&#xA;copy Lib\%25libarch%25\Plugins\OptimFROG.dll &quot;$(OutDir)&quot; /Y&#xD;&#xA;echo Success." />
-    </Target>
-
-    <ItemGroup>
       <EditorConfigFiles Remove="D:\bc\NET\PowerAudioPlayer\PowerAudioPlayer\.editorconfig" />
     </ItemGroup>
 
@@ -113,4 +104,10 @@
       <ProjectReference Include="..\WinFormsExtendedControls\WinFormsExtendedControls.csproj" />
     </ItemGroup>
 
+	<Target Name="CopyLibs" AfterTargets="Build">
+		<ItemGroup>
+			<LibFiles Include="Lib\$(RuntimeIdentifier)\**\*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(LibFiles)" DestinationFolder="$(OutputPath)\%(RecursiveDir)" SkipUnchangedFiles="true" />
+	</Target>
 </Project>
